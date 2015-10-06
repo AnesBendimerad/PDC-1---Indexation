@@ -113,5 +113,8 @@
     <ClCompile Include="Hasher.cpp">
       <Filter>Source Files\models</Filter>
     </ClCompile>
+    <ClCompile Include="DocumentTable.cpp">
+      <Filter>Source Files\models</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
