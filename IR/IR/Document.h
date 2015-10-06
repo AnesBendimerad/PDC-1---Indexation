@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "DocumentMetaData.h"
+
 using namespace std;
 
 class Document {
@@ -13,5 +14,4 @@ public:
 	void incrementWordsNumber();
 	string getText();
 	DocumentMetaData getDocumentMetaData();
-
 };

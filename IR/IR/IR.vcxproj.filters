@@ -96,6 +96,9 @@
     <ClInclude Include="Index.h">
       <Filter>Header Files\models</Filter>
     </ClInclude>
+    <ClInclude Include="Hasher.h">
+      <Filter>Header Files\models</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -105,6 +108,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Document.cpp">
+      <Filter>Source Files\models</Filter>
+    </ClCompile>
+    <ClCompile Include="Hasher.cpp">
       <Filter>Source Files\models</Filter>
     </ClCompile>
   </ItemGroup>
