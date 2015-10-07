@@ -6,12 +6,11 @@
 class Dictionary : IDictionary {
 private:
 	IHasher * hasher;
-	list<Term>  * hashTable;
+	list<Term>  ** hashTable;
 	int size;
 public:
-	Dictionary(int size);
-	void setHasher(IHasher * hasher);
-	Term addTerm(string token) ;
-	Term getTerm(string token) ;
+	Dictionary(int size,IHasher *hasher);
+	Term* addTerm(string token) ;
+	Term* getTerm(string token) ;
 	~Dictionary();
 };
