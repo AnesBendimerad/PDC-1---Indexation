@@ -12,7 +12,7 @@ Index::Index(IDictionary *dictionary)
 
 int Index::addDocument(DocumentMetaData documentMetaData)
 {
-	documentTable->addDocument(documentMetaData);
+	return documentTable->addDocument(documentMetaData);
 }
 
 void Index::addTerm(string token)

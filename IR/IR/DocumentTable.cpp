@@ -2,12 +2,15 @@
 #include <list>
 #include "DocumentTable.h"
 #include "DocumentMetaData.h"
+#include <typeinfo>
 
 using namespace std;
+
 
 DocumentTable::DocumentTable()
 {
 	documentNumber = 0;
+	finilized = false;
 	docTable = new list<DocumentMetaData>();
 }
 
@@ -16,7 +19,7 @@ int DocumentTable::addDocument(DocumentMetaData documentMetaData)
 	list<DocumentMetaData>* docTableAsList = static_cast<list<DocumentMetaData>*>(docTable);
 	docTableAsList->insert(docTableAsList->end(), documentMetaData);
 	documentNumber += 1;
-	return 0;
+	return documentNumber-1;
 }
 
 int DocumentTable::getDocumentNumber()
@@ -26,31 +29,44 @@ int DocumentTable::getDocumentNumber()
 
 void DocumentTable::finalize()
 {
-	list<DocumentMetaData>* docTableAsList = static_cast<list<DocumentMetaData>*>(docTable);
-	DocumentMetaData* docTableAsTable = (DocumentMetaData*) malloc(sizeof(DocumentMetaData)*documentNumber);
-	list<DocumentMetaData>::iterator it;
-	int i = 0;
-	for (it = docTableAsList->begin(); it != docTableAsList->end(); ++it)
-	{
-		docTableAsTable[i++] = *it;
+	if (not finilized) {
+		list<DocumentMetaData>* docTableAsList = static_cast<list<DocumentMetaData>*>(docTable);
+		DocumentMetaData* docTableAsTable = (DocumentMetaData*)malloc(sizeof(DocumentMetaData)*documentNumber);
+		list<DocumentMetaData>::iterator it;
+		int i = 0;
+		for (it = docTableAsList->begin(); it != docTableAsList->end(); ++it)
+		{
+			docTableAsTable[i++] = *it;
+		}
+		delete docTable;
+		docTable = docTableAsTable;
+		finilized = true;
 	}
-	delete docTable;
-	docTable = docTableAsTable;
+	else
+	{
+		throw runtime_error("Index finilized yet");
+	}
 }
 
-DocumentMetaData DocumentTable::getDocument(int documentIndex)
+DocumentMetaData* DocumentTable::getDocument(int documentIndex)
 {
-	list<DocumentMetaData>* docTableAsList = static_cast<list<DocumentMetaData>*>(docTable);
-	list<DocumentMetaData>::iterator it;
-	it = docTableAsList->begin();
-	while (documentIndex > 0)
-	{
-		it++;
-		documentIndex--;
-	}
-	return *it;
 
-	// Error case : documentIndex > documentNumber not treated 
+	if (finilized) {
+		if (documentIndex >= documentNumber)
+		{
+			return nullptr;
+		}
+		else
+		{
+			DocumentMetaData* docTableAsTable = static_cast<DocumentMetaData*>(docTable);
+			return &(docTableAsTable[documentIndex]);
+		}
+	}
+	else
+	{
+		throw runtime_error("Index not finilized yet");
+	}
+	
 }
 
 DocumentTable::~DocumentTable()
