@@ -4,10 +4,10 @@
 #include "DocumentTable.h"
 class Index : IIndex {
 private:
-	IDictionary * dictionary;
-	DocumentTable documentTable;
+	IDictionary *dictionary;
+	DocumentTable *documentTable;
 public:
-	Index();
+	Index(IDictionary *dictionary);
 	int addDocument(DocumentMetaData documentMetaData);
 	void addTerm(string token);
 	void finalize();

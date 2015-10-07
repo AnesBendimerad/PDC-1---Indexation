@@ -6,5 +6,5 @@ typedef struct Term {
 	string token="";
 	unsigned int totalFrequency=1;
 	unsigned int documentNumber=0;
-	void* postingList=NULL;
+	void* postingList=nullptr;
 } Term;

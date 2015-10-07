@@ -119,5 +119,8 @@
     <ClCompile Include="Dictionary.cpp">
       <Filter>Source Files\models</Filter>
     </ClCompile>
+    <ClCompile Include="Index.cpp">
+      <Filter>Source Files\models</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
