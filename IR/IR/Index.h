@@ -2,10 +2,12 @@
 #include "IIndex.h"
 #include "IDictionary.h"
 #include "DocumentTable.h"
-class Index : IIndex {
+class Index : public IIndex {
 private:
 	IDictionary *dictionary;
 	DocumentTable *documentTable;
+	bool finilized;
+	string postingFilePath;
 public:
 	Index(IDictionary *dictionary);
 	int addDocument(DocumentMetaData documentMetaData);

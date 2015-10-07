@@ -122,5 +122,8 @@
     <ClCompile Include="Index.cpp">
       <Filter>Source Files\models</Filter>
     </ClCompile>
+    <ClCompile Include="Indexer.cpp">
+      <Filter>Source Files\controllers</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

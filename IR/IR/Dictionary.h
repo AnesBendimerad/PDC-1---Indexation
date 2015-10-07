@@ -3,7 +3,7 @@
 #include "IDictionary.h"
 #include "IHasher.h"
 #include "Term.h"
-class Dictionary : IDictionary {
+class Dictionary : public IDictionary {
 private:
 	IHasher * hasher;
 	list<Term>  ** hashTable;

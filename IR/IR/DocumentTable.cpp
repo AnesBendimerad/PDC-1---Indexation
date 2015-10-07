@@ -29,7 +29,7 @@ int DocumentTable::getDocumentNumber()
 
 void DocumentTable::finalize()
 {
-	if (not finilized) {
+	if (! finilized) {
 		list<DocumentMetaData>* docTableAsList = static_cast<list<DocumentMetaData>*>(docTable);
 		DocumentMetaData* docTableAsTable = (DocumentMetaData*)malloc(sizeof(DocumentMetaData)*documentNumber);
 		list<DocumentMetaData>::iterator it;
@@ -44,7 +44,7 @@ void DocumentTable::finalize()
 	}
 	else
 	{
-		throw runtime_error("Index finilized yet");
+		throw runtime_error("Document table finilized yet");
 	}
 }
 
@@ -64,7 +64,7 @@ DocumentMetaData* DocumentTable::getDocument(int documentIndex)
 	}
 	else
 	{
-		throw runtime_error("Index not finilized yet");
+		throw runtime_error("Document table not finilized yet");
 	}
 	
 }

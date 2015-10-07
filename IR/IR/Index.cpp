@@ -8,6 +8,8 @@ Index::Index(IDictionary *dictionary)
 {
 	Index::dictionary = dictionary;
 	documentTable = new DocumentTable();
+	finilized = false;
+	postingFilePath = "";
 }
 
 int Index::addDocument(DocumentMetaData documentMetaData)
@@ -23,7 +25,15 @@ void Index::addTerm(string token)
 
 void Index::finalize()
 {
-	// write the posting list on file and change the pointer to offset in file
+	if (!finilized) {
+		documentTable->finalize();
+		// write the posting list on file and change the pointer to offset in file (postingFilePath)
+		finilized = true;
+	}
+	else 
+	{
+		throw runtime_error("Index finilized yet");
+	}
 }
 
 list<int> Index::search(string querry)

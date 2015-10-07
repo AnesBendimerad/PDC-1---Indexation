@@ -3,7 +3,7 @@
 #include "ITokenizer.h"	
 #include "Document.h"
 using namespace std;
-class Tokenizer : ITokenizer{
+class Tokenizer : public ITokenizer{
 private:
 	Document document;
 public:
