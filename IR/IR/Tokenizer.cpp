@@ -3,20 +3,20 @@
 #include <iostream>
 #include <sstream>
 
-Tokenizer::Tokenizer(Document document)
+Tokenizer::Tokenizer(Document *document)
 {
 	this->document = document;
 }
 
 string Tokenizer::getNextToken()
 {
-	string text = document.getText();
+	string text = document->getText();
 	istringstream iss(text);
 	string word;
 	iss.seekg(currentPosition);
 	while (iss >> word)
 	{
-		currentPosition = iss.tellg();
+		currentPosition = (unsigned int) iss.tellg();
 		return word;
 	}
 	return string();

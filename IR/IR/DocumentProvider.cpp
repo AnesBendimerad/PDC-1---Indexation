@@ -33,17 +33,14 @@ DocumentProvider::~DocumentProvider()
 
 Document* DocumentProvider::getNextDocument()
 {
-	Document *document ;
+	Document *document = nullptr ;
 	DocumentMetaData documentMetaData;
 	unsigned int currentDocumentOffset;
 	string documentText;
 	string token;
 
 	//If all FILES have been processed then we return null
-	if (currentFileIndex == pathList.size()) {
-		return NULL;
-	}
-	else
+	if (currentFileIndex != pathList.size()) 
 	{
 		if (!currentFile.is_open())
 		{
@@ -51,7 +48,7 @@ Document* DocumentProvider::getNextDocument()
 		}
 
 		//Save the offset of the current document in the file
-		currentDocumentOffset = currentFile.tellg();
+		currentDocumentOffset = (unsigned int) currentFile.tellg();
 
 		while (currentFile >> token) {
 
@@ -82,7 +79,7 @@ Document* DocumentProvider::getNextDocument()
 		documentMetaData.offset = currentDocumentOffset;
 
 		//Finally construct the document
-		document == new Document(documentMetaData, documentText);
+		document = new Document(documentMetaData, documentText);
 
 		// IF All DOCUMENTS in the current FILE have been processed then close the file and move to the next one
 		if (currentFile.eof()) {

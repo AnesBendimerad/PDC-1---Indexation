@@ -23,7 +23,7 @@ IIndex* Indexer::createIndex()
 	Document* document;
 	while ((document = documentProvider->getNextDocument()) != nullptr)
 	{
-		ITokenizer* tokenizer = new Tokenizer(*document);
+		ITokenizer* tokenizer = new Tokenizer(document);
 		string token;
 		while ((token = tokenizer->getNextToken()).compare("") != 0)
 		{

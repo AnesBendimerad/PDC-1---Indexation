@@ -5,11 +5,11 @@
 using namespace std;
 class Tokenizer : public ITokenizer {
 private:
-	Document document;
+	Document* document;
 	unsigned int currentPosition = 0;
 
 public:
-	Tokenizer(Document document);
+	Tokenizer(Document* document);
 	string getNextToken();
 	~Tokenizer();
 };
