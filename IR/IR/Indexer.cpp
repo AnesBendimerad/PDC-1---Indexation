@@ -17,7 +17,7 @@ IIndex* Indexer::createIndex()
 	IDictionary* dictionary = new Dictionary(dictionarySize, hasher);
 
 	Index* index = new Index(dictionary);
-	/*
+	
 	IDocumentProvider* documentProvider = new DocumentProvider(repositoryPath);
 
 	Document* document;
@@ -32,7 +32,7 @@ IIndex* Indexer::createIndex()
 		index->addDocument(document->getDocumentMetaData());
 	}
 	index->finalize();
-	*/
+	
 	return index;
 }
 

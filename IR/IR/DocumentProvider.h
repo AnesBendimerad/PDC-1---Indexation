@@ -1,14 +1,16 @@
 #pragma once
 #include <stdio.h>
-#include <list>
+#include <fstream>
+#include <vector>
 #include <string>
 #include "IDocumentProvider.h"
 using namespace std;
-class DocumentProvider : public IDocumentProvider{
+class DocumentProvider : public IDocumentProvider {
 private:
-	FILE * currentFile;
-	list<string> pathList;
-	int currentFileIndex;
+	ifstream  currentFile;
+	vector<string> pathList;
+	unsigned int currentFileIndex = 0;
+	string transformToken(string&);
 public:
 	DocumentProvider(string repositoryFile);
 	Document* getNextDocument();
