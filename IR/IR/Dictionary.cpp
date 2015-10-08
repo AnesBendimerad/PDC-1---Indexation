@@ -3,6 +3,7 @@
 
 Dictionary::Dictionary(int size, IHasher *hasher)
 {
+	Dictionary::size = size;
 	hashTable = (list<Term>**) malloc(sizeof(list<Term>*)*size);
 	for (int i = 0; i < size; i++)
 	{
@@ -21,16 +22,17 @@ Term* Dictionary::addTerm(string token)
 		term.token = token;
 		cell = new list<Term>();
 		cell->insert(cell->begin(), term);
+		hashTable[index] = cell;
 		return &(*(cell->begin()));
 	}
 	else 
 	{
 		list<Term>::iterator it = cell->begin();
-		while (token.compare(it->token)<0 && it != cell->end())
+		while (it != cell->end() && token.compare(it->token)<0)
 		{
 			it++;
 		}
-		if (token.compare(it->token) == 0) 
+		if (it != cell->end() && token.compare(it->token) == 0)
 		{
 			it->totalFrequency++;
 		}

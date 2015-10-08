@@ -10,12 +10,15 @@ using namespace std;
 DocumentTable::DocumentTable()
 {
 	documentNumber = 0;
-	finilized = false;
+	finalized = false;
 	docTable = new list<DocumentMetaData>();
 }
 
 int DocumentTable::addDocument(DocumentMetaData documentMetaData)
 {
+	if (finalized) {
+		throw runtime_error("Document table already finalized");
+	}
 	list<DocumentMetaData>* docTableAsList = static_cast<list<DocumentMetaData>*>(docTable);
 	docTableAsList->insert(docTableAsList->end(), documentMetaData);
 	documentNumber += 1;
@@ -29,7 +32,7 @@ int DocumentTable::getDocumentNumber()
 
 void DocumentTable::finalize()
 {
-	if (! finilized) {
+	if (! finalized) {
 		list<DocumentMetaData>* docTableAsList = static_cast<list<DocumentMetaData>*>(docTable);
 		DocumentMetaData* docTableAsTable = (DocumentMetaData*)malloc(sizeof(DocumentMetaData)*documentNumber);
 		list<DocumentMetaData>::iterator it;
@@ -40,18 +43,18 @@ void DocumentTable::finalize()
 		}
 		delete docTable;
 		docTable = docTableAsTable;
-		finilized = true;
+		finalized = true;
 	}
 	else
 	{
-		throw runtime_error("Document table finilized yet");
+		throw runtime_error("Document table finalized yet");
 	}
 }
 
 DocumentMetaData* DocumentTable::getDocument(int documentIndex)
 {
 
-	if (finilized) {
+	if (finalized) {
 		if (documentIndex >= documentNumber)
 		{
 			return nullptr;
@@ -64,7 +67,7 @@ DocumentMetaData* DocumentTable::getDocument(int documentIndex)
 	}
 	else
 	{
-		throw runtime_error("Document table not finilized yet");
+		throw runtime_error("Document table not finalized yet");
 	}
 	
 }

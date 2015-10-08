@@ -6,7 +6,7 @@ class Index : public IIndex {
 private:
 	IDictionary *dictionary;
 	DocumentTable *documentTable;
-	bool finilized;
+	bool finalized;
 	string postingFilePath;
 public:
 	Index(IDictionary *dictionary);

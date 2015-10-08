@@ -4,7 +4,7 @@
 class DocumentTable {
 private:
 	int documentNumber;
-	bool finilized;
+	bool finalized;
 	void * docTable; // it's a list at first, and a table in the end
 public:
 	DocumentTable();

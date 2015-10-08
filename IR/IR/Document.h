@@ -11,6 +11,7 @@ private:
 	string text;
 
 public:
+	Document(DocumentMetaData docMetaData, string text);
 	void incrementWordsNumber();
 	string getText();
 	DocumentMetaData getDocumentMetaData();
