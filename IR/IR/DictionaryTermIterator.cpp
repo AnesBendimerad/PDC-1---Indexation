@@ -9,23 +9,23 @@ DictionaryTermIterator::DictionaryTermIterator(int size, list<Term>  ** hashTabl
 
 void * DictionaryTermIterator::getNext()
 {
-	if (it == nullptr) {
+	if (currentElement==-1) {
 		processNextTermListIndex();
 		if (currentElement < size) {
-			*it = hashTable[currentElement]->begin();
-			return it;
+			it =hashTable[currentElement]->begin();
+			return &(*it);
 		}
 	}
 	else {
-		*it++;
-		if (*it != hashTable[currentElement]->end()) {
-			return it;
+		it++;
+		if (it != hashTable[currentElement]->end()) {
+			return &(*it);
 		}
 		else {
 			processNextTermListIndex();
 			if (currentElement < size) {
-				*it = hashTable[currentElement]->begin();
-				return (it);
+				it = hashTable[currentElement]->begin();
+				return &(*it);
 			}
 		}
 	}

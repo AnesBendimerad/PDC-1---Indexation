@@ -8,7 +8,7 @@ private:
 	list<Term>  ** hashTable;
 	int size;
 	int currentElement = -1;
-	list<Term>::iterator *it=nullptr;
+	list<Term>::iterator it;
 	
 	void processNextTermListIndex();
 public:

@@ -18,19 +18,19 @@ using namespace std;
 int _tmain(int argc, _TCHAR* argv[])
 {
 	
-	IDictionary *dictionary = new Dictionary(1021, new Hasher());
-	dictionary->addTerm("ana");
-	dictionary->addTerm("houwa");
-	dictionary->addTerm("ana");
-	dictionary->addTerm("nta");
-	dictionary->addTerm("l3ayla");
-	dictionary->addTerm("voila");
+	IDictionary *dictionary = new Dictionary(11, new Hasher());
+	dictionary->addTerm("ana");//
+	dictionary->addTerm("houwa");//
+	dictionary->addTerm("ana");//
+	dictionary->addTerm("nta");//
+	dictionary->addTerm("l3ayla");//
+	dictionary->addTerm("voila");//
 	IIterator *iterator = dictionary->getIterator();
 	Term* term;
-	while ((term = (Term*)iterator->getNext()) != nullptr) {
+	while ((term = static_cast<Term*>(iterator->getNext())) != nullptr) {
 		cout << "term :" + term->token << endl;
 	}
-
+	cout << "fin :"<< endl;
 	return 0;
 }
 

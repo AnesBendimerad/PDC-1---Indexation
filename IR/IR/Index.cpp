@@ -62,8 +62,7 @@ void Index::finalize()
 		// we replace the void* postinglist by the offset
 		// we write the posting list table in the file
 		// we destruct the posting list
-		ofstream outputFile(postingFilePath);
-
+		
 		finalized = true;
 	}
 	else 
