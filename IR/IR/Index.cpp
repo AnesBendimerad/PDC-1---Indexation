@@ -1,9 +1,12 @@
+#include <fstream>
 #include "stdafx.h"
 #include "Index.h"
 #include "IDictionary.h"
 #include "DocumentTable.h"
 #include "DocumentTerm.h"
 #include "Term.h"
+
+
 
 Index::Index(IDictionary *dictionary, string outputFilePath)
 {
@@ -52,6 +55,15 @@ void Index::finalize()
 	if (!finalized) {
 		documentTable->finalize();
 		// write the posting list on file and change the pointer to offset in file (postingFilePath)
+		// we'll create a ofstream file to write on it
+		// we'll iterate all the hash table, for each element that contains a non null list
+		// we'll iterate for all terms in the list, for each term
+		// we create a table and copy all posting list element on it,
+		// we replace the void* postinglist by the offset
+		// we write the posting list table in the file
+		// we destruct the posting list
+		ofstream outputFile(postingFilePath);
+
 		finalized = true;
 	}
 	else 
@@ -64,6 +76,11 @@ list<int> Index::search(string querry)
 {
 	// return the most relevent  document to the query
 	return list<int>();
+}
+
+DocumentTerm * Index::getTermPostingList(string token)
+{
+	return nullptr;
 }
 
 Index::~Index()
