@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Dictionary.h"
+#include "DictionaryTermIterator.h"
 
 Dictionary::Dictionary(int size, IHasher *hasher)
 {
@@ -64,6 +65,11 @@ Term* Dictionary::getTerm(string token)
 		}
 	}
 	return nullptr;
+}
+
+IIterator * Dictionary::getIterator()
+{
+	return new DictionaryTermIterator(size,hashTable);
 }
 
 Dictionary::~Dictionary()

@@ -12,5 +12,6 @@ public:
 	Dictionary(int size,IHasher *hasher);
 	Term* addTerm(string token) ;
 	Term* getTerm(string token) ;
+	IIterator * getIterator();
 	~Dictionary();
 };
