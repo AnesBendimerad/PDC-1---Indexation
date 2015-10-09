@@ -30,6 +30,7 @@ IIndex* Indexer::createIndex()
 			index->addTerm(token);
 		}
 		index->addDocument(document->getDocumentMetaData());
+		delete document;
 	}
 	index->finalize();
 	

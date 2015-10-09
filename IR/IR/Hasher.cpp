@@ -9,5 +9,6 @@ unsigned int Hasher::hash(string token)
 		resultat <<= 2;
 		resultat += token[i];
 	}
-	return resultat;
+	//return resultat;
+	return 0;
 }

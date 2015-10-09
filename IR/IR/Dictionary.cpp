@@ -14,7 +14,7 @@ Dictionary::Dictionary(int size, IHasher *hasher)
 
 Term* Dictionary::addTerm(string token)
 {
-	int index = hasher->hash(token) % size;
+	unsigned int index = hasher->hash(token) % size;
 	list<Term>* cell = hashTable[index];
 	if (cell == nullptr)
 	{
@@ -28,7 +28,7 @@ Term* Dictionary::addTerm(string token)
 	else 
 	{
 		list<Term>::iterator it = cell->begin();
-		while (it != cell->end() && token.compare(it->token)<0)
+		while (it != cell->end() && token.compare(it->token)>0)
 		{
 			it++;
 		}
@@ -41,7 +41,6 @@ Term* Dictionary::addTerm(string token)
 			Term term;
 			term.token = token;
 			cell->insert(it, term);
-			it = cell->end();
 			it--;
 		}
 		return &(*it);
@@ -50,16 +49,16 @@ Term* Dictionary::addTerm(string token)
 
 Term* Dictionary::getTerm(string token)
 {
-	int index = hasher->hash(token) % size;
+	unsigned int index = hasher->hash(token) % size;
 	list<Term>* cell = hashTable[index];
 	if (cell != nullptr)
 	{
 		list<Term>::iterator it = cell->begin();
-		while (token.compare(it->token) < 0 && it != cell->end())
+		while (it != cell->end() && token.compare(it->token) > 0 )
 		{
 			it++;
 		}
-		if (token.compare(it->token) == 0)
+		if (it != cell->end() && token.compare(it->token) == 0)
 		{
 			return &(*it);
 		}
