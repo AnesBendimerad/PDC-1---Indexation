@@ -33,18 +33,15 @@ void Index::addTerm(string token)
 	}
 	else {
 		list<DocumentTerm>* postingListAsList = static_cast<list<DocumentTerm>*>(term->postingList);
-		list<DocumentTerm>::iterator it = postingListAsList->begin();
-		while (it != postingListAsList->end() &&  documentTable->getDocumentNumber()<it->documentIndex )
-		{
-			it++;
-		}
-		if (it != postingListAsList->end() && documentTable->getDocumentNumber()==it->documentIndex) {
+		list<DocumentTerm>::iterator it = postingListAsList->end();
+		it--;
+		if (documentTable->getDocumentNumber()==it->documentIndex) {
 			it->ftd++;
 		}
 		else {
 			DocumentTerm docTerm;
 			docTerm.documentIndex = documentTable->getDocumentNumber();
-			postingListAsList->insert(it, docTerm);
+			postingListAsList->insert(postingListAsList->end(), docTerm);
 			term->documentNumber++;
 		}
 	}

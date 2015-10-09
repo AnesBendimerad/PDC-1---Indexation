@@ -7,7 +7,7 @@ Dictionary::Dictionary(int size, IHasher *hasher)
 	hashTable = (list<Term>**) malloc(sizeof(list<Term>*)*size);
 	for (int i = 0; i < size; i++)
 	{
-		hashTable[i]= nullptr;
+		hashTable[i] = nullptr;
 	}
 	Dictionary::hasher = hasher;
 }
@@ -41,6 +41,8 @@ Term* Dictionary::addTerm(string token)
 			Term term;
 			term.token = token;
 			cell->insert(it, term);
+			it = cell->end();
+			it--;
 		}
 		return &(*it);
 	}

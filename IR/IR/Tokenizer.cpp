@@ -19,7 +19,7 @@ string Tokenizer::getNextToken()
 		currentPosition = (unsigned int) iss.tellg();
 		return word;
 	}
-	return string();
+	return "";
 }
 
 Tokenizer::~Tokenizer()

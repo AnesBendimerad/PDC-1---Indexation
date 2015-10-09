@@ -14,7 +14,7 @@ DocumentTable::DocumentTable()
 	docTable = new list<DocumentMetaData>();
 }
 
-int DocumentTable::addDocument(DocumentMetaData documentMetaData)
+unsigned int DocumentTable::addDocument(DocumentMetaData documentMetaData)
 {
 	if (finalized) {
 		throw runtime_error("Document table already finalized");
@@ -25,7 +25,7 @@ int DocumentTable::addDocument(DocumentMetaData documentMetaData)
 	return documentNumber-1;
 }
 
-int DocumentTable::getDocumentNumber()
+unsigned int DocumentTable::getDocumentNumber()
 {
 	return documentNumber;
 }
