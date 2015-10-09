@@ -1,5 +1,6 @@
 #pragma once
 #include "IIndex.h"
+#include "IDictionary.h"
 class IIndexer {
 public:
 	virtual IIndex* createIndex() = 0;
