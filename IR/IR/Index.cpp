@@ -1,5 +1,5 @@
-#include <fstream>
 #include "stdafx.h"
+#include <fstream>
 #include "Index.h"
 #include "IDictionary.h"
 #include "DocumentTable.h"
@@ -78,10 +78,7 @@ list<int> Index::search(string querry)
 	return list<int>();
 }
 
-DocumentTerm * Index::getTermPostingList(string token)
-{
-	return nullptr;
-}
+
 
 Index::~Index()
 {

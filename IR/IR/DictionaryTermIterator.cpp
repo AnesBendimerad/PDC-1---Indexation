@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DictionaryTermIterator.h"
 
 DictionaryTermIterator::DictionaryTermIterator(int size, list<Term>  ** hashTable)

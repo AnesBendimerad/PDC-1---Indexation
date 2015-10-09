@@ -8,7 +8,6 @@ private:
 	DocumentTable *documentTable;
 	bool finalized;
 	string postingFilePath;
-	DocumentTerm * getTermPostingList(string token);
 public:
 	Index(IDictionary *dictionary,string outputFilePath);
 	int addDocument(DocumentMetaData documentMetaData);
