@@ -8,15 +8,20 @@
 Indexer::Indexer(string repositoryPath)
 {
 	Indexer::repositoryPath = repositoryPath;
+	iDictionary = nullptr;
+	outputFilePath = "";
 }
 
 IIndex* Indexer::createIndex()
 {
 	int dictionarySize = 1021; //1021 is a prime number used for this indexer
-	IHasher* hasher = new Hasher();
-	IDictionary* dictionary = new Dictionary(dictionarySize, hasher);
-
-	Index* index = new Index(dictionary);
+	if (iDictionary == nullptr) {
+		iDictionary = new Dictionary(dictionarySize, new Hasher());
+	}
+	if (outputFilePath.compare("")==0) {
+		outputFilePath = DEFAULT_OUTPUT_FILE;
+	}
+	Index* index = new Index(iDictionary, outputFilePath);
 	
 	IDocumentProvider* documentProvider = new DocumentProvider(repositoryPath);
 
@@ -35,6 +40,18 @@ IIndex* Indexer::createIndex()
 	index->finalize();
 	
 	return index;
+}
+
+IIndexer * Indexer::setIDictionary(IDictionary * iDictionary)
+{
+	Indexer::iDictionary = iDictionary;
+	return this;
+}
+
+IIndexer * Indexer::setOutputFilePath(string outputFilePath)
+{
+	Indexer::outputFilePath = outputFilePath;
+	return this;
 }
 
 Indexer::~Indexer()

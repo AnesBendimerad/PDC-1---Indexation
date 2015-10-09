@@ -5,12 +5,12 @@
 #include "DocumentTerm.h"
 #include "Term.h"
 
-Index::Index(IDictionary *dictionary)
+Index::Index(IDictionary *dictionary, string outputFilePath)
 {
 	Index::dictionary = dictionary;
 	documentTable = new DocumentTable();
 	finalized = false;
-	postingFilePath = "";
+	postingFilePath = outputFilePath;
 }
 
 int Index::addDocument(DocumentMetaData documentMetaData)

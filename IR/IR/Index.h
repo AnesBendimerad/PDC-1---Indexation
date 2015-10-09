@@ -9,7 +9,7 @@ private:
 	bool finalized;
 	string postingFilePath;
 public:
-	Index(IDictionary *dictionary);
+	Index(IDictionary *dictionary,string outputFilePath);
 	int addDocument(DocumentMetaData documentMetaData);
 	void addTerm(string token);
 	void finalize();
