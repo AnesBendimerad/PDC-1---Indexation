@@ -38,6 +38,7 @@ Document* DocumentProvider::getNextDocument()
 	unsigned int currentDocumentOffset;
 	string documentText;
 	string token;
+	char c;
 
 	//If all FILES have been processed then we return null
 	if (currentFileIndex != pathList.size()) 
@@ -51,71 +52,52 @@ Document* DocumentProvider::getNextDocument()
 		currentDocumentOffset = (unsigned int) currentFile.tellg();
 
 		while (currentFile >> token) {
-
 			//The end of the current DOCUMENT has been reached
-			if (token.compare("</DOC>") == 0)
+			if (token.compare("<DOCNO>") == 0)
 			{
-				break;
+				currentFile >> token;
+				token = token.erase(0, 2).erase(6, 1);
+				documentMetaData.address= stoul(token, nullptr, 10);
 			}
-			else
+			else if(token.compare("<DOCID>") == 0)
 			{
-				token = transformToken(token);
-				if (token != "")
+				currentFile >> token;
+				documentMetaData.id = stoul(token, nullptr, 10);
+			}
+			else if (token.compare("<HEADLINE>") == 0)
+			{
+				while (currentFile >> token && token.compare("</HEADLINE>") != 0)
 					documentText += token + " ";
 			}
+			else if (token.compare("<TEXT>") == 0)
+			{
+				while (currentFile >> token && token.compare("</TEXT>") != 0)
+					documentText += token + " ";
+			}
+			else if (token.compare("<GRAPHIC>") == 0)
+			{
+				while (currentFile >> token && token.compare("</GRAPHIC>") != 0)
+					documentText += token + " ";
+			}
+			else if (token.compare("</DOC>") == 0)
+			    { 
+					currentFile >> token;
+					// IF All DOCUMENTS in the current FILE have been processed then close the file and move to the next one
+					if (currentFile.eof())
+					{
+						currentFileIndex++;
+						currentFile.close();
+					}
+					break;
+				}
 		}
-
-		//The first string in text is the DOCNO, erase "la" and "-" from it then convert it to unsigned int
-		istringstream  iss(documentText);
-		iss >> token;
-		token = token.erase(0, 2).erase(6, 1);
-		documentMetaData.address = stoul(token, nullptr, 10);
-
-		//The second string in text is the DOCID, convert it to unsigned int
-		iss >> token;
-		documentMetaData.id = stoul(token, nullptr, 10);
+		
 
 		//Store the offset of the current document
 		documentMetaData.offset = currentDocumentOffset;
 
 		//Finally construct the document
 		document = new Document(documentMetaData, documentText);
-
-		// IF All DOCUMENTS in the current FILE have been processed then close the file and move to the next one
-		if (currentFile.eof()) {
-			currentFileIndex++;
-			currentFile.close();
-		}
 	}
 	return document;
-}
-
-
-// This function eliminates HTML tags, punctuation and convert tokens to lower case
-string DocumentProvider::transformToken(string &token)
-{
-	unsigned i = 0;
-
-	if (token.find("<") == 0 || token.find("</") == 0 || token.find("CHJ=") == 0 || token.find("CVJ=") == 0)
-	{
-		return "";
-	}
-
-	else
-	{
-		while (i < token.length())
-		{
-			token[i] = tolower(token[i]);
-			if (ispunct(token[i]) && token[i] != '-' && token[i] != '\'')
-			{
-				token.erase(i, 1);
-			}
-			else
-			{
-				i++;
-			}
-		}
-
-	}
-	return token;
 }

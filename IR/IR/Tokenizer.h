@@ -7,6 +7,7 @@ class Tokenizer : public ITokenizer {
 private:
 	Document* document;
 	unsigned int currentPosition = 0;
+	string transformToken(string&);
 
 public:
 	Tokenizer(Document* document);
