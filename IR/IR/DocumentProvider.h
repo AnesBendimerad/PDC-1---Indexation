@@ -10,7 +10,6 @@ private:
 	ifstream  currentFile;
 	vector<string> pathList;
 	unsigned int currentFileIndex = 0;
-	string transformToken(string&);
 public:
 	DocumentProvider(string repositoryFile);
 	Document* getNextDocument();
