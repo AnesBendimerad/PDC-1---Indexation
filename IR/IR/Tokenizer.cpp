@@ -32,7 +32,7 @@ string Tokenizer::getNextToken()
 	return "";
 }
 
-// This function eliminates HTML tags, punctuation and convert tokens to lower case
+// This function eliminates tags, punctuation and convert tokens to lower case
 string Tokenizer::transformToken(string &token)
 {
 	unsigned i = 0;

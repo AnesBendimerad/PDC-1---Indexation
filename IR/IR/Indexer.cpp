@@ -14,8 +14,8 @@ Indexer::Indexer(string repositoryPath)
 
 IIndex* Indexer::createIndex()
 {
-	int dictionarySize = 1021; //1021 is a prime number used for this indexer
 	if (iDictionary == nullptr) {
+		int dictionarySize = 1021; //1021 is a prime number used for this indexer
 		iDictionary = new Dictionary(dictionarySize, new Hasher());
 	}
 	if (outputFilePath.compare("")==0) {

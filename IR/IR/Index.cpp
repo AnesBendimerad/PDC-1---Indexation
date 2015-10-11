@@ -77,6 +77,7 @@ void Index::finalize()
 			delete term->postingList;
 			term->postingList = (void *) (unsigned int)outputFile.tellp();
 			outputFile.write((const char *)docTermTable, (sizeof(DocumentTerm)*term->documentNumber));
+			free(docTermTable);
 		}
 		outputFile.close();
 		finalized = true;
