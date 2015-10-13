@@ -6,9 +6,9 @@ using namespace std;
 class Tokenizer : public ITokenizer {
 private:
 	Document* document;
-	unsigned int currentPosition = 0;
+	streampos currentPosition = ios_base::beg;
 	string transformToken(string&);
-
+	void preprocess();
 public:
 	Tokenizer(Document* document);
 	string getNextToken();

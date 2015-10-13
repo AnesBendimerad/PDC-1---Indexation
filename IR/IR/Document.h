@@ -14,5 +14,6 @@ public:
 	Document(DocumentMetaData docMetaData, string text);
 	void incrementWordsNumber();
 	string getText();
+	void setText(string text);
 	DocumentMetaData getDocumentMetaData();
 };
