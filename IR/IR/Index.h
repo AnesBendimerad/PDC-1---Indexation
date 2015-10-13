@@ -2,6 +2,7 @@
 #include "IIndex.h"
 #include "IDictionary.h"
 #include "DocumentTable.h"
+#include "DocumentTerm.h"
 class Index : public IIndex {
 private:
 	IDictionary *dictionary;
@@ -14,5 +15,6 @@ public:
 	void addTerm(string token);
 	void finalize();
 	list<int> search(string querry);
+	DocumentTerm* getTermPostingList(string token);
 	~Index();
 };

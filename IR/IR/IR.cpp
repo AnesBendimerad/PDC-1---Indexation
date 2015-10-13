@@ -1,3 +1,6 @@
+// IR.cpp : Defines the entry point for the console application.
+//
+
 #include "stdafx.h"
 #include <iostream>
 #include <string>
@@ -15,8 +18,8 @@ using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-
-	Index *index = new Index(new Dictionary(23, new Hasher()), "myFileOfPostingList");
+	
+	Index *index = new Index(new Dictionary(23,new Hasher()),"myFileOfPostingList");
 	DocumentMetaData dMD1, dMD2, dMD3;
 	dMD1.address = 1;
 	dMD1.id = 1;
@@ -51,3 +54,4 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	return 0;
 }
+

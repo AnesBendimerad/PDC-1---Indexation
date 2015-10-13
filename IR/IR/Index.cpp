@@ -63,7 +63,22 @@ void Index::finalize()
 		// we write the posting list table in the file
 		// we destruct the posting list
 		ofstream outputFile(postingFilePath);
-
+		IIterator* termIterator = dictionary->getIterator();
+		Term * term;
+		while ((term = static_cast<Term*>(termIterator->getNext())) != nullptr) {
+			list<DocumentTerm>* postingListAsList = static_cast<list<DocumentTerm>*>(term->postingList);
+			DocumentTerm * docTermTable= (DocumentTerm*)malloc(sizeof(DocumentTerm)*term->documentNumber);
+			list<DocumentTerm>::iterator it;
+			int i = 0;
+			for (it = postingListAsList->begin(); it != postingListAsList->end(); ++it)
+			{
+				docTermTable[i++] = *it;
+			}
+			delete term->postingList;
+			term->postingList = (void *) (unsigned int)outputFile.tellp();
+			outputFile.write((const char *)docTermTable, (sizeof(DocumentTerm)*term->documentNumber));
+		}
+		outputFile.close();
 		finalized = true;
 	}
 	else 
@@ -76,6 +91,21 @@ list<int> Index::search(string querry)
 {
 	// return the most relevent  document to the query
 	return list<int>();
+}
+
+DocumentTerm * Index::getTermPostingList(string token)
+{
+	ifstream inputStream(postingFilePath);
+	Term * term = dictionary->getTerm(token);
+	if (term != nullptr) {
+		DocumentTerm* documentTermTable= (DocumentTerm*)malloc(sizeof(DocumentTerm)*term->documentNumber);
+		inputStream.seekg((unsigned int) term->postingList);
+		inputStream.read((char * )documentTermTable, sizeof(DocumentTerm)*term->documentNumber);
+		inputStream.close();
+		return documentTermTable;
+	}
+	inputStream.close();
+	return nullptr;
 }
 
 
