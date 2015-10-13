@@ -16,11 +16,6 @@ string Document::getText()
 	return text;
 }
 
-void Document::setText(string text)
-{
-	this->text = text;
-}
-
 DocumentMetaData Document::getDocumentMetaData()
 {
 	return documentMetaData;
