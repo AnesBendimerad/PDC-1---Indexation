@@ -36,7 +36,9 @@ IIndex* Indexer::createIndex()
 		}
 		index->addDocument(document->getDocumentMetaData());
 		delete document;
+		delete tokenizer;
 	}
+	delete documentProvider;
 	index->finalize();
 	
 	return index;

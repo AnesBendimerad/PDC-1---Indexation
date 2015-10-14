@@ -12,5 +12,6 @@ public:
 	unsigned int getDocumentNumber();
 	void finalize();
 	DocumentMetaData* getDocument(int documentIndex);
+	unsigned long long getMemorySize();
 	~DocumentTable();
 };

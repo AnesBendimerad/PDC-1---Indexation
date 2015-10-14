@@ -5,6 +5,7 @@
 #include "DocumentTable.h"
 #include "DocumentTerm.h"
 #include "Term.h"
+#include <iostream>
 
 
 
@@ -79,9 +80,14 @@ void Index::finalize()
 			outputFile.write((const char *)docTermTable, (sizeof(DocumentTerm)*term->documentNumber));
 			free(docTermTable);
 		}
+		unsigned long long termsNumber = dictionary->getTermsNumber();
+		unsigned long long dicMemorySize = dictionary->getMemorySize();
+		unsigned long long docTableMemSize = documentTable->getMemorySize();
 		outputFile.close();
 		finalized = true;
+		
 	}
+	
 	else 
 	{
 		throw runtime_error("Index finalized yet");

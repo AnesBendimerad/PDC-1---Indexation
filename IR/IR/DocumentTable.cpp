@@ -72,6 +72,11 @@ DocumentMetaData* DocumentTable::getDocument(int documentIndex)
 	
 }
 
+unsigned long long DocumentTable::getMemorySize()
+{
+	return documentNumber*sizeof(DocumentMetaData)+sizeof(unsigned int)+sizeof(bool) + sizeof(void*);
+}
+
 DocumentTable::~DocumentTable()
 {
 	delete docTable;

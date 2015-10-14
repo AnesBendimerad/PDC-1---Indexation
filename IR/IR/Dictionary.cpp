@@ -4,6 +4,7 @@
 
 Dictionary::Dictionary(int size, IHasher *hasher)
 {
+	Dictionary::termsNumber = 0;
 	Dictionary::size = size;
 	hashTable = (list<Term>**) malloc(sizeof(list<Term>*)*size);
 	for (int i = 0; i < size; i++)
@@ -19,6 +20,7 @@ Term* Dictionary::addTerm(string token)
 	list<Term>* cell = hashTable[index];
 	if (cell == nullptr)
 	{
+		termsNumber++;
 		Term term;
 		term.token = token;
 		cell = new list<Term>();
@@ -39,6 +41,7 @@ Term* Dictionary::addTerm(string token)
 		}
 		else
 		{
+			termsNumber++;
 			Term term;
 			term.token = token;
 			cell->insert(it, term);
@@ -70,6 +73,16 @@ Term* Dictionary::getTerm(string token)
 IIterator * Dictionary::getIterator()
 {
 	return new DictionaryTermIterator(size,hashTable);
+}
+
+unsigned long long Dictionary::getTermsNumber()
+{
+	return termsNumber;
+}
+
+unsigned long long Dictionary::getMemorySize()
+{
+	return sizeof(IHasher*)+size*sizeof(list<Term>*)+sizeof(list<Term>  **)+sizeof(int)+sizeof(unsigned long long)+termsNumber*(sizeof(Term)+sizeof(void*));
 }
 
 Dictionary::~Dictionary()

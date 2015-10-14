@@ -8,10 +8,13 @@ private:
 	IHasher * hasher;
 	list<Term>  ** hashTable;
 	int size;
+	unsigned long long termsNumber;
 public:
 	Dictionary(int size,IHasher *hasher);
 	Term* addTerm(string token) ;
 	Term* getTerm(string token) ;
 	IIterator * getIterator();
+	unsigned long long getTermsNumber();
+	unsigned long long getMemorySize();
 	~Dictionary();
 };
