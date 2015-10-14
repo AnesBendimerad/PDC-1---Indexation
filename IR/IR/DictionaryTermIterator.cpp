@@ -9,10 +9,10 @@ DictionaryTermIterator::DictionaryTermIterator(int size, list<Term>  ** hashTabl
 
 void * DictionaryTermIterator::getNext()
 {
-	if (currentElement==-1) {
+	if (currentElement == -1) {
 		processNextTermListIndex();
 		if (currentElement < size) {
-			it =hashTable[currentElement]->begin();
+			it = hashTable[currentElement]->begin();
 			return &(*it);
 		}
 	}

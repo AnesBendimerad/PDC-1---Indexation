@@ -56,14 +56,23 @@ void Index::finalize()
 	if (!finalized) {
 		documentTable->finalize();
 		// write the posting list on file and change the pointer to offset in file (postingFilePath)
-		// we'll create a ofstream file to write on it
-		// we'll iterate all the hash table, for each element that contains a non null list
-		// we'll iterate for all terms in the list, for each term
-		// we create a table and copy all posting list element on it,
-		// we replace the void* postinglist by the offset
-		// we write the posting list table in the file
-		// we destruct the posting list
+		// the offstream structure file is :
+		//		Dictionary offset
+		//		Terms number in Dictionary
+		//		DocumentMetaDatas number in DocumentTable
+		//		DocumentMetaDatas
+		//		posting lists
+		//		Dictionary
 		ofstream outputFile(postingFilePath);
+		// prepare a place for the dictionary offset
+		outputFile.write((const char *)nullptr, sizeof(void *));
+		// write the terms number in Dictionary
+		outputFile.write((const char *)dictionary->getTermsNumber(), sizeof(unsigned long long));
+		// write the DocumentMetaDatas number in DocumentTable
+		outputFile.write((const char *)documentTable->getDocumentNumber(), sizeof(unsigned long long));
+		// write the DocumentMetaDatas
+		outputFile.write((const char *)documentTable->getFinalizedDocumentTable(),documentTable->getDocumentNumber()*sizeof(DocumentMetaData));
+		// write the posting lists contiguously
 		IIterator* termIterator = dictionary->getIterator();
 		Term * term;
 		while ((term = static_cast<Term*>(termIterator->getNext())) != nullptr) {
@@ -80,9 +89,9 @@ void Index::finalize()
 			outputFile.write((const char *)docTermTable, (sizeof(DocumentTerm)*term->documentNumber));
 			free(docTermTable);
 		}
-		unsigned long long termsNumber = dictionary->getTermsNumber();
-		unsigned long long dicMemorySize = dictionary->getMemorySize();
-		unsigned long long docTableMemSize = documentTable->getMemorySize();
+		delete termIterator;
+		// write the terms of the dictionary
+		// TODO
 		outputFile.close();
 		finalized = true;
 		

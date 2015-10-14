@@ -77,6 +77,15 @@ unsigned long long DocumentTable::getMemorySize()
 	return documentNumber*sizeof(DocumentMetaData)+sizeof(unsigned int)+sizeof(bool) + sizeof(void*);
 }
 
+DocumentMetaData * DocumentTable::getFinalizedDocumentTable()
+{
+	if (!finalized) {
+		throw runtime_error("Document table not finalized yet");
+	}
+	return static_cast<DocumentMetaData*>(docTable);
+}
+
+
 DocumentTable::~DocumentTable()
 {
 	delete docTable;

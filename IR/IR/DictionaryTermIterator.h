@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include <list>
 #include "IIterator.h"
 #include "Term.h"

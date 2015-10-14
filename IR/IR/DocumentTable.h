@@ -13,5 +13,6 @@ public:
 	void finalize();
 	DocumentMetaData* getDocument(int documentIndex);
 	unsigned long long getMemorySize();
+	DocumentMetaData* getFinalizedDocumentTable();
 	~DocumentTable();
 };
