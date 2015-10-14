@@ -6,6 +6,7 @@
 Tokenizer::Tokenizer(Document *document)
 {
 	this->document = document;
+	preprocess();
 }
 
 Tokenizer::~Tokenizer()
@@ -21,13 +22,10 @@ string Tokenizer::getNextToken()
 	iss.seekg(currentPosition);
 	while (iss >> token)
 	{
-		currentPosition = (unsigned int) iss.tellg();
-		token = transformToken(token);
-		if (token != "")
-		{
-			document->incrementWordsNumber();
-			return token;
-		}
+		currentPosition = (unsigned int)iss.tellg();
+		document->incrementWordsNumber();
+		return token;
+		
 	}
 	return "";
 }
@@ -48,7 +46,11 @@ string Tokenizer::transformToken(string &token)
 		{
 			token[i] = tolower(token[i]);
 
-			if (ispunct(token[i]) && token[i] == '.')
+			if (ispunct(token[i]) && (i == token.length() - 1 || i ==0 ))
+			{
+				token.erase(i, 1);
+			}
+			else if (ispunct(token[i]) && token[i] == '.')
 			{
 				token[i] = ' ';
 			}
@@ -66,3 +68,21 @@ string Tokenizer::transformToken(string &token)
 	return token;
 }
 
+
+// This function does some processing in text before being used by getNextToken() function
+void Tokenizer::preprocess()
+{
+	string text = document->getText();
+	istringstream iss(text);
+	string token;
+	string transformedText;
+	while (iss >> token)
+	{
+		token = transformToken(token);
+		if (token != "")
+		{
+			transformedText += token + " ";
+		}
+	}
+	document->setText(transformedText);
+}

@@ -8,6 +8,7 @@ private:
 	Document* document;
 	unsigned int currentPosition = 0;
 	string transformToken(string&);
+	void preprocess();
 
 public:
 	Tokenizer(Document* document);
