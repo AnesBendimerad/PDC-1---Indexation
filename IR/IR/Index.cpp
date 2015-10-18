@@ -67,9 +67,9 @@ void Index::finalize()
 		// prepare a place for the dictionary offset
 		outputFile.write((const char *)nullptr, sizeof(void *));
 		// write the terms number in Dictionary
-		outputFile.write((const char *)dictionary->getTermsNumber(), sizeof(unsigned long long));
+		outputFile.write((const char *)&dictionary->getTermsNumber(), sizeof(unsigned long long));
 		// write the DocumentMetaDatas number in DocumentTable
-		outputFile.write((const char *)documentTable->getDocumentNumber(), sizeof(unsigned long long));
+		outputFile.write((const char *)&documentTable->getDocumentNumber(), sizeof(unsigned long long));
 		// write the DocumentMetaDatas
 		outputFile.write((const char *)documentTable->getFinalizedDocumentTable(),documentTable->getDocumentNumber()*sizeof(DocumentMetaData));
 		// write the posting lists contiguously
