@@ -75,7 +75,7 @@ IIterator * Dictionary::getIterator()
 	return new DictionaryTermIterator(size,hashTable);
 }
 
-unsigned long long Dictionary::getTermsNumber()
+unsigned long long& Dictionary::getTermsNumber()
 {
 	return termsNumber;
 }

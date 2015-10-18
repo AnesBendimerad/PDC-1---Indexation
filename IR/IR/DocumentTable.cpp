@@ -3,6 +3,7 @@
 #include "DocumentTable.h"
 #include "DocumentMetaData.h"
 #include <typeinfo>
+#include <iostream>
 
 using namespace std;
 
@@ -25,7 +26,7 @@ unsigned int DocumentTable::addDocument(DocumentMetaData documentMetaData)
 	return documentNumber-1;
 }
 
-unsigned int DocumentTable::getDocumentNumber()
+unsigned int& DocumentTable::getDocumentNumber()
 {
 	return documentNumber;
 }

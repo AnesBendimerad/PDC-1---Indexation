@@ -14,7 +14,7 @@ public:
 	Term* addTerm(string token) ;
 	Term* getTerm(string token) ;
 	IIterator * getIterator();
-	unsigned long long getTermsNumber();
+	unsigned long long& getTermsNumber();
 	unsigned long long getMemorySize();
 	~Dictionary();
 };

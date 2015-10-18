@@ -9,6 +9,6 @@ public:
 	virtual Term* addTerm(string token) = 0;
 	virtual Term* getTerm(string token) = 0;
 	virtual IIterator * getIterator()=0;
-	virtual unsigned long long getTermsNumber() = 0;
+	virtual unsigned long long& getTermsNumber() = 0;
 	virtual unsigned long long getMemorySize() = 0;
 };

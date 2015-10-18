@@ -9,7 +9,7 @@ private:
 public:
 	DocumentTable();
 	unsigned int addDocument(DocumentMetaData documentMetaData);
-	unsigned int getDocumentNumber();
+	unsigned int& getDocumentNumber();
 	void finalize();
 	DocumentMetaData* getDocument(int documentIndex);
 	unsigned long long getMemorySize();
