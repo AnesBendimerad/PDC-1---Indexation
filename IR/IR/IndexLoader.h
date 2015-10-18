@@ -6,11 +6,11 @@ class IndexLoader {
 private:
 	IDictionary *dictionary;
 	string postingFilePath;
-	class indexType;
+	int indexType;
 public:
 	IndexLoader(string postingFilePath);
 	IndexLoader * setDictionary(IDictionary * dictionary);
-	IndexLoader * setIndexType(int type);
+	IndexLoader * setIndexType(int indexType);
 	IIndex * load();
 	~IndexLoader();
 };

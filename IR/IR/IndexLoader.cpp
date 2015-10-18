@@ -2,6 +2,7 @@
 
 IndexLoader::IndexLoader(string postingFilePath)
 {
+	IndexLoader::postingFilePath = postingFilePath;
 }
 
 IndexLoader * IndexLoader::setDictionary(IDictionary * dictionary)
