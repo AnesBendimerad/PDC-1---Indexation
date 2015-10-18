@@ -90,8 +90,15 @@ void Index::finalize()
 			free(docTermTable);
 		}
 		delete termIterator;
+		// save the dictionary offset
+		void * dictionaryOffset= (void *)(unsigned int)outputFile.tellp();
 		// write the terms of the dictionary
-		// TODO
+		termIterator = dictionary->getIterator();
+		while ((term = static_cast<Term*>(termIterator->getNext())) != nullptr) {
+			outputFile.write((const char *)&term, sizeof(Term));
+		}
+		outputFile.seekp(0);
+		outputFile.write((const char *)dictionaryOffset, sizeof(void *));
 		outputFile.close();
 		finalized = true;
 		
