@@ -5,5 +5,5 @@
 using namespace std;
 class IIndex {
 public:
-	virtual list<int> search(string querry) = 0;
+	virtual list<int> search(int topK,string query) = 0;
 };
