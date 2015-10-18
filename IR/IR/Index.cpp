@@ -65,7 +65,7 @@ void Index::finalize()
 		//		Dictionary
 		ofstream outputFile(postingFilePath);
 		// prepare a place for the dictionary offset
-		outputFile.write((const char *)nullptr, sizeof(void *));
+		outputFile.write((const char *)nullptr, sizeof(unsigned int));
 		// write the terms number in Dictionary
 		outputFile.write((const char *)&dictionary->getTermsNumber(), sizeof(unsigned long long));
 		// write the DocumentMetaDatas number in DocumentTable
@@ -91,14 +91,14 @@ void Index::finalize()
 		}
 		delete termIterator;
 		// save the dictionary offset
-		void * dictionaryOffset= (void *)(unsigned int)outputFile.tellp();
+		unsigned int * dictionaryOffset= (unsigned int *)(unsigned int)outputFile.tellp();
 		// write the terms of the dictionary
 		termIterator = dictionary->getIterator();
 		while ((term = static_cast<Term*>(termIterator->getNext())) != nullptr) {
 			outputFile.write((const char *)&term, sizeof(Term));
 		}
 		outputFile.seekp(0);
-		outputFile.write((const char *)dictionaryOffset, sizeof(void *));
+		outputFile.write((const char *)dictionaryOffset, sizeof(unsigned int));
 		outputFile.close();
 		finalized = true;
 		

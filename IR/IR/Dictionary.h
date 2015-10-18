@@ -12,6 +12,7 @@ private:
 public:
 	Dictionary(int size,IHasher *hasher);
 	Term* addTerm(string token) ;
+	void addTerm(Term* term);
 	Term* getTerm(string token) ;
 	IIterator * getIterator();
 	unsigned long long& getTermsNumber();

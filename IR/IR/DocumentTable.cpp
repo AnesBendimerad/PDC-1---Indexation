@@ -15,6 +15,13 @@ DocumentTable::DocumentTable()
 	docTable = new list<DocumentMetaData>();
 }
 
+DocumentTable::DocumentTable(int documentNumber, DocumentMetaData * docTable)
+{
+	DocumentTable::documentNumber = documentNumber;
+	DocumentTable::docTable = docTable;
+	DocumentTable::finalized = true;
+}
+
 unsigned int DocumentTable::addDocument(DocumentMetaData documentMetaData)
 {
 	if (finalized) {

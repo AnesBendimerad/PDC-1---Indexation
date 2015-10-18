@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "SimpleIndex.h"
 #include <fstream>
 SimpleIndex::SimpleIndex(IDictionary * dictionary, DocumentTable * documentTable, string postingFilePath)
