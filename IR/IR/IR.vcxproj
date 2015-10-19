@@ -125,6 +125,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="StrTkTokenizer.cpp" />
+    <ClCompile Include="Term.cpp" />
     <ClCompile Include="Tokenizer.cpp" />
   </ItemGroup>
   <ItemGroup>

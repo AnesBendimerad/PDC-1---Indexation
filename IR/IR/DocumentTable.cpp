@@ -33,7 +33,7 @@ unsigned int DocumentTable::addDocument(DocumentMetaData documentMetaData)
 	return documentNumber-1;
 }
 
-unsigned int& DocumentTable::getDocumentNumber()
+unsigned long long& DocumentTable::getDocumentNumber()
 {
 	return documentNumber;
 }
@@ -82,7 +82,7 @@ DocumentMetaData* DocumentTable::getDocument(int documentIndex)
 
 unsigned long long DocumentTable::getMemorySize()
 {
-	return documentNumber*sizeof(DocumentMetaData)+sizeof(unsigned int)+sizeof(bool) + sizeof(void*);
+	return documentNumber*sizeof(DocumentMetaData)+sizeof(unsigned long long)+sizeof(bool) + sizeof(void*);
 }
 
 DocumentMetaData * DocumentTable::getFinalizedDocumentTable()

@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <list>
-#define DEFAULT_OUTPUT_FILE "myIndex"
+#define DEFAULT_OUTPUT_FILE "myIndex2"
 using namespace std;
 class IIndex {
 public:

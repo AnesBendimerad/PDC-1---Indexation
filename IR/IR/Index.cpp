@@ -57,21 +57,27 @@ void Index::finalize()
 		documentTable->finalize();
 		// write the posting list on file and change the pointer to offset in file (postingFilePath)
 		// the offstream structure file is :
-		//		Dictionary offset
+		//		Dictionary offset in this file
 		//		Terms number in Dictionary
 		//		DocumentMetaDatas number in DocumentTable
 		//		DocumentMetaDatas
 		//		posting lists
 		//		Dictionary
-		ofstream outputFile(postingFilePath);
+		ofstream outputFile(postingFilePath, ios::out | ios::binary);
+
 		// prepare a place for the dictionary offset
-		outputFile.write((const char *)nullptr, sizeof(unsigned int));
+		unsigned int offsetPlacer = 0;
+		outputFile.write((const char *)&offsetPlacer, sizeof(unsigned int));
+		
 		// write the terms number in Dictionary
 		outputFile.write((const char *)&dictionary->getTermsNumber(), sizeof(unsigned long long));
+		
 		// write the DocumentMetaDatas number in DocumentTable
 		outputFile.write((const char *)&documentTable->getDocumentNumber(), sizeof(unsigned long long));
+		
 		// write the DocumentMetaDatas
 		outputFile.write((const char *)documentTable->getFinalizedDocumentTable(),documentTable->getDocumentNumber()*sizeof(DocumentMetaData));
+		
 		// write the posting lists contiguously
 		IIterator* termIterator = dictionary->getIterator();
 		Term * term;
@@ -90,20 +96,21 @@ void Index::finalize()
 			free(docTermTable);
 		}
 		delete termIterator;
+		
 		// save the dictionary offset
-		unsigned int * dictionaryOffset= (unsigned int *)(unsigned int)outputFile.tellp();
+		unsigned int  dictionaryOffset=(unsigned int)outputFile.tellp();
+		
 		// write the terms of the dictionary
 		termIterator = dictionary->getIterator();
 		while ((term = static_cast<Term*>(termIterator->getNext())) != nullptr) {
-			outputFile.write((const char *)&term, sizeof(Term));
+			outputFile << term;
 		}
 		outputFile.seekp(0);
-		outputFile.write((const char *)dictionaryOffset, sizeof(unsigned int));
+		outputFile.write((const char *) &dictionaryOffset, sizeof(unsigned int));
 		outputFile.close();
+		delete termIterator;
 		finalized = true;
-		
 	}
-	
 	else 
 	{
 		throw runtime_error("Index finalized yet");
@@ -118,7 +125,7 @@ list<int> Index::search(string querry)
 
 DocumentTerm * Index::getTermPostingList(string token)
 {
-	ifstream inputStream(postingFilePath);
+	ifstream inputStream(postingFilePath, ios::in | ios::binary);
 	Term * term = dictionary->getTerm(token);
 	if (term != nullptr) {
 		DocumentTerm* documentTermTable= (DocumentTerm*)malloc(sizeof(DocumentTerm)*term->documentNumber);

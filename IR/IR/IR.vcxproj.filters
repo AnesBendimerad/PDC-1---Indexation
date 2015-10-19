@@ -37,6 +37,9 @@
     <Filter Include="Source Files\utils">
       <UniqueIdentifier>{fc000d58-95cf-486e-91c9-3217b0cc07bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\structures">
+      <UniqueIdentifier>{5922593b-0c55-453f-9e10-fbd47f621173}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -163,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="IndexLoader.cpp">
       <Filter>Source Files\controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="Term.cpp">
+      <Filter>Source Files\structures</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
