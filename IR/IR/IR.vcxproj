@@ -51,13 +51,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>C:\boost\boost_1_59_0;lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\boost\boost_1_59_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -97,9 +96,7 @@
     <ClInclude Include="IIndexer.h" />
     <ClInclude Include="Index.h" />
     <ClInclude Include="Indexer.h" />
-    <ClInclude Include="IndexLoader.h" />
     <ClInclude Include="ITokenizer.h" />
-    <ClInclude Include="SimpleIndex.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="stopWords.h" />
     <ClInclude Include="strtk.hpp" />
@@ -112,14 +109,12 @@
     <ClCompile Include="DictionaryTermIterator.cpp" />
     <ClCompile Include="Document.cpp" />
     <ClCompile Include="DocumentProvider.cpp" />
-    <ClCompile Include="IndexLoader.cpp" />
     <ClCompile Include="IR.cpp" />
     <ClCompile Include="Hasher.cpp" />
     <ClCompile Include="DocumentTable.cpp" />
     <ClCompile Include="Dictionary.cpp" />
     <ClCompile Include="Index.cpp" />
     <ClCompile Include="Indexer.cpp" />
-    <ClCompile Include="SimpleIndex.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

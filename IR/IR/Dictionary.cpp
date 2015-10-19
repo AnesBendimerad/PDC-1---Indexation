@@ -51,36 +51,6 @@ Term* Dictionary::addTerm(string token)
 	}
 }
 
-void Dictionary::addTerm(Term * term)
-{
-	unsigned int index = hasher->hash(term->token) % size;
-	list<Term>* cell = hashTable[index];
-	if (cell == nullptr)
-	{
-		termsNumber++;
-		cell = new list<Term>();
-		cell->insert(cell->begin(), *term);
-		hashTable[index] = cell;
-	}
-	else
-	{
-		list<Term>::iterator it = cell->begin();
-		while (it != cell->end() && term->token.compare(it->token)>0)
-		{
-			it++;
-		}
-		if (it != cell->end() && term->token.compare(it->token) == 0)
-		{
-			throw runtime_error("You can't add Term twice");
-		}
-		else
-		{
-			termsNumber++;
-			cell->insert(it, *term);
-		}
-	}
-}
-
 Term* Dictionary::getTerm(string token)
 {
 	unsigned int index = hasher->hash(token) % size;

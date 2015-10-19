@@ -8,7 +8,6 @@ private:
 	void * docTable; // it's a list at first, and a table in the end
 public:
 	DocumentTable();
-	DocumentTable(int documentNumber, DocumentMetaData * docTable);
 	unsigned int addDocument(DocumentMetaData documentMetaData);
 	unsigned long long& getDocumentNumber();
 	void finalize();
