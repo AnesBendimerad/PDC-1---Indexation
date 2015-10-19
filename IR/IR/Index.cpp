@@ -38,11 +38,11 @@ DocumentTerm * Index::getTermPostingList(string token)
 
 
 // This function implements fagin's algorithm and return the topK documents which matchs the query
-list<int> Index::search(int topK, string query)
+vector<pair<DocumentMetaData, double>> Index::search(int topK, string query)
 {
 	vector<vector<pair<int, double>>> list_sorted_by_tf_idf = calculateTF_IDF(query);
 	vector<pair<int, double>> topKDocuments;
-	list<int> topDocuments;
+	vector<pair<DocumentMetaData, double>>  topDocuments;
 
 	double thresHold;
 	double weight=0, globalWeight =0;
@@ -66,7 +66,7 @@ list<int> Index::search(int topK, string query)
 				list_sorted_by_tf_idf.erase(list_sorted_by_tf_idf.begin()+i);
 			}
 
-			//Compute its global score by retrieving all s(tj, d(i)) with j?i
+			//Compute its global score by retrieving all s(tj, d(i)) with j!=i
 			for (int j = 0; j < list_sorted_by_tf_idf.size(); j++)
 			{
 				if (i != j)
@@ -86,6 +86,7 @@ list<int> Index::search(int topK, string query)
 			if (topKDocuments.size() < topK && documentIndex != -1)
 			{
 				topKDocuments.push_back(pair<int, double>(documentIndex, globalWeight));
+				topDocuments.push_back(pair<DocumentMetaData, double>(*documentTable->getDocument(documentIndex), globalWeight));
 			}
 			//Otherwise, if gd(i) is larger than the minimum of the scores of documents in Result, 
 			//replace the document with minimum score in R with d(i).
@@ -95,23 +96,26 @@ list<int> Index::search(int topK, string query)
 				{
 					topKDocuments.erase(topKDocuments.end());
 					topKDocuments.push_back(pair<int, double>(documentIndex, globalWeight));
+					topDocuments.push_back(pair<DocumentMetaData, double>(*documentTable->getDocument(documentIndex), globalWeight));
+
 				}
 			}
 
 			globalWeight = 0;
 			documentIndex = -1;
-			//We always sort the result by tf_idf 
-			sort(topKDocuments.begin(), topKDocuments.end(), sort_by_tf_idf);
+
+			//We always sort the result by global weight 
+			sort(topKDocuments.begin(), topKDocuments.end(),sort_by_tf_idf);
 		}
 	} while (topKDocuments.size() < topK  && topKDocuments.at(topKDocuments.size()-1).second< thresHold && list_sorted_by_tf_idf.size() !=0);
 
-	for (int i = 0; i < topKDocuments.size(); i++)
+	/*for (int i = 0; i < topKDocuments.size(); i++)
 	{
 		cout << "documentindex:" << topKDocuments.at(i).first << endl;
 		cout << "rank:" << topKDocuments.at(i).second << endl;
 		cout << endl;
-		topDocuments.push_back(topKDocuments.at(i).first);
-	}
+		//topDocuments.push_back(topKDocuments.at(i).first);
+	}*/
 	return topDocuments;
 }
 
@@ -124,16 +128,7 @@ vector<vector<pair<int, double>>> Index::calculateTF_IDF(string query)
 	fstream inputStream(invertedFilePath);
 	istringstream iss(query);
 	string token;
-	unsigned long long termsNumber = 0;
-	unsigned int documentsNumber = 0;
-
-	//Retrieve Number of terms in the dictionary and Number of Documents in the corpus
-	inputStream.read((char*)&termsNumber, sizeof(unsigned long long));
-	inputStream.read((char*)&documentsNumber, sizeof(unsigned int));
-
-	//Retrieve Documents MetaData
-	DocumentMetaData *documentTable = (DocumentMetaData*)malloc(sizeof(DocumentMetaData)*documentsNumber);
-	inputStream.read((char *)documentTable, sizeof(DocumentMetaData)*documentsNumber);
+	int documentsNumber = documentTable->getDocumentNumber();
 
 	//Calculate tf-idf in the loop
 	while (iss >> token)
@@ -144,8 +139,8 @@ vector<vector<pair<int, double>>> Index::calculateTF_IDF(string query)
 			DocumentTerm * documentTermTable = getTermPostingList(token);
 			for (int i = 0; i < term->documentNumber; i++)
 			{
-				tf = ((double)documentTermTable[i].ftd / (double)documentTable[documentTermTable[i].documentIndex].wordsNumber);
-				idf = (double)documentsNumber / (double)term->documentNumber;
+				tf = ((double)documentTermTable[i].ftd / (double)documentTable->getDocument(documentTermTable[i].documentIndex)->wordsNumber);
+				idf = (double)documentTable->getDocumentNumber() / (double)term->documentNumber;
 
 				vector.push_back(pair<int, double>(documentTermTable[i].documentIndex, tf*log10(idf)));
 			}
@@ -155,6 +150,7 @@ vector<vector<pair<int, double>>> Index::calculateTF_IDF(string query)
 			vector.clear();
 		}
 	}
+
 	return tf_idfLists;
 }
 
@@ -170,7 +166,7 @@ int Index::findPositionOfDocument(int documentIndex, vector<pair<int, double>> v
 	return -1;
 }
 
-bool sort_by_tf_idf(const pair<int, double>& left, const pair<int, double>& right)
+bool Index:: sort_by_tf_idf(const pair<int, double>& left, const pair<int, double>& right)
 {
 	return left.second > right.second;
 }
