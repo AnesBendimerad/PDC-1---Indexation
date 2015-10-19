@@ -60,44 +60,39 @@ vector<pair<DocumentMetaData, double>> Index::search(int topK, string query)
 				documentIndex = list_sorted_by_tf_idf.at(i).begin()->first;
 				weight = list_sorted_by_tf_idf.at(i).begin()->second;
 				list_sorted_by_tf_idf.at(i).erase(list_sorted_by_tf_idf.at(i).begin());
-			}
-			else
-			{
-				list_sorted_by_tf_idf.erase(list_sorted_by_tf_idf.begin()+i);
-			}
-
-			//Compute its global score by retrieving all s(tj, d(i)) with j!=i
-			for (int j = 0; j < list_sorted_by_tf_idf.size(); j++)
-			{
-				if (i != j)
+				//Compute its global score by retrieving all s(tj, d(i)) with j!=i
+				for (int j = 0; j < list_sorted_by_tf_idf.size(); j++)
 				{
-					if ((result = findPositionOfDocument(documentIndex, list_sorted_by_tf_idf.at(j))) != -1)
+					if (i != j)
 					{
-						globalWeight += list_sorted_by_tf_idf.at(j).at(result).second;
-						list_sorted_by_tf_idf.at(j).erase(list_sorted_by_tf_idf.at(j).begin() + result);
+						if ((result = findPositionOfDocument(documentIndex, list_sorted_by_tf_idf.at(j))) != -1)
+						{
+							globalWeight += list_sorted_by_tf_idf.at(j).at(result).second;
+							list_sorted_by_tf_idf.at(j).erase(list_sorted_by_tf_idf.at(j).begin() + result);
+						}
 					}
 				}
-			}
 
-			globalWeight += weight;
-			thresHold += weight;
+				globalWeight += weight;
+				thresHold += weight;
 
-			//If R contains less than k documents, add d(i) to the result
-			if (topKDocuments.size() < topK && documentIndex != -1)
-			{
-				topKDocuments.push_back(pair<int, double>(documentIndex, globalWeight));
-			}
-			//Otherwise, if gd(i) is larger than the minimum of the scores of documents in Result, 
-			//replace the document with minimum score in R with d(i).
-			else
-			{
-				if (topKDocuments.at(topKDocuments.size()-1).second < globalWeight && documentIndex != -1)
+				//If R contains less than k documents, add d(i) to the result
+				if (topKDocuments.size() < topK && documentIndex != -1)
 				{
-				    topKDocuments.pop_back();
 					topKDocuments.push_back(pair<int, double>(documentIndex, globalWeight));
 				}
-			}
+				//Otherwise, if gd(i) is larger than the minimum of the scores of documents in Result, 
+				//replace the document with minimum score in R with d(i).
+				else
+				{
+					if (topKDocuments.at(topKDocuments.size() - 1).second < globalWeight && documentIndex != -1)
+					{
+						topKDocuments.pop_back();
+						topKDocuments.push_back(pair<int, double>(documentIndex, globalWeight));
+					}
+				}
 
+			}
 			globalWeight = 0;
 			documentIndex = -1;
 
@@ -110,7 +105,6 @@ vector<pair<DocumentMetaData, double>> Index::search(int topK, string query)
 	{
 		topDocuments.push_back(pair<DocumentMetaData, double>(*documentTable->getDocument(topKDocuments.at(i).first), topKDocuments.at(i).second));
 	}
-
 
 	return topDocuments;
 }
@@ -146,7 +140,6 @@ vector<vector<pair<int, double>>> Index::calculateTF_IDF(string query)
 			vector.clear();
 		}
 	}
-
 	return tf_idfLists;
 }
 
