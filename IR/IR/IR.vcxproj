@@ -89,6 +89,7 @@
     <ClInclude Include="DocumentTable.h" />
     <ClInclude Include="DocumentTerm.h" />
     <ClInclude Include="Hasher.h" />
+    <ClInclude Include="ICompressor.h" />
     <ClInclude Include="IIterator.h" />
     <ClInclude Include="IDictionary.h" />
     <ClInclude Include="IDocumentProvider.h" />
@@ -99,6 +100,7 @@
     <ClInclude Include="InMemoryIndexBuilder.h" />
     <ClInclude Include="IndexLoader.h" />
     <ClInclude Include="ITokenizer.h" />
+    <ClInclude Include="NoCompressor.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="stopWords.h" />
     <ClInclude Include="strtk.hpp" />
@@ -118,6 +120,7 @@
     <ClCompile Include="HashTableDictionary.cpp" />
     <ClCompile Include="Index.cpp" />
     <ClCompile Include="InMemoryIndexBuilder.cpp" />
+    <ClCompile Include="NoCompressor.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
