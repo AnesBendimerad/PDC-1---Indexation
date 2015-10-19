@@ -8,7 +8,7 @@ SimpleIndex::SimpleIndex(IDictionary * dictionary, DocumentTable * documentTable
 	SimpleIndex::postingFilePath = postingFilePath;
 }
 
-list<int> SimpleIndex::search(string querry)
+list<int> SimpleIndex::search(int topK, string query)
 {
 	return list<int>();
 }

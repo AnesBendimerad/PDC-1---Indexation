@@ -10,7 +10,7 @@ private:
 	string postingFilePath;
 public:
 	SimpleIndex(IDictionary *dictionary, DocumentTable* documentTable, string postingFilePath);
-	list<int> search(string querry);
+	list<int> search(int topK, string query) ;
 	DocumentTerm* getTermPostingList(string token);
 	~SimpleIndex();
 };
