@@ -86,7 +86,6 @@ vector<pair<DocumentMetaData, double>> Index::search(int topK, string query)
 			if (topKDocuments.size() < topK && documentIndex != -1)
 			{
 				topKDocuments.push_back(pair<int, double>(documentIndex, globalWeight));
-				topDocuments.push_back(pair<DocumentMetaData, double>(*documentTable->getDocument(documentIndex), globalWeight));
 			}
 			//Otherwise, if gd(i) is larger than the minimum of the scores of documents in Result, 
 			//replace the document with minimum score in R with d(i).
@@ -94,10 +93,8 @@ vector<pair<DocumentMetaData, double>> Index::search(int topK, string query)
 			{
 				if (topKDocuments.at(topKDocuments.size()-1).second < globalWeight && documentIndex != -1)
 				{
-					topKDocuments.erase(topKDocuments.end());
+				    topKDocuments.pop_back();
 					topKDocuments.push_back(pair<int, double>(documentIndex, globalWeight));
-					topDocuments.push_back(pair<DocumentMetaData, double>(*documentTable->getDocument(documentIndex), globalWeight));
-
 				}
 			}
 
@@ -109,13 +106,12 @@ vector<pair<DocumentMetaData, double>> Index::search(int topK, string query)
 		}
 	} while (topKDocuments.size() < topK  && topKDocuments.at(topKDocuments.size()-1).second< thresHold && list_sorted_by_tf_idf.size() !=0);
 
-	/*for (int i = 0; i < topKDocuments.size(); i++)
+	for (int i = 0; i < topKDocuments.size(); i++)
 	{
-		cout << "documentindex:" << topKDocuments.at(i).first << endl;
-		cout << "rank:" << topKDocuments.at(i).second << endl;
-		cout << endl;
-		//topDocuments.push_back(topKDocuments.at(i).first);
-	}*/
+		topDocuments.push_back(pair<DocumentMetaData, double>(*documentTable->getDocument(topKDocuments.at(i).first), topKDocuments.at(i).second));
+	}
+
+
 	return topDocuments;
 }
 
