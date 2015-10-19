@@ -29,6 +29,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		cout << "wordsNumber:" << topK.at(i).first.wordsNumber << endl;
 		cout << "offset:" << topK.at(i).first.offset << endl;
 		cout << "adress:" << topK.at(i).first.address << endl;
+		
 		cout << "rank:" << topK.at(i).second << endl;
 		cout << endl;
 	}
