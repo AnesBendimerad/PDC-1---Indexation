@@ -117,11 +117,11 @@
     <ClInclude Include="StrTkTokenizer.h">
       <Filter>Header Files\models</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleIndex.h">
-      <Filter>Header Files\models</Filter>
-    </ClInclude>
     <ClInclude Include="IndexLoader.h">
       <Filter>Header Files\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleIndex.h">
+      <Filter>Header Files\models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -161,14 +161,14 @@
     <ClCompile Include="StrTkTokenizer.cpp">
       <Filter>Source Files\models</Filter>
     </ClCompile>
-    <ClCompile Include="SimpleIndex.cpp">
-      <Filter>Source Files\models</Filter>
+    <ClCompile Include="Term.cpp">
+      <Filter>Source Files\structures</Filter>
     </ClCompile>
     <ClCompile Include="IndexLoader.cpp">
       <Filter>Source Files\controllers</Filter>
     </ClCompile>
-    <ClCompile Include="Term.cpp">
-      <Filter>Source Files\structures</Filter>
+    <ClCompile Include="SimpleIndex.cpp">
+      <Filter>Source Files\models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
