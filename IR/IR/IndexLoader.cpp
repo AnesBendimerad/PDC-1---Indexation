@@ -4,13 +4,13 @@
 #include "HashTableDictionary.h"
 #include "Hasher.h"
 #include "DocumentTable.h"
-#include "SimpleIndex.h"
+#include "Index.h"
 
-IndexLoader::IndexLoader(string postingFilePath)
+IndexLoader::IndexLoader(string invertedFilePath)
 {
-	IndexLoader::postingFilePath = postingFilePath;
+	IndexLoader::invertedFilePath = invertedFilePath;
 	dictionary = nullptr;
-	indexType = SIMPLE_INDEX_TYPE;
+	indexType = FAGIN_INDEX_TYPE;
 }
 
 IndexLoader * IndexLoader::setDictionary(IDictionary * dictionary)
@@ -30,7 +30,7 @@ IIndex  * IndexLoader::load()
 	if (dictionary == nullptr) {
 		dictionary= new HashTableDictionary();
 	}
-	ifstream inputStream(postingFilePath, ios::in | ios::binary);
+	ifstream inputStream(invertedFilePath, ios::in | ios::binary);
 
 	// get information about dictionary and documentTable
 	unsigned int * dictionaryOffset= (unsigned int *)malloc(sizeof(unsigned int));
@@ -53,8 +53,8 @@ IIndex  * IndexLoader::load()
 		dictionary->addTerm(&currentTerm);
 	}
 	IIndex *myIndex=nullptr;
-	if (indexType == SIMPLE_INDEX_TYPE) {
-		myIndex = new SimpleIndex(dictionary, documentTable, postingFilePath);;
+	if (indexType == FAGIN_INDEX_TYPE) {
+		myIndex = new Index(dictionary, documentTable, invertedFilePath);;
 	}
 	return myIndex;
 }

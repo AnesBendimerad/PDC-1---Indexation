@@ -17,8 +17,8 @@ using namespace std;
 int _tmain(int argc, _TCHAR* argv[])
 {
 
-	//InMemoryIndexBuilder * indexer = new InMemoryIndexBuilder("C:\\myFiles\\tests");
-	//IIndex  * index = indexer->createIndex();
+	InMemoryIndexBuilder * indexer = new InMemoryIndexBuilder("C:\\myFiles\\tests");
+	IIndex  * index = indexer->createIndex();
 	//IndexLoader * indexLoader = new IndexLoader(DEFAULT_OUTPUT_FILE);
 	//IIndex * index = indexLoader->load();
 	

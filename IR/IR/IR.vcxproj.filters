@@ -108,9 +108,6 @@
     <ClInclude Include="IndexLoader.h">
       <Filter>Header Files\controllers</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleIndex.h">
-      <Filter>Header Files\models</Filter>
-    </ClInclude>
     <ClInclude Include="IIndexBuilder.h">
       <Filter>Header Files\interfaces</Filter>
     </ClInclude>
@@ -157,9 +154,6 @@
     </ClCompile>
     <ClCompile Include="IndexLoader.cpp">
       <Filter>Source Files\controllers</Filter>
-    </ClCompile>
-    <ClCompile Include="SimpleIndex.cpp">
-      <Filter>Source Files\models</Filter>
     </ClCompile>
     <ClCompile Include="InMemoryIndexBuilder.cpp">
       <Filter>Source Files\controllers</Filter>

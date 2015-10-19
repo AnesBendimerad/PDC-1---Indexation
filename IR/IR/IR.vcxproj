@@ -99,7 +99,6 @@
     <ClInclude Include="InMemoryIndexBuilder.h" />
     <ClInclude Include="IndexLoader.h" />
     <ClInclude Include="ITokenizer.h" />
-    <ClInclude Include="SimpleIndex.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="stopWords.h" />
     <ClInclude Include="strtk.hpp" />
@@ -119,7 +118,6 @@
     <ClCompile Include="HashTableDictionary.cpp" />
     <ClCompile Include="Index.cpp" />
     <ClCompile Include="InMemoryIndexBuilder.cpp" />
-    <ClCompile Include="SimpleIndex.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

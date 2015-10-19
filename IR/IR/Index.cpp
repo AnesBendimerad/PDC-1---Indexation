@@ -11,117 +11,17 @@
 #include "Term.h"
 using namespace std;
 
-Index::Index(IDictionary *dictionary, string outputFilePath)
+
+Index::Index(IDictionary * dictionary, DocumentTable * documentTable, string invertedFilePath)
 {
 	Index::dictionary = dictionary;
-	documentTable = new DocumentTable();
-	finalized = false;
-	postingFilePath = outputFilePath;
-}
-
-int Index::addDocument(DocumentMetaData documentMetaData)
-{
-	return documentTable->addDocument(documentMetaData);
-}
-
-void Index::addTerm(string token)
-{
-	Term* term = Index::dictionary->addTerm(token);
-	// The next step is to update the term posting list and document number
-	if (term->postingList == nullptr) {
-		term->postingList= new list<DocumentTerm>();
-		list<DocumentTerm>* postingListAsList = static_cast<list<DocumentTerm>*>(term->postingList);
-		DocumentTerm docTerm;
-		docTerm.documentIndex = documentTable->getDocumentNumber();
-		postingListAsList->insert(postingListAsList->begin(), docTerm);
-		term->documentNumber++;
-		
-	}
-	else {
-		list<DocumentTerm>* postingListAsList = static_cast<list<DocumentTerm>*>(term->postingList);
-		list<DocumentTerm>::iterator it = postingListAsList->end();
-		it--;
-		if (documentTable->getDocumentNumber()==it->documentIndex) {
-			it->ftd++;
-		}
-		else {
-			DocumentTerm docTerm;
-			docTerm.documentIndex = documentTable->getDocumentNumber();
-			postingListAsList->insert(postingListAsList->end(), docTerm);
-			term->documentNumber++;
-		}
-	}
-}
-
-void Index::finalize()
-{
-	if (!finalized) {
-		documentTable->finalize();
-		// write the posting list on file and change the pointer to offset in file (postingFilePath)
-		// the offstream structure file is :
-		//		HashTableDictionary offset in this file
-		//		Terms number in HashTableDictionary
-		//		DocumentMetaDatas number in DocumentTable
-		//		DocumentMetaDatas
-		//		posting lists
-		//		HashTableDictionary
-		ofstream outputFile(postingFilePath, ios::out | ios::binary);
-
-		// prepare a place for the dictionary offset
-		unsigned int offsetPlacer = 0;
-		outputFile.write((const char *)&offsetPlacer, sizeof(unsigned int));
-		
-		// write the terms number in HashTableDictionary
-		outputFile.write((const char *)&dictionary->getTermsNumber(), sizeof(unsigned long long));
-		
-		// write the DocumentMetaDatas number in DocumentTable
-		outputFile.write((const char *)&documentTable->getDocumentNumber(), sizeof(unsigned long long));
-		
-		// write the DocumentMetaDatas
-		outputFile.write((const char *)documentTable->getFinalizedDocumentTable(),documentTable->getDocumentNumber()*sizeof(DocumentMetaData));
-		
-		// write the posting lists contiguously
-		IIterator* termIterator = dictionary->getIterator();
-		Term * term;
-		while ((term = static_cast<Term*>(termIterator->getNext())) != nullptr) {
-			list<DocumentTerm>* postingListAsList = static_cast<list<DocumentTerm>*>(term->postingList);
-			DocumentTerm * docTermTable= (DocumentTerm*)malloc(sizeof(DocumentTerm)*term->documentNumber);
-			list<DocumentTerm>::iterator it;
-			int i = 0;
-			for (it = postingListAsList->begin(); it != postingListAsList->end(); ++it)
-			{
-				docTermTable[i++] = *it;
-			}
-			delete term->postingList;
-			term->postingList = (void *) (unsigned int)outputFile.tellp();
-			outputFile.write((const char *)docTermTable, (sizeof(DocumentTerm)*term->documentNumber));
-			free(docTermTable);
-		}
-		delete termIterator;
-		
-		// save the dictionary offset
-		unsigned int  dictionaryOffset=(unsigned int)outputFile.tellp();
-		
-		// write the terms of the dictionary
-		termIterator = dictionary->getIterator();
-		while ((term = static_cast<Term*>(termIterator->getNext())) != nullptr) {
-			outputFile << term;
-		}
-		outputFile.seekp(0);
-		outputFile.write((const char *) &dictionaryOffset, sizeof(unsigned int));
-		outputFile.close();
-		delete termIterator;
-		finalized = true;
-	}
-	else 
-	{
-		throw runtime_error("Index finalized yet");
-	}
+	Index::documentTable = documentTable;
+	Index::invertedFilePath = invertedFilePath;
 }
 
 DocumentTerm * Index::getTermPostingList(string token)
 {
-	ifstream inputStream(postingFilePath, ios::in | ios::binary);
+	ifstream inputStream(invertedFilePath, ios::in | ios::binary);
 	Term * term = dictionary->getTerm(token);
 	if (term != nullptr) {
 		DocumentTerm* documentTermTable= (DocumentTerm*)malloc(sizeof(DocumentTerm)*term->documentNumber);
@@ -136,11 +36,6 @@ DocumentTerm * Index::getTermPostingList(string token)
 
 
 
-Index::~Index()
-{
-	delete dictionary;
-	delete documentTable;
-}
 
 // This function implements fagin's algorithm and return the topK documents which matchs the query
 list<int> Index::search(int topK, string query)
@@ -226,7 +121,7 @@ vector<vector<pair<int, double>>> Index::calculateTF_IDF(string query)
 	vector<vector<pair<int, double>>> tf_idfLists;
 	vector<pair<int, double>> vector;
 	double tf, idf;
-	fstream inputStream(postingFilePath);
+	fstream inputStream(invertedFilePath);
 	istringstream iss(query);
 	string token;
 	unsigned long long termsNumber = 0;
@@ -278,4 +173,11 @@ int Index::findPositionOfDocument(int documentIndex, vector<pair<int, double>> v
 bool sort_by_tf_idf(const pair<int, double>& left, const pair<int, double>& right)
 {
 	return left.second > right.second;
+}
+
+
+Index::~Index()
+{
+	delete dictionary;
+	delete documentTable;
 }

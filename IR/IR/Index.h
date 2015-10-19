@@ -8,16 +8,13 @@ class Index : public IIndex {
 private:
 	IDictionary *dictionary;
 	DocumentTable *documentTable;
-	bool finalized;
-	string postingFilePath;
+	string invertedFilePath;
+
 	DocumentTerm* getTermPostingList(string token);
 	vector<vector<pair<int, double>>> calculateTF_IDF(string query);
 	int findPositionOfDocument(int documentIndex,vector<pair<int, double>> vector);
 public:
-	Index(IDictionary *dictionary,string outputFilePath);
-	int addDocument(DocumentMetaData documentMetaData);
-	void addTerm(string token);
-	void finalize();
+	Index(IDictionary *dictionary, DocumentTable* documentTable, string invertedFilePath);
 	list<int> search(int topK,string query);
 	~Index();
 };
