@@ -59,19 +59,19 @@ void Index::finalize()
 		documentTable->finalize();
 		// write the posting list on file and change the pointer to offset in file (postingFilePath)
 		// the offstream structure file is :
-		//		Dictionary offset in this file
-		//		Terms number in Dictionary
+		//		HashTableDictionary offset in this file
+		//		Terms number in HashTableDictionary
 		//		DocumentMetaDatas number in DocumentTable
 		//		DocumentMetaDatas
 		//		posting lists
-		//		Dictionary
+		//		HashTableDictionary
 		ofstream outputFile(postingFilePath, ios::out | ios::binary);
 
 		// prepare a place for the dictionary offset
 		unsigned int offsetPlacer = 0;
 		outputFile.write((const char *)&offsetPlacer, sizeof(unsigned int));
 		
-		// write the terms number in Dictionary
+		// write the terms number in HashTableDictionary
 		outputFile.write((const char *)&dictionary->getTermsNumber(), sizeof(unsigned long long));
 		
 		// write the DocumentMetaDatas number in DocumentTable

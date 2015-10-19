@@ -2,7 +2,7 @@
 #include <list>
 #include "IIterator.h"
 #include "Term.h"
-class DictionaryTermIterator : public IIterator {
+class HashTableDictionaryTermIterator : public IIterator {
 private:
 	list<Term>  ** hashTable;
 	int size;
@@ -11,7 +11,7 @@ private:
 	
 	void processNextTermListIndex();
 public:
-	DictionaryTermIterator(int size, list<Term>  ** hashTable);
+	HashTableDictionaryTermIterator(int size, list<Term>  ** hashTable);
 	void*  getNext();
-	~DictionaryTermIterator();
+	~HashTableDictionaryTermIterator();
 };

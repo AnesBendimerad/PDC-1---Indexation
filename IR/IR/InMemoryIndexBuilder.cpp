@@ -1,22 +1,21 @@
 #include "stdafx.h"
-#include "Indexer.h"
+#include "InMemoryIndexBuilder.h"
 #include "Index.h"
-#include "Dictionary.h"
+#include "HashTableDictionary.h"
 #include "Hasher.h"
 #include "DocumentProvider.h"
 #include "Tokenizer.h"
-Indexer::Indexer(string repositoryPath)
+InMemoryIndexBuilder::InMemoryIndexBuilder(string repositoryPath)
 {
-	Indexer::repositoryPath = repositoryPath;
+	InMemoryIndexBuilder::repositoryPath = repositoryPath;
 	iDictionary = nullptr;
 	outputFilePath = "";
 }
 
-IIndex* Indexer::createIndex()
+IIndex* InMemoryIndexBuilder::createIndex()
 {
 	if (iDictionary == nullptr) {
-		int dictionarySize = 10009; //1021 is a prime number used for this indexer
-		iDictionary = new Dictionary(dictionarySize, new Hasher());
+		iDictionary = new HashTableDictionary();
 	}
 	if (outputFilePath.compare("")==0) {
 		outputFilePath = DEFAULT_OUTPUT_FILE;
@@ -44,19 +43,19 @@ IIndex* Indexer::createIndex()
 	return index;
 }
 
-IIndexer * Indexer::setIDictionary(IDictionary * iDictionary)
+IIndexBuilder * InMemoryIndexBuilder::setIDictionary(IDictionary * iDictionary)
 {
-	Indexer::iDictionary = iDictionary;
+	InMemoryIndexBuilder::iDictionary = iDictionary;
 	return this;
 }
 
-IIndexer * Indexer::setOutputFilePath(string outputFilePath)
+IIndexBuilder * InMemoryIndexBuilder::setOutputFilePath(string outputFilePath)
 {
-	Indexer::outputFilePath = outputFilePath;
+	InMemoryIndexBuilder::outputFilePath = outputFilePath;
 	return this;
 }
 
-Indexer::~Indexer()
+InMemoryIndexBuilder::~InMemoryIndexBuilder()
 {
 	//[Aymen] i don't know what we should do in this destructor
 }

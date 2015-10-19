@@ -81,8 +81,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Dictionary.h" />
-    <ClInclude Include="DictionaryTermIterator.h" />
+    <ClInclude Include="HashTableDictionary.h" />
+    <ClInclude Include="HashTableDictionaryTermIterator.h" />
     <ClInclude Include="Document.h" />
     <ClInclude Include="DocumentMetaData.h" />
     <ClInclude Include="DocumentProvider.h" />
@@ -94,9 +94,9 @@
     <ClInclude Include="IDocumentProvider.h" />
     <ClInclude Include="IHasher.h" />
     <ClInclude Include="IIndex.h" />
-    <ClInclude Include="IIndexer.h" />
+    <ClInclude Include="IIndexBuilder.h" />
     <ClInclude Include="Index.h" />
-    <ClInclude Include="Indexer.h" />
+    <ClInclude Include="InMemoryIndexBuilder.h" />
     <ClInclude Include="IndexLoader.h" />
     <ClInclude Include="ITokenizer.h" />
     <ClInclude Include="SimpleIndex.h" />
@@ -109,16 +109,16 @@
     <ClInclude Include="Tokenizer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DictionaryTermIterator.cpp" />
+    <ClCompile Include="HashTableDictionaryTermIterator.cpp" />
     <ClCompile Include="Document.cpp" />
     <ClCompile Include="DocumentProvider.cpp" />
     <ClCompile Include="IndexLoader.cpp" />
     <ClCompile Include="IR.cpp" />
     <ClCompile Include="Hasher.cpp" />
     <ClCompile Include="DocumentTable.cpp" />
-    <ClCompile Include="Dictionary.cpp" />
+    <ClCompile Include="HashTableDictionary.cpp" />
     <ClCompile Include="Index.cpp" />
-    <ClCompile Include="Indexer.cpp" />
+    <ClCompile Include="InMemoryIndexBuilder.cpp" />
     <ClCompile Include="SimpleIndex.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -78,20 +78,11 @@
     <ClInclude Include="IIndex.h">
       <Filter>Header Files\interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="IIndexer.h">
-      <Filter>Header Files\interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="DocumentProvider.h">
       <Filter>Header Files\controllers</Filter>
     </ClInclude>
     <ClInclude Include="Tokenizer.h">
       <Filter>Header Files\controllers</Filter>
-    </ClInclude>
-    <ClInclude Include="Indexer.h">
-      <Filter>Header Files\controllers</Filter>
-    </ClInclude>
-    <ClInclude Include="Dictionary.h">
-      <Filter>Header Files\models</Filter>
     </ClInclude>
     <ClInclude Include="DocumentTable.h">
       <Filter>Header Files\models</Filter>
@@ -104,9 +95,6 @@
     </ClInclude>
     <ClInclude Include="IIterator.h">
       <Filter>Header Files\interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="DictionaryTermIterator.h">
-      <Filter>Header Files\models</Filter>
     </ClInclude>
     <ClInclude Include="stopWords.h">
       <Filter>Header Files\utils</Filter>
@@ -121,6 +109,18 @@
       <Filter>Header Files\controllers</Filter>
     </ClInclude>
     <ClInclude Include="SimpleIndex.h">
+      <Filter>Header Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="IIndexBuilder.h">
+      <Filter>Header Files\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="InMemoryIndexBuilder.h">
+      <Filter>Header Files\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTableDictionary.h">
+      <Filter>Header Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTableDictionaryTermIterator.h">
       <Filter>Header Files\models</Filter>
     </ClInclude>
   </ItemGroup>
@@ -140,23 +140,14 @@
     <ClCompile Include="DocumentTable.cpp">
       <Filter>Source Files\models</Filter>
     </ClCompile>
-    <ClCompile Include="Dictionary.cpp">
-      <Filter>Source Files\models</Filter>
-    </ClCompile>
     <ClCompile Include="Index.cpp">
       <Filter>Source Files\models</Filter>
-    </ClCompile>
-    <ClCompile Include="Indexer.cpp">
-      <Filter>Source Files\controllers</Filter>
     </ClCompile>
     <ClCompile Include="DocumentProvider.cpp">
       <Filter>Source Files\controllers</Filter>
     </ClCompile>
     <ClCompile Include="Tokenizer.cpp">
       <Filter>Source Files\controllers</Filter>
-    </ClCompile>
-    <ClCompile Include="DictionaryTermIterator.cpp">
-      <Filter>Source Files\models</Filter>
     </ClCompile>
     <ClCompile Include="StrTkTokenizer.cpp">
       <Filter>Source Files\models</Filter>
@@ -168,6 +159,15 @@
       <Filter>Source Files\controllers</Filter>
     </ClCompile>
     <ClCompile Include="SimpleIndex.cpp">
+      <Filter>Source Files\models</Filter>
+    </ClCompile>
+    <ClCompile Include="InMemoryIndexBuilder.cpp">
+      <Filter>Source Files\controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="HashTableDictionary.cpp">
+      <Filter>Source Files\models</Filter>
+    </ClCompile>
+    <ClCompile Include="HashTableDictionaryTermIterator.cpp">
       <Filter>Source Files\models</Filter>
     </ClCompile>
   </ItemGroup>

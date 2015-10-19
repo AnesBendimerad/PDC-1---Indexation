@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "IndexLoader.h"
 #include <fstream>
-#include "Dictionary.h"
+#include "HashTableDictionary.h"
 #include "Hasher.h"
 #include "DocumentTable.h"
 #include "SimpleIndex.h"
@@ -28,8 +28,7 @@ IndexLoader * IndexLoader::setIndexType(int indexType)
 IIndex  * IndexLoader::load()
 {
 	if (dictionary == nullptr) {
-		int dictionarySize = 10009; 
-		dictionary= new Dictionary(dictionarySize, new Hasher());
+		dictionary= new HashTableDictionary();
 	}
 	ifstream inputStream(postingFilePath, ios::in | ios::binary);
 

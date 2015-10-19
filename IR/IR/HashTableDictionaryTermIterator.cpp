@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "DictionaryTermIterator.h"
+#include "HashTableDictionaryTermIterator.h"
 
-DictionaryTermIterator::DictionaryTermIterator(int size, list<Term>  ** hashTable)
+HashTableDictionaryTermIterator::HashTableDictionaryTermIterator(int size, list<Term>  ** hashTable)
 {
-	DictionaryTermIterator::size = size;
-	DictionaryTermIterator::hashTable = hashTable;
+	HashTableDictionaryTermIterator::size = size;
+	HashTableDictionaryTermIterator::hashTable = hashTable;
 }
 
-void * DictionaryTermIterator::getNext()
+void * HashTableDictionaryTermIterator::getNext()
 {
 	if (currentElement == -1) {
 		processNextTermListIndex();
@@ -31,13 +31,13 @@ void * DictionaryTermIterator::getNext()
 	}
 	return nullptr;
 }
-void DictionaryTermIterator::processNextTermListIndex()
+void HashTableDictionaryTermIterator::processNextTermListIndex()
 {
 	currentElement++;
 	while (currentElement < size && hashTable[currentElement] == nullptr) {
 		currentElement++;
 	}
 }
-DictionaryTermIterator::~DictionaryTermIterator()
+HashTableDictionaryTermIterator::~HashTableDictionaryTermIterator()
 {
 }

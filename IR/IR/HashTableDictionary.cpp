@@ -1,20 +1,33 @@
 #include "stdafx.h"
-#include "Dictionary.h"
-#include "DictionaryTermIterator.h"
+#include "HashTableDictionary.h"
+#include "HashTableDictionaryTermIterator.h"
+#include "Hasher.h"
 
-Dictionary::Dictionary(int size, IHasher *hasher)
+HashTableDictionary::HashTableDictionary(int size, IHasher *hasher)
 {
-	Dictionary::termsNumber = 0;
-	Dictionary::size = size;
+	HashTableDictionary::termsNumber = 0;
+	HashTableDictionary::size = size;
 	hashTable = (list<Term>**) malloc(sizeof(list<Term>*)*size);
 	for (int i = 0; i < size; i++)
 	{
 		hashTable[i] = nullptr;
 	}
-	Dictionary::hasher = hasher;
+	HashTableDictionary::hasher = hasher;
 }
 
-Term* Dictionary::addTerm(string token)
+HashTableDictionary::HashTableDictionary()
+{
+	HashTableDictionary::termsNumber = 0;
+	HashTableDictionary::size = DEFAULT_SIZE;
+	hashTable = (list<Term>**) malloc(sizeof(list<Term>*)*size);
+	for (int i = 0; i < size; i++)
+	{
+		hashTable[i] = nullptr;
+	}
+	HashTableDictionary::hasher = new Hasher();
+}
+
+Term* HashTableDictionary::addTerm(string token)
 {
 	unsigned int index = hasher->hash(token) % size;
 	list<Term>* cell = hashTable[index];
@@ -51,7 +64,7 @@ Term* Dictionary::addTerm(string token)
 	}
 }
 
-void Dictionary::addTerm(Term * term)
+void HashTableDictionary::addTerm(Term * term)
  {
 	unsigned int index = hasher->hash(term->token) % size;
 	list<Term>* cell = hashTable[index];
@@ -81,7 +94,7 @@ void Dictionary::addTerm(Term * term)
 		}
 	}
 
-Term* Dictionary::getTerm(string token)
+Term* HashTableDictionary::getTerm(string token)
 {
 	unsigned int index = hasher->hash(token) % size;
 	list<Term>* cell = hashTable[index];
@@ -100,22 +113,22 @@ Term* Dictionary::getTerm(string token)
 	return nullptr;
 }
 
-IIterator * Dictionary::getIterator()
+IIterator * HashTableDictionary::getIterator()
 {
-	return new DictionaryTermIterator(size,hashTable);
+	return new HashTableDictionaryTermIterator(size,hashTable);
 }
 
-unsigned long long& Dictionary::getTermsNumber()
+unsigned long long& HashTableDictionary::getTermsNumber()
 {
 	return termsNumber;
 }
 
-unsigned long long Dictionary::getMemorySize()
+unsigned long long HashTableDictionary::getMemorySize()
 {
 	return sizeof(IHasher*)+size*sizeof(list<Term>*)+sizeof(list<Term>  **)+sizeof(int)+sizeof(unsigned long long)+termsNumber*(sizeof(Term)+sizeof(void*));
 }
 
-Dictionary::~Dictionary()
+HashTableDictionary::~HashTableDictionary()
 {
 	for (int i = 0; i < size; i++) 
 	{
