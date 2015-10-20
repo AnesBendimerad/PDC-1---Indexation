@@ -140,12 +140,14 @@ void InMemoryIndexBuilder::finalize(DocumentTable * documentTable)
 		// write the posting lists contiguously
 		IIterator* termIterator = iDictionary->getIterator();
 		Term * term;
+		int i = 0;
 		while ((term = static_cast<Term*>(termIterator->getNext())) != nullptr) {
 			list<DocumentTerm>* postingListAsList = static_cast<list<DocumentTerm>*>(term->postingList);
 			unsigned int  postingListOffset = (unsigned int)outputFile.tellp();
 			iCompressor->compressAndWrite(&outputFile, postingListAsList);
 			delete term->postingList;
 			term->postingList = (void *)postingListOffset;
+			i++;
 		}
 		delete termIterator;
 

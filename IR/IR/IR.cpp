@@ -12,14 +12,20 @@
 #include "DocumentTerm.h"
 #include "IndexLoader.h"
 #include <fstream>
+#include "VByteCompressor.h"
 using namespace std;
+
+
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	//ICompressor *compressor = new VByteCompressor();
 	//InMemoryIndexBuilder * indexer = new InMemoryIndexBuilder("C:\\myFiles\\tests");
+	//indexer->setICompressor(compressor);
 	//IIndex  * index = indexer->createIndex();
-	IndexLoader * indexLoader = new IndexLoader(DEFAULT_OUTPUT_FILE);
-	IIndex * index = indexLoader->load();
+	
+	//IndexLoader * indexLoader = new IndexLoader(DEFAULT_OUTPUT_FILE);
+	//IIndex * index = indexLoader->load();
 	
 	/*vector<pair<DocumentMetaData, double>> topK = index->search(5, "maha hassan");
 
