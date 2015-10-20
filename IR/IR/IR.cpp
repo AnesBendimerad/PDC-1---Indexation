@@ -12,7 +12,10 @@
 #include "DocumentTerm.h"
 #include "IndexLoader.h"
 #include <fstream>
+#include "VByteCompressor.h"
 using namespace std;
+
+
 
 int _tmain(int argc, _TCHAR* argv[])
 {

@@ -110,6 +110,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Term.h" />
     <ClInclude Include="Tokenizer.h" />
+    <ClInclude Include="VByteCompressor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HashTableDictionaryTermIterator.cpp" />
@@ -131,6 +132,7 @@
     <ClCompile Include="StrTkTokenizer.cpp" />
     <ClCompile Include="Term.cpp" />
     <ClCompile Include="Tokenizer.cpp" />
+    <ClCompile Include="VByteCompressor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
