@@ -3,11 +3,13 @@
 #include "IDictionary.h"
 #include "DocumentTable.h"
 #include "DocumentTerm.h"
+#include "ICompressor.h"
 #include <vector>
 class Index : public IIndex {
 private:
 	IDictionary *dictionary;
 	DocumentTable *documentTable;
+	ICompressor *compressor;
 	string invertedFilePath;
 
 	DocumentTerm* getTermPostingList(string token);
@@ -15,7 +17,7 @@ private:
     static int findPositionOfDocument(int documentIndex,vector<pair<int, double>> vector);
 	static bool sort_by_tf_idf(const pair<int, double>& left, const pair<int, double>& right);
 public:
-	Index(IDictionary *dictionary, DocumentTable* documentTable, string invertedFilePath);
+	Index(IDictionary *dictionary, DocumentTable* documentTable, ICompressor * compressor,string invertedFilePath);
 	vector<pair<DocumentMetaData, double>>  search(int topK,string query);
 	~Index();
 };

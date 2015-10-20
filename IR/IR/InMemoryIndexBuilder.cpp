@@ -5,10 +5,12 @@
 #include "Hasher.h"
 #include "DocumentProvider.h"
 #include "Tokenizer.h"
+#include "NoCompressor.h"
 InMemoryIndexBuilder::InMemoryIndexBuilder(string repositoryPath)
 {
 	InMemoryIndexBuilder::repositoryPath = repositoryPath;
 	iDictionary = nullptr;
+	iCompressor = nullptr;
 	outputFilePath = "";
 	indexType = FAGIN_INDEX_TYPE;
 }
@@ -16,6 +18,12 @@ InMemoryIndexBuilder::InMemoryIndexBuilder(string repositoryPath)
 IIndexBuilder * InMemoryIndexBuilder::setIDictionary(IDictionary * iDictionary)
 {
 	InMemoryIndexBuilder::iDictionary = iDictionary;
+	return this;
+}
+
+IIndexBuilder * InMemoryIndexBuilder::setICompressor(ICompressor * iCompressor)
+{
+	InMemoryIndexBuilder::iCompressor = iCompressor;
 	return this;
 }
 
@@ -37,6 +45,9 @@ IIndex* InMemoryIndexBuilder::createIndex()
 {
 	if (iDictionary == nullptr) {
 		iDictionary = new HashTableDictionary();
+	}
+	if (iCompressor == nullptr) {
+		iCompressor = new NoCompressor();
 	}
 	DocumentTable * documentTable = new DocumentTable();
 
@@ -64,7 +75,7 @@ IIndex* InMemoryIndexBuilder::createIndex()
 	finalize(documentTable);
 	IIndex *index = nullptr;
 	if (indexType == FAGIN_INDEX_TYPE) {
-		index = new Index(iDictionary, documentTable, outputFilePath);
+		index = new Index(iDictionary, documentTable, iCompressor, outputFilePath);
 	}
 	return index;
 }
@@ -101,12 +112,13 @@ void InMemoryIndexBuilder::finalize(DocumentTable * documentTable)
 		documentTable->finalize();
 		// write the posting list on file and change the pointer to offset in file (invertedFilePath)
 		// the offstream structure file is :
-		//		HashTableDictionary offset in this file
-		//		Terms number in HashTableDictionary
+		//		Dictionary offset in this file
+		//		Terms number in Dictionary
+		//		Compressor ID
 		//		DocumentMetaDatas number in DocumentTable
 		//		DocumentMetaDatas
 		//		posting lists
-		//		HashTableDictionary
+		//		Dictionary
 		ofstream outputFile(outputFilePath, ios::out | ios::binary);
 
 		// prepare a place for the dictionary offset
@@ -115,6 +127,9 @@ void InMemoryIndexBuilder::finalize(DocumentTable * documentTable)
 
 		// write the terms number in HashTableDictionary
 		outputFile.write((const char *)&iDictionary->getTermsNumber(), sizeof(unsigned long long));
+
+		// write the Compressor ID
+		outputFile.write((const char *)&iCompressor->getCompressorId(), sizeof(int));
 
 		// write the DocumentMetaDatas number in DocumentTable
 		outputFile.write((const char *)&documentTable->getDocumentNumber(), sizeof(unsigned long long));
@@ -127,17 +142,10 @@ void InMemoryIndexBuilder::finalize(DocumentTable * documentTable)
 		Term * term;
 		while ((term = static_cast<Term*>(termIterator->getNext())) != nullptr) {
 			list<DocumentTerm>* postingListAsList = static_cast<list<DocumentTerm>*>(term->postingList);
-			DocumentTerm * docTermTable = (DocumentTerm*)malloc(sizeof(DocumentTerm)*term->documentNumber);
-			list<DocumentTerm>::iterator it;
-			int i = 0;
-			for (it = postingListAsList->begin(); it != postingListAsList->end(); ++it)
-			{
-				docTermTable[i++] = *it;
-			}
+			unsigned int  postingListOffset = (unsigned int)outputFile.tellp();
+			iCompressor->compressAndWrite(&outputFile, postingListAsList);
 			delete term->postingList;
-			term->postingList = (void *)(unsigned int)outputFile.tellp();
-			outputFile.write((const char *)docTermTable, (sizeof(DocumentTerm)*term->documentNumber));
-			free(docTermTable);
+			term->postingList = (void *)postingListOffset;
 		}
 		delete termIterator;
 

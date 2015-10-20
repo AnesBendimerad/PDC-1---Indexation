@@ -8,6 +8,7 @@ private:
 	string repositoryPath;
 	string outputFilePath;
 	IDictionary * iDictionary;
+	ICompressor * iCompressor;
 	int indexType;
 
 	void addTerm(string token, DocumentTable *documentTable);
@@ -15,6 +16,7 @@ private:
 public:
 	InMemoryIndexBuilder(string repositoryPath);
 	IIndexBuilder* setIDictionary(IDictionary *iDictionary);
+	IIndexBuilder* setICompressor(ICompressor *iCompressor);
 	IIndexBuilder* setOutputFilePath(string outputFilePath);
 	IIndexBuilder* setIndexType(int indexType);
 	IIndex* createIndex();

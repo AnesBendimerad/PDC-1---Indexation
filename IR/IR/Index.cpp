@@ -12,10 +12,11 @@
 using namespace std;
 
 
-Index::Index(IDictionary * dictionary, DocumentTable * documentTable, string invertedFilePath)
+Index::Index(IDictionary * dictionary, DocumentTable * documentTable, ICompressor * compressor, string invertedFilePath)
 {
 	Index::dictionary = dictionary;
 	Index::documentTable = documentTable;
+	Index::compressor = compressor;
 	Index::invertedFilePath = invertedFilePath;
 }
 
@@ -24,9 +25,9 @@ DocumentTerm * Index::getTermPostingList(string token)
 	ifstream inputStream(invertedFilePath, ios::in | ios::binary);
 	Term * term = dictionary->getTerm(token);
 	if (term != nullptr) {
-		DocumentTerm* documentTermTable= (DocumentTerm*)malloc(sizeof(DocumentTerm)*term->documentNumber);
+		DocumentTerm* documentTermTable;
 		inputStream.seekg((unsigned int) term->postingList);
-		inputStream.read((char * )documentTermTable, sizeof(DocumentTerm)*term->documentNumber);
+		compressor->readAndDecompress(&inputStream, &documentTermTable, term->documentNumber);
 		inputStream.close();
 		return documentTermTable;
 	}

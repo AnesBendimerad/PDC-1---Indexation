@@ -1,6 +1,12 @@
+#include "stdafx.h"
 #include "NoCompressor.h"
 
-void NoCompressor::compress(ofstream outputInvertedFile, list<DocumentTerm>* postingList)
+NoCompressor::NoCompressor()
+{
+	NoCompressor::compressorId = NO_COMPRESSOR;
+}
+
+void NoCompressor::compressAndWrite(ofstream *outputInvertedFile, list<DocumentTerm>* postingList)
 {
 	DocumentTerm * docTermTable = (DocumentTerm*)malloc(sizeof(DocumentTerm)*(postingList->size()));
 	list<DocumentTerm>::iterator it;
@@ -9,12 +15,17 @@ void NoCompressor::compress(ofstream outputInvertedFile, list<DocumentTerm>* pos
 	{
 		docTermTable[i++] = *it;
 	}
-	outputInvertedFile.write((const char *)docTermTable, (sizeof(DocumentTerm)*(postingList->size())));
+	outputInvertedFile->write((const char *)docTermTable, (sizeof(DocumentTerm)*(postingList->size())));
 	free(docTermTable);
 }
 
-void NoCompressor::decompress(ifstream inputInvertedFile, DocumentTerm ** postingList, int size)
+void NoCompressor::readAndDecompress(ifstream *inputInvertedFile, DocumentTerm ** postingList, int size)
 {
 	*postingList = (DocumentTerm*)malloc(sizeof(DocumentTerm)*size);
-	inputInvertedFile.read((char *)*postingList, sizeof(DocumentTerm)*size);
+	inputInvertedFile->read((char *)*postingList, sizeof(DocumentTerm)*size);
+}
+
+int & NoCompressor::getCompressorId()
+{
+	return compressorId;
 }

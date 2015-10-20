@@ -16,12 +16,12 @@ using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	InMemoryIndexBuilder * indexer = new InMemoryIndexBuilder("D:\\repo");
-	IIndex  * index = indexer->createIndex();
-	//IndexLoader * indexLoader = new IndexLoader(DEFAULT_OUTPUT_FILE);
-	//IIndex * index = indexLoader->load();
+	//InMemoryIndexBuilder * indexer = new InMemoryIndexBuilder("C:\\myFiles\\tests");
+	//IIndex  * index = indexer->createIndex();
+	IndexLoader * indexLoader = new IndexLoader(DEFAULT_OUTPUT_FILE);
+	IIndex * index = indexLoader->load();
 	
-	vector<pair<DocumentMetaData, double>> topK = index->search(5, "maha hassan");
+	/*vector<pair<DocumentMetaData, double>> topK = index->search(5, "maha hassan");
 
 	for (int i = 0; i < topK.size(); i++)
 	{
@@ -32,7 +32,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		
 		cout << "rank:" << topK.at(i).second << endl;
 		cout << endl;
-	}
+	}*/
 	
 	return 0;
 }

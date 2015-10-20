@@ -7,6 +7,7 @@
 using namespace std;
 class ICompressor {
 public:
-	virtual void compress(ofstream outputInvertedFile, list<DocumentTerm>* postingList) = 0;
-	virtual void decompress(ifstream inputInvertedFile, DocumentTerm ** postingList, int size) = 0;
+	virtual void compressAndWrite(ofstream *outputInvertedFile, list<DocumentTerm>* postingList) = 0;
+	virtual void readAndDecompress(ifstream *inputInvertedFile, DocumentTerm ** postingList, int size) = 0;
+	virtual int& getCompressorId()=0;
 };

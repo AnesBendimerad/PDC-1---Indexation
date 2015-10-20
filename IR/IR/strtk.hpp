@@ -20371,7 +20371,7 @@ namespace strtk
             return size_list.back();
          }
 
-         inline bool compress(const double& percentage)
+         inline bool compressAndWrite(const double& percentage)
          {
             if ((0.0 >= percentage) || (percentage >= 100.0))
             {

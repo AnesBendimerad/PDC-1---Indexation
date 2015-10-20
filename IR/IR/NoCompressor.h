@@ -1,7 +1,11 @@
 #pragma once
 #include "ICompressor.h"
 class NoCompressor : public ICompressor {
+private:
+	int compressorId;
 public:
-	void compress(ofstream outputInvertedFile, list<DocumentTerm>* postingList);
-	void decompress(ifstream inputInvertedFile, DocumentTerm ** postingList, int size);
+	NoCompressor();
+	void compressAndWrite(ofstream *outputInvertedFile, list<DocumentTerm>* postingList);
+	void readAndDecompress(ifstream *inputInvertedFile, DocumentTerm ** postingList, int size);
+	int& getCompressorId();
 };
