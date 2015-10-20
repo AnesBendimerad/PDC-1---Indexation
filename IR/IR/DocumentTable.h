@@ -9,7 +9,7 @@ private:
 public:
 	DocumentTable();
 	DocumentTable::DocumentTable(int documentNumber, DocumentMetaData * docTable);
-	unsigned int addDocument(DocumentMetaData documentMetaData);
+	unsigned long long addDocument(DocumentMetaData documentMetaData);
 	unsigned long long& getDocumentNumber();
 	void finalize();
 	DocumentMetaData* getDocument(int documentIndex);

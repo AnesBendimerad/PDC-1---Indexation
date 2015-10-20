@@ -38,8 +38,7 @@ Document* DocumentProvider::getNextDocument()
 	unsigned int currentDocumentOffset;
 	string documentText;
 	string token;
-	char c;
-
+	
 	//If all FILES have been processed then we return null
 	if (currentFileIndex != pathList.size()) 
 	{

@@ -19,5 +19,9 @@ public:
 	IIterator * getIterator();
 	unsigned long long& getTermsNumber();
 	unsigned long long getMemorySize();
+
+	unsigned long long getTokenId(string token);
+	Term* getTermById(unsigned long long id);
+	
 	~HashTableDictionary();
 };

@@ -129,6 +129,9 @@
     <ClInclude Include="sortBasedIndexBuilder.h">
       <Filter>Header Files\controllers</Filter>
     </ClInclude>
+    <ClInclude Include="Triplet.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -12,4 +12,7 @@ public:
 	virtual IIterator * getIterator()=0;
 	virtual unsigned long long& getTermsNumber() = 0;
 	virtual unsigned long long getMemorySize() = 0;
+
+	virtual unsigned long long getTokenId(string token) = 0;
+	virtual Term* getTermById(unsigned long long id) = 0;
 };

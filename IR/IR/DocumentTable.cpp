@@ -21,7 +21,7 @@ DocumentTable::DocumentTable(int documentNumber, DocumentMetaData * docTable)
 	DocumentTable::finalized = true;
 }
 
-unsigned int DocumentTable::addDocument(DocumentMetaData documentMetaData)
+unsigned long long DocumentTable::addDocument(DocumentMetaData documentMetaData)
 {
 	if (finalized) {
 		throw runtime_error("Document table already finalized");

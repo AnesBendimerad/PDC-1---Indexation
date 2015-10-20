@@ -44,7 +44,7 @@ Term* HashTableDictionary::addTerm(string token)
 	else 
 	{
 		list<Term>::iterator it = cell->begin();
-		while (it != cell->end() && token.compare(it->token)>0)
+		while (it != cell->end() && token.compare(it->token)!=0)
 		{
 			it++;
 		}
@@ -57,42 +57,41 @@ Term* HashTableDictionary::addTerm(string token)
 			termsNumber++;
 			Term term;
 			term.token = token;
-			cell->insert(it, term);
-			it--;
+			it=cell->insert(cell->end(), term);
 		}
 		return &(*it);
 	}
 }
 
 void HashTableDictionary::addTerm(Term * term)
- {
+{
 	unsigned int index = hasher->hash(term->token) % size;
 	list<Term>* cell = hashTable[index];
 	if (cell == nullptr)
-		 {
+	{
 		termsNumber++;
 		cell = new list<Term>();
 		cell->insert(cell->begin(), *term);
 		hashTable[index] = cell;
-		}
+	}
 	else
-		 {
+	{
 		list<Term>::iterator it = cell->begin();
-		while (it != cell->end() && term->token.compare(it->token)>0)
-			 {
+		while (it != cell->end() && term->token.compare(it->token)!=0)
+		{
 			it++;
-			}
+		}
 		if (it != cell->end() && term->token.compare(it->token) == 0)
-			 {
+		{
 			throw runtime_error("You can't add Term twice");
-			}
+		}
 		else
-			 {
+		{
 			termsNumber++;
 			cell->insert(it, *term);
-			}
 		}
 	}
+}
 
 Term* HashTableDictionary::getTerm(string token)
 {
@@ -101,7 +100,7 @@ Term* HashTableDictionary::getTerm(string token)
 	if (cell != nullptr)
 	{
 		list<Term>::iterator it = cell->begin();
-		while (it != cell->end() && token.compare(it->token) > 0 )
+		while (it != cell->end() && token.compare(it->token) != 0 )
 		{
 			it++;
 		}
@@ -126,6 +125,54 @@ unsigned long long& HashTableDictionary::getTermsNumber()
 unsigned long long HashTableDictionary::getMemorySize()
 {
 	return sizeof(IHasher*)+size*sizeof(list<Term>*)+sizeof(list<Term>  **)+sizeof(int)+sizeof(unsigned long long)+termsNumber*(sizeof(Term)+sizeof(void*));
+}
+
+unsigned long long HashTableDictionary::getTokenId(string token)
+{
+	unsigned int index = hasher->hash(token) % size;
+	unsigned int i = 0;
+	list<Term>* cell = hashTable[index];
+	if (cell != nullptr)
+	{
+		list<Term>::iterator it = cell->begin();
+		while (it != cell->end() && token.compare(it->token) != 0)
+		{
+			i++;
+			it++;
+		}
+		if (it != cell->end() && token.compare(it->token) == 0)
+		{
+
+			return i*size + index;
+		}
+		else 
+		{
+			throw runtime_error("No such token");
+		}
+	}
+	return 0;
+}
+
+Term * HashTableDictionary::getTermById(unsigned long long id)
+{
+	unsigned int index = id % size;
+	unsigned int i = id / size;
+	list<Term>* cell = hashTable[index];
+	if (cell != nullptr)
+	{
+		list<Term>::iterator it = cell->begin();
+		while (it != cell->end() && i>0)
+		{
+			i--;
+			it++;
+		}
+		if (it != cell->end() && i == 0)
+		{
+
+			return &(*it);
+		}
+	}
+	return nullptr;
 }
 
 HashTableDictionary::~HashTableDictionary()
