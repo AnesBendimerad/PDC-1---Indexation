@@ -126,6 +126,9 @@
     <ClInclude Include="NoCompressor.h">
       <Filter>Header Files\models</Filter>
     </ClInclude>
+    <ClInclude Include="sortBasedIndexBuilder.h">
+      <Filter>Header Files\controllers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -172,6 +175,9 @@
     </ClCompile>
     <ClCompile Include="NoCompressor.cpp">
       <Filter>Source Files\models</Filter>
+    </ClCompile>
+    <ClCompile Include="sortBasedIndexBuilder.cpp">
+      <Filter>Source Files\controllers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
