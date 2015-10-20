@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "sortBasedIndexBuilder.h"
 #include "Index.h"
 #include "HashTableDictionary.h"
