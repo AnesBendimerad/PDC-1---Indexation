@@ -78,7 +78,7 @@ IIndex  * IndexLoader::load()
 	IIndex *myIndex=nullptr;
 	switch (indexType) {
 	case FAGIN_INDEX_TYPE:
-			myIndex = new Index(dictionary, documentTable, iCompressor, invertedFilePath);
+			myIndex= new Index(dictionary, documentTable, iCompressor, invertedFilePath);
 			break;
 	}
 	return myIndex;
