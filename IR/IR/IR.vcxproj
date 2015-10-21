@@ -81,6 +81,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GammaCompressor.h" />
     <ClInclude Include="HashTableDictionary.h" />
     <ClInclude Include="HashTableDictionaryTermIterator.h" />
     <ClInclude Include="Document.h" />
@@ -113,6 +114,7 @@
     <ClInclude Include="VByteCompressor.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GammaCompressor.cpp" />
     <ClCompile Include="HashTableDictionaryTermIterator.cpp" />
     <ClCompile Include="Document.cpp" />
     <ClCompile Include="DocumentProvider.cpp" />

@@ -7,6 +7,7 @@
 #include "Index.h"
 #include "NoCompressor.h"
 #include "VByteCompressor.h"
+#include "GammaCompressor.h"
 IndexLoader::IndexLoader(string invertedFilePath)
 {
 	IndexLoader::invertedFilePath = invertedFilePath;
@@ -56,6 +57,9 @@ IIndex  * IndexLoader::load()
 	case VBYTE_COMPRESSOR:
 		iCompressor = new VByteCompressor();
 		break;
+	case GAMMA_COMPRESSOR:
+		iCompressor = new GammaCompressor();
+		break;
 	default:
 		throw runtime_error("No compressor with such ID");
 		break;
@@ -78,7 +82,7 @@ IIndex  * IndexLoader::load()
 	IIndex *myIndex=nullptr;
 	switch (indexType) {
 	case FAGIN_INDEX_TYPE:
-			myIndex= new Index(dictionary, documentTable, iCompressor, invertedFilePath);
+			myIndex = new Index(dictionary, documentTable, iCompressor, invertedFilePath);
 			break;
 	}
 	return myIndex;

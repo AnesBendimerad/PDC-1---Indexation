@@ -12,7 +12,7 @@
 #include "DocumentTerm.h"
 #include "IndexLoader.h"
 #include <fstream>
-#include "VByteCompressor.h"
+#include "GammaCompressor.h"
 #include "InMemoryIndexBuilder.h"
 using namespace std;
 
@@ -25,13 +25,11 @@ int _tmain(int argc, _TCHAR* argv[])
 	//int a;
 	//cin >> a;
 
-	//ICompressor *compressor = new VByteCompressor();
+	//ICompressor *compressor = new GammaCompressor();
 	//InMemoryIndexBuilder * indexer = new InMemoryIndexBuilder("C:\\myFiles\\tests");
 	//indexer->setICompressor(compressor);
 	//IIndex  * index = indexer->createIndex();
 
 	IndexLoader * indexLoader = new IndexLoader(DEFAULT_OUTPUT_FILE);
 	IIndex * index = indexLoader->load();
-
-	return 0;
 }
