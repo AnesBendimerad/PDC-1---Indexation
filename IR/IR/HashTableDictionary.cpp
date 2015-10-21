@@ -209,7 +209,7 @@ void HashTableDictionary::writeCSVFile(){
 	ofstream allTermsCSV("allTermsInTheCorpus.csv");
 	allTermsCSV << "Term" << "," << "frequency" << endl;
 
-	for (int i = 0; i < allTerms.size(); i++){
+	for (unsigned int i = 0; i < allTerms.size(); i++){
 		allTermsCSV << allTerms[i]->token << "," << allTerms[i]->totalFrequency << endl;
 	}
 }

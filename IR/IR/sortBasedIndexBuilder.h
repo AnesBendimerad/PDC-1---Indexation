@@ -24,6 +24,9 @@ private:
 
 	// private methods
 	list<Triplet>* parseDocumentToTriplet(Document* document, DocumentTable* documentTable);
+	unsigned int createFirstLevelSortedTripletsFiles(Triplet *tripletBuffer, DocumentTable* documentTable);
+	string getFinalSortedTripletsFilesByFusion(Triplet *tripletBuffer, DocumentTable* documentTable, unsigned int lastRunNumber);
+	void finalize(DocumentTable *documentTable, string sortedTripletFilePath);
 	static int sort_by_termId_docId(const void *left, const void *right);
 
 public:

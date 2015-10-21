@@ -53,7 +53,7 @@ vector<pair<DocumentMetaData, double>> Index::search(int topK, string query)
 	do
 	{
 		thresHold = 0;
-		for (int i = 0; i < list_sorted_by_tf_idf.size(); i++)
+		for (unsigned int i = 0; i < list_sorted_by_tf_idf.size(); i++)
 		{
 			if (list_sorted_by_tf_idf.at(i).size() != 0)
 			{
@@ -62,7 +62,7 @@ vector<pair<DocumentMetaData, double>> Index::search(int topK, string query)
 				weight = list_sorted_by_tf_idf.at(i).begin()->second;
 				list_sorted_by_tf_idf.at(i).erase(list_sorted_by_tf_idf.at(i).begin());
 				//Compute its global score by retrieving all s(tj, d(i)) with j!=i
-				for (int j = 0; j < list_sorted_by_tf_idf.size(); j++)
+				for (unsigned int j = 0; j < list_sorted_by_tf_idf.size(); j++)
 				{
 					if (i != j)
 					{
@@ -102,7 +102,7 @@ vector<pair<DocumentMetaData, double>> Index::search(int topK, string query)
 		}
 	} while (topKDocuments.size() < topK  && topKDocuments.at(topKDocuments.size()-1).second< thresHold && list_sorted_by_tf_idf.size() !=0);
 
-	for (int i = 0; i < topKDocuments.size(); i++)
+	for (unsigned int i = 0; i < topKDocuments.size(); i++)
 	{
 		topDocuments.push_back(pair<DocumentMetaData, double>(*documentTable->getDocument(topKDocuments.at(i).first), topKDocuments.at(i).second));
 	}
@@ -128,7 +128,7 @@ vector<vector<pair<int, double>>> Index::calculateTF_IDF(string query)
 		if (term != nullptr)
 		{
 			DocumentTerm * documentTermTable = getTermPostingList(token);
-			for (int i = 0; i < term->documentNumber; i++)
+			for (unsigned int i = 0; i < term->documentNumber; i++)
 			{
 				tf = ((double)documentTermTable[i].ftd / (double)documentTable->getDocument(documentTermTable[i].documentIndex)->wordsNumber);
 				idf = (double)documentTable->getDocumentNumber() / (double)term->documentNumber;
@@ -146,7 +146,7 @@ vector<vector<pair<int, double>>> Index::calculateTF_IDF(string query)
 
 int Index::findPositionOfDocument(int documentIndex, vector<pair<int, double>> vector)
 {
-	for (int i = 0; i < vector.size(); i++)
+	for (unsigned int i = 0; i < vector.size(); i++)
 	{
 		if (vector.at(i).first == documentIndex)
 		{
