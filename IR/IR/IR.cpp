@@ -13,7 +13,8 @@
 #include "DocumentTerm.h"
 #include "IndexLoader.h"
 #include <fstream>
-#include "VByteCompressor.h"
+#include "GammaCompressor.h"
+#include "InMemoryIndexBuilder.h"
 using namespace std;
 
 

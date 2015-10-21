@@ -9,20 +9,15 @@ VByteCompressor::VByteCompressor()
 
 void VByteCompressor::compressUnsignedInt(ofstream * invertedFile, unsigned int number)
 {
-	int compressedSize;
-	if (number != 0) {
-		compressedSize= int(ceil((floor(log(double(number)) / log(2)) + 1) / 7));
-	}
-	else {
-		compressedSize = 1;
-	}
-	unsigned char * compressedNumber = (unsigned char *)malloc(sizeof(unsigned char)*compressedSize);
-	for (int i = 0; i < compressedSize; i++) {
-		compressedNumber[i] = number % 128;
+	unsigned char currentChar = 0;
+	while (number > 0) {
+		currentChar = number % 128;
 		number /= 128;
+		if (number == 0) {
+			currentChar += 128;
+		}
+		invertedFile->write((char *)&currentChar, sizeof(unsigned char));
 	}
-	compressedNumber[compressedSize - 1] += 128;
-	invertedFile->write((char *)compressedNumber, compressedSize*sizeof(unsigned char));
 }
 
 void VByteCompressor::decompressUnsignedInt(ifstream * invertedFile, unsigned int * number)

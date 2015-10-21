@@ -15,4 +15,6 @@ public:
 
 	virtual unsigned long long getTokenId(string token) = 0;
 	virtual Term* getTermById(unsigned long long id) = 0;
+	virtual void writeCSVFile() = 0;
+
 };

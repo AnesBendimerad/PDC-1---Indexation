@@ -7,6 +7,7 @@
 #include "Index.h"
 #include "NoCompressor.h"
 #include "VByteCompressor.h"
+#include "GammaCompressor.h"
 IndexLoader::IndexLoader(string invertedFilePath)
 {
 	IndexLoader::invertedFilePath = invertedFilePath;
@@ -55,6 +56,9 @@ IIndex  * IndexLoader::load()
 		break;
 	case VBYTE_COMPRESSOR:
 		iCompressor = new VByteCompressor();
+		break;
+	case GAMMA_COMPRESSOR:
+		iCompressor = new GammaCompressor();
 		break;
 	default:
 		throw runtime_error("No compressor with such ID");

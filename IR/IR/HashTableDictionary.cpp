@@ -2,6 +2,7 @@
 #include "HashTableDictionary.h"
 #include "HashTableDictionaryTermIterator.h"
 #include "Hasher.h"
+#include <algorithm>
 
 HashTableDictionary::HashTableDictionary(int size, IHasher *hasher)
 {
@@ -173,6 +174,44 @@ Term * HashTableDictionary::getTermById(unsigned long long id)
 		}
 	}
 	return nullptr;
+}
+
+bool HashTableDictionary::compare(const void * firstTerm, const  void *secondTerm)
+{
+	Term * first = (Term*)firstTerm;
+	Term * second = (Term*)secondTerm;
+
+	return (first->totalFrequency > second->totalFrequency);
+}
+
+vector<Term*> HashTableDictionary::sortTermsByOccurances(){
+
+	vector <Term*> allTerms;
+	IIterator * iterator = getIterator();
+	Term * term;
+
+	//retrieve all terms
+	while ((term = static_cast<Term*>(iterator->getNext())) != nullptr) {
+
+		allTerms.push_back(term);
+	}
+
+	//sort all items
+	sort(allTerms.begin(), allTerms.end(), compare);
+
+	return allTerms;
+}
+
+void HashTableDictionary::writeCSVFile(){
+
+	vector <Term*> allTerms = sortTermsByOccurances();
+
+	ofstream allTermsCSV("allTermsInTheCorpus.csv");
+	allTermsCSV << "Term" << "," << "frequency" << endl;
+
+	for (int i = 0; i < allTerms.size(); i++){
+		allTermsCSV << allTerms[i]->token << "," << allTerms[i]->totalFrequency << endl;
+	}
 }
 
 HashTableDictionary::~HashTableDictionary()

@@ -135,6 +135,9 @@
     <ClInclude Include="VByteCompressor.h">
       <Filter>Header Files\models</Filter>
     </ClInclude>
+    <ClInclude Include="GammaCompressor.h">
+      <Filter>Header Files\models</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -190,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="Triplet.cpp">
       <Filter>Source Files\structures</Filter>
+    </ClCompile>
+    <ClCompile Include="GammaCompressor.cpp">
+      <Filter>Source Files\models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
