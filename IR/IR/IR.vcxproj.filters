@@ -188,6 +188,9 @@
     <ClCompile Include="VByteCompressor.cpp">
       <Filter>Source Files\models</Filter>
     </ClCompile>
+    <ClCompile Include="Triplet.cpp">
+      <Filter>Source Files\structures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
