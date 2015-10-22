@@ -3,16 +3,16 @@
 
 class DocumentTable {
 private:
-	unsigned long long documentNumber;
+	unsigned int documentNumber;
 	bool finalized;
 	void * docTable; // it's a list at first, and a table in the end
 public:
 	DocumentTable();
-	DocumentTable::DocumentTable(int documentNumber, DocumentMetaData * docTable);
-	unsigned long long addDocument(DocumentMetaData documentMetaData);
-	unsigned long long& getDocumentNumber();
+	DocumentTable::DocumentTable(unsigned int documentNumber, DocumentMetaData * docTable);
+	unsigned int addDocument(DocumentMetaData documentMetaData);
+	unsigned int& getDocumentNumber();
 	void finalize();
-	DocumentMetaData* getDocument(int documentIndex);
+	DocumentMetaData* getDocument(unsigned int documentIndex);
 	unsigned long long getMemorySize();
 	DocumentMetaData* getFinalizedDocumentTable();
 	~DocumentTable();

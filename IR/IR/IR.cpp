@@ -14,6 +14,7 @@
 #include "IndexLoader.h"
 #include <fstream>
 #include "GammaCompressor.h"
+#include "VByteCompressor.h"
 #include "InMemoryIndexBuilder.h"
 using namespace std;
 
@@ -21,11 +22,11 @@ using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	IIndexBuilder* indexBuilder= new sortBasedIndexBuilder("C:\\Users\\LENOVO\\Desktop\\Etudes\\5IF - PDC\\PDC 1\\Exemple Data",5, 100);
+	IIndexBuilder* indexBuilder= new sortBasedIndexBuilder("C:\\myFiles\\tests",5, 100);
+	//IIndexBuilder* indexBuilder = new InMemoryIndexBuilder("C:\\myFiles\\tests");
 	IIndex *index1= indexBuilder->createIndex();
-	IndexLoader* indexLoader = new IndexLoader(DEFAULT_OUTPUT_FILE);
-	IIndex *index2 = indexLoader->load();
-	int a;
-	cin >> a;
+	//IndexLoader* indexLoader = new IndexLoader(DEFAULT_OUTPUT_FILE);
+	//IIndex *index2 = indexLoader->load();
+	int a=1;
 	return 0;
 }

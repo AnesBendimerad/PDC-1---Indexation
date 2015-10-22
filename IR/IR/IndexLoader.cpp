@@ -41,12 +41,12 @@ IIndex  * IndexLoader::load()
 	unsigned int  dictionaryOffset;
 	unsigned long long  termNumbers;
 	int compressorId;
-	unsigned long long  documentMetaDataNumber;
+	unsigned int documentMetaDataNumber;
 
 	inputStream.read((char *)&dictionaryOffset, sizeof(unsigned int));
 	inputStream.read((char *)&termNumbers, sizeof(unsigned long long));
 	inputStream.read((char *)&compressorId, sizeof(int));
-	inputStream.read((char *)&documentMetaDataNumber, sizeof(unsigned long long));
+	inputStream.read((char *)&documentMetaDataNumber, sizeof(unsigned int));
 	
 	ICompressor *iCompressor;
 	switch (compressorId)
