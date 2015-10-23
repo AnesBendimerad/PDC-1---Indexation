@@ -90,6 +90,7 @@
     <ClInclude Include="DocumentTable.h" />
     <ClInclude Include="DocumentTerm.h" />
     <ClInclude Include="Hasher.h" />
+    <ClInclude Include="MemoryManager.h" />
     <ClInclude Include="Triplet.h" />
     <ClInclude Include="sortBasedIndexBuilder.h" />
     <ClInclude Include="ICompressor.h" />
@@ -125,6 +126,7 @@
     <ClCompile Include="HashTableDictionary.cpp" />
     <ClCompile Include="Index.cpp" />
     <ClCompile Include="InMemoryIndexBuilder.cpp" />
+    <ClCompile Include="MemoryManager.cpp" />
     <ClCompile Include="NoCompressor.cpp" />
     <ClCompile Include="sortBasedIndexBuilder.cpp" />
     <ClCompile Include="Triplet.cpp" />
