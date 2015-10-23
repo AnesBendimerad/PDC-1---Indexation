@@ -52,12 +52,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>C:\boost\boost_1_59_0;lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\boost\boost_1_59_0;lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\boost\boost_1_59_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\boost\boost_1_59_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -90,6 +90,7 @@
     <ClInclude Include="DocumentTable.h" />
     <ClInclude Include="DocumentTerm.h" />
     <ClInclude Include="Hasher.h" />
+    <ClInclude Include="IndexBM25.h" />
     <ClInclude Include="Triplet.h" />
     <ClInclude Include="sortBasedIndexBuilder.h" />
     <ClInclude Include="ICompressor.h" />
@@ -118,6 +119,7 @@
     <ClCompile Include="HashTableDictionaryTermIterator.cpp" />
     <ClCompile Include="Document.cpp" />
     <ClCompile Include="DocumentProvider.cpp" />
+    <ClCompile Include="IndexBM25.cpp" />
     <ClCompile Include="IndexLoader.cpp" />
     <ClCompile Include="IR.cpp" />
     <ClCompile Include="Hasher.cpp" />

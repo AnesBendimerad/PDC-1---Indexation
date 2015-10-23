@@ -8,6 +8,7 @@
 #include "NoCompressor.h"
 #include "VByteCompressor.h"
 #include "GammaCompressor.h"
+#include "IndexBM25.h"
 IndexLoader::IndexLoader(string invertedFilePath)
 {
 	IndexLoader::invertedFilePath = invertedFilePath;
@@ -84,6 +85,10 @@ IIndex  * IndexLoader::load()
 	case FAGIN_INDEX_TYPE:
 			myIndex = new Index(dictionary, documentTable, iCompressor, invertedFilePath);
 			break;
+	case BM25_INDEX_TYPE:
+		myIndex = new IndexBM25(dictionary, documentTable, iCompressor, invertedFilePath);
+		
+		break;
 	}
 	return myIndex;
 }

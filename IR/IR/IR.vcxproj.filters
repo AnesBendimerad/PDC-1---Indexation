@@ -138,6 +138,9 @@
     <ClInclude Include="GammaCompressor.h">
       <Filter>Header Files\models</Filter>
     </ClInclude>
+    <ClInclude Include="IndexBM25.h">
+      <Filter>Header Files\models</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -195,6 +198,9 @@
       <Filter>Source Files\structures</Filter>
     </ClCompile>
     <ClCompile Include="GammaCompressor.cpp">
+      <Filter>Source Files\models</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBM25.cpp">
       <Filter>Source Files\models</Filter>
     </ClCompile>
   </ItemGroup>

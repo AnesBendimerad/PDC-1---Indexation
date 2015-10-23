@@ -6,6 +6,7 @@
 #include "DocumentProvider.h"
 #include "Tokenizer.h"
 #include "NoCompressor.h"
+#include "IndexBM25.h"
 InMemoryIndexBuilder::InMemoryIndexBuilder(string repositoryPath)
 {
 	InMemoryIndexBuilder::repositoryPath = repositoryPath;
@@ -74,8 +75,13 @@ IIndex* InMemoryIndexBuilder::createIndex()
 	delete documentProvider;
 	finalize(documentTable);
 	IIndex *index = nullptr;
-	if (indexType == FAGIN_INDEX_TYPE) {
+	switch (indexType) {
+	case FAGIN_INDEX_TYPE:
 		index = new Index(iDictionary, documentTable, iCompressor, outputFilePath);
+		break;
+	case BM25_INDEX_TYPE:
+		index = new IndexBM25(iDictionary, documentTable, iCompressor, outputFilePath);
+		break;
 	}
 	return index;
 }
