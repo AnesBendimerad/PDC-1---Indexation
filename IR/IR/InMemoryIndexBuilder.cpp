@@ -151,6 +151,7 @@ void InMemoryIndexBuilder::finalize(DocumentTable * documentTable)
 			list<DocumentTerm>* postingListAsList = static_cast<list<DocumentTerm>*>(term->postingList);
 			unsigned int  postingListOffset = (unsigned int)outputFile.tellp();
 			iCompressor->compressAndWrite(&outputFile, postingListAsList);
+			postingListAsList->erase(postingListAsList->begin(), postingListAsList->end());
 			delete term->postingList;
 			term->postingList = (void *)postingListOffset;
 			i++;
