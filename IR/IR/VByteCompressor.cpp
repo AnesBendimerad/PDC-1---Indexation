@@ -10,13 +10,19 @@ VByteCompressor::VByteCompressor()
 void VByteCompressor::compressUnsignedInt(ofstream * invertedFile, unsigned int number)
 {
 	unsigned char currentChar = 0;
-	while (number > 0) {
-		currentChar = number % 128;
-		number /= 128;
-		if (number == 0) {
-			currentChar += 128;
-		}
+	if (number == 0) {
+		currentChar = 128;
 		invertedFile->write((char *)&currentChar, sizeof(unsigned char));
+	}
+	else {
+		while (number > 0) {
+			currentChar = number % 128;
+			number /= 128;
+			if (number == 0) {
+				currentChar += 128;
+			}
+			invertedFile->write((char *)&currentChar, sizeof(unsigned char));
+		}
 	}
 }
 
