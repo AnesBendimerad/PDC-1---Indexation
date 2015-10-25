@@ -19,11 +19,11 @@ private:
 	ICompressor * iCompressor;
 	int indexType;
 	
-	// Temporary limitation of memory
-	unsigned int numberOfBlock; //number of block in the memory
+	unsigned int numberOfBlock; //number of block in the Triplet Buffer
 	unsigned int numberOfTripletInBlock; //number of triplet in each block
 
 	// private methods
+	void init(string repositoryPath, unsigned int numberOfBlock, unsigned int numberOfTripletInBlock);
 	list<Triplet>* parseDocumentToTriplet(Document* document, DocumentTable* documentTable);
 	unsigned int createFirstLevelSortedTripletsFiles(Triplet *tripletBuffer, DocumentTable* documentTable);
 	string getFinalSortedTripletsFilesByFusion(Triplet *tripletBuffer, DocumentTable* documentTable, unsigned int lastRunNumber);
@@ -32,8 +32,7 @@ private:
 
 public:
 	sortBasedIndexBuilder(string repositoryPath,unsigned int numberOfBlock, unsigned int numberOfTripletInBlock);
-	sortBasedIndexBuilder(string repositoryPath, unsigned int memoryLimitInByte);
-	sortBasedIndexBuilder(string repositoryPath); // use the defined DEFAULT_MEMORY_LIMIT_IN_BYTE
+	sortBasedIndexBuilder(string repositoryPath, unsigned int memoryLimitInByte = DEFAULT_MEMORY_LIMIT_IN_BYTE);
 
 	IIndexBuilder* setIDictionary(IDictionary *iDictionary);
 	IIndexBuilder* setICompressor(ICompressor *iCompressor);
