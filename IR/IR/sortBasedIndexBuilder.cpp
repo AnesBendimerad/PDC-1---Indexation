@@ -185,6 +185,8 @@ unsigned int sortBasedIndexBuilder::createFirstLevelSortedTripletsFiles(Triplet 
 			}
 			it++;
 		}
+		tripletList->erase(tripletList->begin(), tripletList->end());
+		delete tripletList;
 	}
 
 	if (bufferFirstFreeIndex > 0)
@@ -264,6 +266,7 @@ string sortBasedIndexBuilder::getFinalSortedTripletsFilesByFusion(Triplet * trip
 					{
 						localMergingEnd = localMergingEnd & true;
 						mergedTableStream[i]->close();
+						delete mergedTableStream[i];
 						string sourcePath = temporaryFilePrefixPath  + to_string(unsigned int(i + firstSortedRunNumber));
 						remove(sourcePath.c_str());
 						mergedInRunIsFileClosed[i] = true;
@@ -425,6 +428,7 @@ void sortBasedIndexBuilder::finalize(DocumentTable * documentTable,string sorted
 	outputFile.close();
 	inputStreamI->close();
 	
+	delete inputStreamI;
 	delete termIteratorDictionary;
 	remove(sortedTripletFilePath.c_str());
 }
