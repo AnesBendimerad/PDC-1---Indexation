@@ -27,7 +27,7 @@ using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	
+
 	//Index Builder case :
 	string repositoryPath;
 	string indexPath;
@@ -66,7 +66,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	cout << "choice : ";
 	cin >> indiceCompressor;
 	cout << endl;
-
+	
 	switch (indiceBuilder) {
 	case 1:
 		indexBuilder = new InMemoryIndexBuilder(repositoryPath);
@@ -78,9 +78,9 @@ int _tmain(int argc, _TCHAR* argv[])
 		indexBuilder = new InMemoryIndexBuilder(repositoryPath);
 		break;
 	}
-
+	
 	IDictionary *dictionary = new HashTableDictionary();
-
+	
 	switch (indiceBuilder) {
 	case 0:
 		compressor = new NoCompressor();
@@ -95,7 +95,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		compressor = new NoCompressor();
 		break;
 	}
-	
+
 	indexBuilder->setIDictionary(dictionary)->setOutputFilePath(indexPath)->setICompressor(compressor);
 	
 	return 0;

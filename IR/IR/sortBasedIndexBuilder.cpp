@@ -5,6 +5,7 @@
 #include "Hasher.h"
 #include "DocumentProvider.h"
 #include "Tokenizer.h"
+#include "StrTkTokenizer.h"
 #include "NoCompressor.h"
 #include "MemoryManager.h"
 #include <map>
@@ -24,6 +25,7 @@ void sortBasedIndexBuilder::init(string repositoryPath, unsigned int numberOfBlo
 	sortBasedIndexBuilder::iCompressor = nullptr;
 	sortBasedIndexBuilder::outputFilePath = "";
 	sortBasedIndexBuilder::indexType = FAGIN_INDEX_TYPE;
+	sortBasedIndexBuilder::iTokenizerType = SIMPLE_TOKENIZER;
 }
 
 sortBasedIndexBuilder::sortBasedIndexBuilder(string repositoryPath, unsigned int numberOfBlock, unsigned int numberOfTripletInBlock)
@@ -49,6 +51,12 @@ IIndexBuilder * sortBasedIndexBuilder::setIDictionary(IDictionary * iDictionary)
 IIndexBuilder * sortBasedIndexBuilder::setICompressor(ICompressor * iCompressor)
 {
 	sortBasedIndexBuilder::iCompressor = iCompressor;
+	return this;
+}
+
+IIndexBuilder * sortBasedIndexBuilder::setITokenizer(int iTokenizerType)
+{
+	sortBasedIndexBuilder::iTokenizerType = iTokenizerType;
 	return this;
 }
 
@@ -109,7 +117,18 @@ IIndex * sortBasedIndexBuilder::createIndex()
 
 list<Triplet>* sortBasedIndexBuilder::parseDocumentToTriplet(Document* document, DocumentTable *documentTable)
 {
-	ITokenizer* tokenizer = new Tokenizer(document);
+	ITokenizer* tokenizer;
+	switch (iTokenizerType) {
+	case SIMPLE_TOKENIZER:
+		tokenizer = new Tokenizer(document);
+		break;
+	case STRTK_TOKENIZER:
+		tokenizer = new StrTkTokenizer(document);
+		break;
+	default:
+		throw runtime_error("No Tokenizer with such ID");
+		break;
+	}
 	string token;
 	unsigned long long termId;
 	Term* term;

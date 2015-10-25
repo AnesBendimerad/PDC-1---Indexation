@@ -5,6 +5,7 @@
 #include "Hasher.h"
 #include "DocumentProvider.h"
 #include "Tokenizer.h"
+#include "StrTkTokenizer.h"
 #include "NoCompressor.h"
 #include "IndexBM25.h"
 InMemoryIndexBuilder::InMemoryIndexBuilder(string repositoryPath)
@@ -14,6 +15,7 @@ InMemoryIndexBuilder::InMemoryIndexBuilder(string repositoryPath)
 	iCompressor = nullptr;
 	outputFilePath = "";
 	indexType = FAGIN_INDEX_TYPE;
+	iTokenizerType = SIMPLE_TOKENIZER;
 }
 
 IIndexBuilder * InMemoryIndexBuilder::setIDictionary(IDictionary * iDictionary)
@@ -25,6 +27,12 @@ IIndexBuilder * InMemoryIndexBuilder::setIDictionary(IDictionary * iDictionary)
 IIndexBuilder * InMemoryIndexBuilder::setICompressor(ICompressor * iCompressor)
 {
 	InMemoryIndexBuilder::iCompressor = iCompressor;
+	return this;
+}
+
+IIndexBuilder * InMemoryIndexBuilder::setITokenizer(int iTokenizerType)
+{
+	InMemoryIndexBuilder::iTokenizerType = iTokenizerType;
 	return this;
 }
 
@@ -62,7 +70,18 @@ IIndex* InMemoryIndexBuilder::createIndex()
 	Document* document;
 	while ((document = documentProvider->getNextDocument()) != nullptr)
 	{
-		ITokenizer* tokenizer = new Tokenizer(document);
+		ITokenizer* tokenizer;
+		switch (iTokenizerType) {
+		case SIMPLE_TOKENIZER:
+			tokenizer = new Tokenizer(document);
+			break;
+		case STRTK_TOKENIZER :
+			tokenizer = new StrTkTokenizer(document);
+			break;
+		default:
+			throw runtime_error("No Tokenizer with such ID");
+			break;
+		}
 		string token;
 		while ((token = tokenizer->getNextToken()).compare("") != 0)
 		{
