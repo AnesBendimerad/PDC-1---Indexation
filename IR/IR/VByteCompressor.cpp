@@ -10,6 +10,7 @@ VByteCompressor::VByteCompressor()
 void VByteCompressor::compressUnsignedInt(ofstream * invertedFile, unsigned int number)
 {
 	unsigned char currentChar = 0;
+	// case of 0 :
 	if (number == 0) {
 		currentChar = 128;
 		invertedFile->write((char *)&currentChar, sizeof(unsigned char));
