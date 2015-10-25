@@ -24,15 +24,16 @@ using namespace std;
 int _tmain(int argc, _TCHAR* argv[])
 {
 
-	unsigned int b = MemoryManager::getDiskSectorSize();
-	cout << b;
+	//unsigned int b = MemoryManager::getDiskSectorSize();
+	//cout << b;
 	
 	
-	//IDictionary *dictionary = new HashTableDictionary();
-	//IIndexBuilder* indexBuilder= new sortBasedIndexBuilder("C:\\Users\\LENOVO\\Desktop\\Etudes\\5IF - PDC\\PDC 1\\Exemple Data",5, 100);
-	//indexBuilder->setIDictionary(dictionary);
-	//IIndex *index1= indexBuilder->createIndex();
-	//dictionary->writeCSVFile();
+	IDictionary *dictionary = new HashTableDictionary();
+	IIndexBuilder* indexBuilder= new sortBasedIndexBuilder("C:\\Users\\LENOVO\\Desktop\\Etudes\\5IF - PDC\\PDC 1\\Exemple Data",5, 100);
+	indexBuilder->setIDictionary(dictionary);
+	IIndex *index1= indexBuilder->createIndex();
+	
+	dictionary->writeCSVFile();
 	//cout << MemoryManager::getWorkingSetSize() << endl;
 	
 	int a;

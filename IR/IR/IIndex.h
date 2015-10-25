@@ -5,6 +5,7 @@
 #define DEFAULT_OUTPUT_FILE "myIndex2"
 #define FAGIN_INDEX_TYPE 1
 #define BM25_INDEX_TYPE 2
+
 using namespace std;
 class IIndex {
 public:

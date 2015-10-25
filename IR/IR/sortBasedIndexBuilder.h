@@ -5,19 +5,17 @@
 #include "Document.h"
 #include "Triplet.h"
 
-#define TEMPORARY_FILES_DIRECTORY_PATH "C:\\Users\\anes\\Documents\\projets"
-#define TEMPORARY_FILE_PREFIX_NAME "~tmp"
-
 using namespace std;
 
 class sortBasedIndexBuilder : public IIndexBuilder {
 private:
+	string temporaryFilePrefixPath;
 	string repositoryPath;
 	string outputFilePath;
 	IDictionary * iDictionary;
 	ICompressor * iCompressor;
 	int indexType;
-
+	
 	// Temporary limitation of memory
 	unsigned int numberOfBlock; //number of block in the memory
 	unsigned int numberOfTripletInBlock; //number of triplet in each block

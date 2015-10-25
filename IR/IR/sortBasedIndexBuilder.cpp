@@ -19,6 +19,10 @@ sortBasedIndexBuilder::sortBasedIndexBuilder(string repositoryPath, unsigned int
 	iCompressor = nullptr;
 	outputFilePath = "";
 	indexType = FAGIN_INDEX_TYPE;
+
+	string temporaryFileDirectory = ""; // should end with '\\' if not empty 
+	string temporaryFilePrefixName = ".~tmp_";
+	temporaryFilePrefixPath = temporaryFileDirectory + temporaryFilePrefixName;
 }
 
 IIndexBuilder * sortBasedIndexBuilder::setIDictionary(IDictionary * iDictionary)
@@ -155,7 +159,7 @@ unsigned int sortBasedIndexBuilder::createFirstLevelSortedTripletsFiles(Triplet 
 			if (bufferFirstFreeIndex == bufferSize)
 			{
 				qsort(tripletBuffer, bufferFirstFreeIndex, sizeof(Triplet), sort_by_termId_docId);
-				path = TEMPORARY_FILES_DIRECTORY_PATH + string("\\") + TEMPORARY_FILE_PREFIX_NAME + string("_") + to_string(runNumber);
+				path = temporaryFilePrefixPath + to_string(runNumber);
 				ofstream outputFile(path, ios::out | ios::binary);
 				outputFile.write((char *)tripletBuffer, sizeof(Triplet)*bufferFirstFreeIndex);
 				outputFile.close();
@@ -169,7 +173,7 @@ unsigned int sortBasedIndexBuilder::createFirstLevelSortedTripletsFiles(Triplet 
 	if (bufferFirstFreeIndex > 0)
 	{
 		qsort(tripletBuffer, bufferFirstFreeIndex, sizeof(Triplet), sort_by_termId_docId);
-		path = TEMPORARY_FILES_DIRECTORY_PATH + string("\\") + TEMPORARY_FILE_PREFIX_NAME + string("_") + to_string(runNumber);
+		path = temporaryFilePrefixPath + to_string(runNumber);
 		ofstream outputFile(path, ios::out | ios::binary);
 		outputFile.write((const char *)tripletBuffer, sizeof(Triplet)*bufferFirstFreeIndex);
 		outputFile.close();
@@ -208,11 +212,11 @@ string sortBasedIndexBuilder::getFinalSortedTripletsFilesByFusion(Triplet * trip
 
 		if (lastSortedRunNumber - firstSortedRunNumber > 0)
 		{
-			string outputPath = TEMPORARY_FILES_DIRECTORY_PATH + string("\\") + TEMPORARY_FILE_PREFIX_NAME + string("_Merged_") + to_string(outputNumber);
+			string outputPath = temporaryFilePrefixPath + string("Merged_") + to_string(outputNumber);
 			ofstream outputFile(outputPath, ios::out | ios::binary);
 			for (unsigned int i = 0;i <= lastSortedRunNumber - firstSortedRunNumber;i++)
 			{
-				string sourcePath = TEMPORARY_FILES_DIRECTORY_PATH + string("\\") + TEMPORARY_FILE_PREFIX_NAME + string("_") + to_string(unsigned int(i + firstSortedRunNumber));
+				string sourcePath = temporaryFilePrefixPath + to_string(unsigned int(i + firstSortedRunNumber));
 				ifstream* inputStreamI = new ifstream(sourcePath, ios::in | ios::binary);
 				mergedTableStream[i] = inputStreamI;
 				mergedInRunIndex[i] = 0;
@@ -243,7 +247,7 @@ string sortBasedIndexBuilder::getFinalSortedTripletsFilesByFusion(Triplet * trip
 					{
 						localMergingEnd = localMergingEnd & true;
 						mergedTableStream[i]->close();
-						string sourcePath = TEMPORARY_FILES_DIRECTORY_PATH + string("\\") + TEMPORARY_FILE_PREFIX_NAME + string("_") + to_string(unsigned int(i + firstSortedRunNumber));
+						string sourcePath = temporaryFilePrefixPath  + to_string(unsigned int(i + firstSortedRunNumber));
 						remove(sourcePath.c_str());
 						mergedInRunIsFileClosed[i] = true;
 					}
@@ -294,13 +298,13 @@ string sortBasedIndexBuilder::getFinalSortedTripletsFilesByFusion(Triplet * trip
 			// Finalize runs
 			outputFile.close();
 			//rename the file 
-			string lastOutputPath = TEMPORARY_FILES_DIRECTORY_PATH + string("\\") + TEMPORARY_FILE_PREFIX_NAME + string("_") + to_string(outputNumber);
+			string lastOutputPath = temporaryFilePrefixPath + to_string(outputNumber);
 			rename(outputPath.c_str(), lastOutputPath.c_str());
 		}
 		else
 		{
-			string ancientName = TEMPORARY_FILES_DIRECTORY_PATH + string("\\") + TEMPORARY_FILE_PREFIX_NAME + string("_") + to_string(firstSortedRunNumber);
-			string lastOutputPath = TEMPORARY_FILES_DIRECTORY_PATH + string("\\") + TEMPORARY_FILE_PREFIX_NAME + string("_") + to_string(outputNumber);
+			string ancientName = temporaryFilePrefixPath + to_string(firstSortedRunNumber);
+			string lastOutputPath = temporaryFilePrefixPath + to_string(outputNumber);
 			rename(ancientName.c_str(), lastOutputPath.c_str());
 		}
 		if (lastSortedRunNumber < lastRunNumber)
@@ -319,8 +323,8 @@ string sortBasedIndexBuilder::getFinalSortedTripletsFilesByFusion(Triplet * trip
 		}
 	}
 
-	string lastOutputPath = TEMPORARY_FILES_DIRECTORY_PATH + string("\\") + TEMPORARY_FILE_PREFIX_NAME + string("_") + to_string(outputNumber);
-	string sortedTripletFilePath = TEMPORARY_FILES_DIRECTORY_PATH + string("\\") + TEMPORARY_FILE_PREFIX_NAME + string("_merged");
+	string lastOutputPath = temporaryFilePrefixPath + to_string(outputNumber);
+	string sortedTripletFilePath = temporaryFilePrefixPath + string("merged");
 	rename(lastOutputPath.c_str(), sortedTripletFilePath.c_str());
 
 	free(mergedInRunIndex);
