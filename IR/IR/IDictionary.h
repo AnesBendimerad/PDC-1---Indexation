@@ -4,6 +4,7 @@
 #include "IIterator.h"
 using namespace std;
 
+#define DEFAULT_OUTPUT_CSV_PATH "allTermsInTheCorpus.csv"
 class IDictionary {
 public:
 	virtual Term* addTerm(string token) = 0;

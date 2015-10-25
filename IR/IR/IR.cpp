@@ -29,9 +29,12 @@ int _tmain(int argc, _TCHAR* argv[])
 	
 	
 	IDictionary *dictionary = new HashTableDictionary();
-	IIndexBuilder* indexBuilder= new sortBasedIndexBuilder("C:\\Users\\LENOVO\\Desktop\\Etudes\\5IF - PDC\\PDC 1\\Exemple Data",5, 100);
+	IIndexBuilder* indexBuilder= new sortBasedIndexBuilder("C:\\Users\\LENOVO\\Desktop\\Etudes\\5IF - PDC\\PDC 1\\Exemple Data");
 	indexBuilder->setIDictionary(dictionary);
 	IIndex *index1= indexBuilder->createIndex();
+	
+	vector <pair<DocumentMetaData,double>> resultat = index1->search(3, "establishment");
+	cout << resultat[0].first.id << endl;
 	
 	dictionary->writeCSVFile();
 	//cout << MemoryManager::getWorkingSetSize() << endl;

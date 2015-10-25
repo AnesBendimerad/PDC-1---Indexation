@@ -6,23 +6,59 @@
 #include "DocumentProvider.h"
 #include "Tokenizer.h"
 #include "NoCompressor.h"
+#include "MemoryManager.h"
 #include <map>
 #include <iostream>
 #include <stdio.h>
 
 sortBasedIndexBuilder::sortBasedIndexBuilder(string repositoryPath, unsigned int numberOfBlock, unsigned int numberOfTripletInBlock)
 {
+	string temporaryFileDirectory = ""; // should end with '\\' if not empty 
+	string temporaryFilePrefixName = ".~tmp_";
+	sortBasedIndexBuilder::temporaryFilePrefixPath = temporaryFileDirectory + temporaryFilePrefixName;
 	sortBasedIndexBuilder::repositoryPath = repositoryPath;
 	sortBasedIndexBuilder::numberOfBlock = numberOfBlock;
 	sortBasedIndexBuilder::numberOfTripletInBlock = numberOfTripletInBlock;
-	iDictionary = nullptr;
-	iCompressor = nullptr;
-	outputFilePath = "";
-	indexType = FAGIN_INDEX_TYPE;
+	sortBasedIndexBuilder::iDictionary = nullptr;
+	sortBasedIndexBuilder::iCompressor = nullptr;
+	sortBasedIndexBuilder::outputFilePath = "";
+	sortBasedIndexBuilder::indexType = FAGIN_INDEX_TYPE;
+}
 
+sortBasedIndexBuilder::sortBasedIndexBuilder(string repositoryPath, unsigned int memoryLimitInByte)
+{
 	string temporaryFileDirectory = ""; // should end with '\\' if not empty 
 	string temporaryFilePrefixName = ".~tmp_";
-	temporaryFilePrefixPath = temporaryFileDirectory + temporaryFilePrefixName;
+	sortBasedIndexBuilder::temporaryFilePrefixPath = temporaryFileDirectory + temporaryFilePrefixName;
+	sortBasedIndexBuilder::repositoryPath = repositoryPath;
+	sortBasedIndexBuilder::iDictionary = nullptr;
+	sortBasedIndexBuilder::iCompressor = nullptr;
+	sortBasedIndexBuilder::outputFilePath = "";
+	sortBasedIndexBuilder::indexType = FAGIN_INDEX_TYPE;
+
+	unsigned int memoryLimitForBufferInByte = (unsigned int) (MEMORY_RATIO_USED_FOR_BUFFER*memoryLimitInByte);
+	unsigned int sizeOfDiskBlock = MemoryManager::getDiskSectorSize();
+
+	sortBasedIndexBuilder::numberOfTripletInBlock = sizeOfDiskBlock / sizeof(Triplet);
+	sortBasedIndexBuilder::numberOfBlock = memoryLimitForBufferInByte/sizeOfDiskBlock;
+}
+
+sortBasedIndexBuilder::sortBasedIndexBuilder(string repositoryPath)
+{
+	string temporaryFileDirectory = ""; // should end with '\\' if not empty 
+	string temporaryFilePrefixName = ".~tmp_";
+	sortBasedIndexBuilder::temporaryFilePrefixPath = temporaryFileDirectory + temporaryFilePrefixName;
+	sortBasedIndexBuilder::repositoryPath = repositoryPath;
+	sortBasedIndexBuilder::iDictionary = nullptr;
+	sortBasedIndexBuilder::iCompressor = nullptr;
+	sortBasedIndexBuilder::outputFilePath = "";
+	sortBasedIndexBuilder::indexType = FAGIN_INDEX_TYPE;
+
+	unsigned int memoryLimitForBufferInByte = (unsigned int)(MEMORY_RATIO_USED_FOR_BUFFER*DEFAULT_MEMORY_LIMIT_IN_BYTE);
+	unsigned int sizeOfDiskBlock = MemoryManager::getDiskSectorSize();
+
+	sortBasedIndexBuilder::numberOfTripletInBlock = sizeOfDiskBlock / sizeof(Triplet);
+	sortBasedIndexBuilder::numberOfBlock = memoryLimitForBufferInByte / sizeOfDiskBlock;
 }
 
 IIndexBuilder * sortBasedIndexBuilder::setIDictionary(IDictionary * iDictionary)

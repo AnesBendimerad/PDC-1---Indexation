@@ -7,6 +7,9 @@
 
 using namespace std;
 
+#define MEMORY_RATIO_USED_FOR_BUFFER 0.5
+#define DEFAULT_MEMORY_LIMIT_IN_BYTE 65536
+
 class sortBasedIndexBuilder : public IIndexBuilder {
 private:
 	string temporaryFilePrefixPath;
@@ -29,6 +32,9 @@ private:
 
 public:
 	sortBasedIndexBuilder(string repositoryPath,unsigned int numberOfBlock, unsigned int numberOfTripletInBlock);
+	sortBasedIndexBuilder(string repositoryPath, unsigned int memoryLimitInByte);
+	sortBasedIndexBuilder(string repositoryPath); // use the defined DEFAULT_MEMORY_LIMIT_IN_BYTE
+
 	IIndexBuilder* setIDictionary(IDictionary *iDictionary);
 	IIndexBuilder* setICompressor(ICompressor *iCompressor);
 	IIndexBuilder* setOutputFilePath(string outputFilePath);

@@ -206,7 +206,7 @@ void HashTableDictionary::writeCSVFile(){
 
 	vector <Term*> allTerms = sortTermsByOccurances();
 
-	ofstream allTermsCSV("allTermsInTheCorpus.csv");
+	ofstream allTermsCSV(DEFAULT_OUTPUT_CSV_PATH);
 	allTermsCSV << "Term" << "," << "frequency" << endl;
 
 	for (unsigned int i = 0; i < allTerms.size(); i++){
