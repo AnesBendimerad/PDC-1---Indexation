@@ -28,11 +28,16 @@ int _tmain(int argc, _TCHAR* argv[])
 	//cout << b;
 	
 	
-	IDictionary *dictionary = new HashTableDictionary();
-	IIndexBuilder* indexBuilder= new InMemoryIndexBuilder("C:\\myFiles\\tests");
-	indexBuilder->setIDictionary(dictionary);
-	IIndex *index1= indexBuilder->createIndex();
-	int size = dictionary->getMemorySize();
+	//IDictionary *dictionary = new HashTableDictionary();
+	
+	//indexBuilder->setIDictionary(dictionary);
+	//IIndexBuilder* indexBuilder = new InMemoryIndexBuilder("C:\\myFiles\\tests");
+	//indexBuilder->setICompressor(new GammaCompressor());
+	//IIndex *index1= indexBuilder->createIndex();
+	IndexLoader *indexLoader = new IndexLoader(DEFAULT_OUTPUT_FILE);
+	IIndex * index = indexLoader->load();
+
+	//int size = dictionary->getMemorySize();
 	int j = 0;
 
 	//vector <pair<DocumentMetaData,double>> resultat = index1->search(3, "establishment");
