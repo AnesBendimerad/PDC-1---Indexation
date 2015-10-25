@@ -15,7 +15,7 @@
 
 void sortBasedIndexBuilder::init(string repositoryPath, unsigned int numberOfBlock, unsigned int numberOfTripletInBlock)
 {
-	string temporaryFileDirectory = ""; // should end with '\\' if not empty 
+	string temporaryFileDirectory = "E:\\tmp\\"; // should end with '\\' if not empty 
 	string temporaryFilePrefixName = ".~tmp_";
 	sortBasedIndexBuilder::temporaryFilePrefixPath = temporaryFileDirectory + temporaryFilePrefixName;
 	sortBasedIndexBuilder::repositoryPath = repositoryPath;
