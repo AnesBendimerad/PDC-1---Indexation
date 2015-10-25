@@ -216,7 +216,7 @@ void HashTableDictionary::writeCSVFile(){
 
 HashTableDictionary::~HashTableDictionary()
 {
-	for (int i = 0; i < size; i++) 
+	for (unsigned int i = 0; i < size; i++) 
 	{
 		delete hashTable[i];
 	}

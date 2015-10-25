@@ -19,4 +19,13 @@ unsigned long long MemoryManager::getWorkingSetSize()
 		*/
 	}
 	CloseHandle(GetCurrentProcess());
+	return 0;
+}
+
+unsigned int MemoryManager::getDiskSectorSize()
+{
+	LPCWSTR pszDrive = NULL;
+	DWORD lpSectorsPerCluster, lpBytesPerSector, lpNumberOfFreeClusters, lpTotalNumberOfClusters;
+	GetDiskFreeSpace(pszDrive, &lpSectorsPerCluster, &lpBytesPerSector, &lpNumberOfFreeClusters, &lpTotalNumberOfClusters);
+	return lpSectorsPerCluster*lpBytesPerSector;
 }

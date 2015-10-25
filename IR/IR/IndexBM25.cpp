@@ -59,7 +59,7 @@ vector<pair<DocumentMetaData, double>> IndexBM25::search(int topK, string query)
 		{
 			term = dictionary->getTerm(token);
 
-			for (int i = 0; i < term->documentNumber; i++)
+			for (unsigned int i = 0; i < term->documentNumber; i++)
 			{
 				tf = documentTermTable[i].ftd;
 				currentDocumentIndex = documentTermTable[i].documentIndex;
@@ -101,7 +101,7 @@ double IndexBM25::calculateAVGDL()
 	int totalDocumentsLength = 0;
 	DocumentMetaData *allDocuments = documentTable->getFinalizedDocumentTable();
 
-	for (int i = 0; i < documentTable->getDocumentNumber(); i++)
+	for (unsigned int i = 0; i < documentTable->getDocumentNumber(); i++)
 	{
 		totalDocumentsLength += allDocuments[i].wordsNumber;
 	}
