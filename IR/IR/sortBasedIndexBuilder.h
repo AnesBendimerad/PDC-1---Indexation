@@ -18,6 +18,7 @@ private:
 	IDictionary * iDictionary;
 	ICompressor * iCompressor;
 	int indexType;
+	int iTokenizerType;
 	
 	unsigned int numberOfBlock; //number of block in the Triplet Buffer
 	unsigned int numberOfTripletInBlock; //number of triplet in each block
@@ -36,6 +37,7 @@ public:
 
 	IIndexBuilder* setIDictionary(IDictionary *iDictionary);
 	IIndexBuilder* setICompressor(ICompressor *iCompressor);
+	IIndexBuilder* setITokenizer(int iTokenizerType);
 	IIndexBuilder* setOutputFilePath(string outputFilePath);
 	IIndexBuilder* setIndexType(int indexType);
 	IIndex* createIndex();

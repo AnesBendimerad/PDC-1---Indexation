@@ -81,9 +81,6 @@
     <ClInclude Include="DocumentProvider.h">
       <Filter>Header Files\controllers</Filter>
     </ClInclude>
-    <ClInclude Include="Tokenizer.h">
-      <Filter>Header Files\controllers</Filter>
-    </ClInclude>
     <ClInclude Include="DocumentTable.h">
       <Filter>Header Files\models</Filter>
     </ClInclude>
@@ -144,6 +141,9 @@
     <ClInclude Include="IndexBM25.h">
       <Filter>Header Files\models</Filter>
     </ClInclude>
+    <ClInclude Include="Tokenizer.h">
+      <Filter>Header Files\models</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -165,9 +165,6 @@
       <Filter>Source Files\models</Filter>
     </ClCompile>
     <ClCompile Include="DocumentProvider.cpp">
-      <Filter>Source Files\controllers</Filter>
-    </ClCompile>
-    <ClCompile Include="Tokenizer.cpp">
       <Filter>Source Files\controllers</Filter>
     </ClCompile>
     <ClCompile Include="StrTkTokenizer.cpp">
@@ -207,6 +204,9 @@
       <Filter>Source Files\controllers</Filter>
     </ClCompile>
     <ClCompile Include="IndexBM25.cpp">
+      <Filter>Source Files\models</Filter>
+    </ClCompile>
+    <ClCompile Include="Tokenizer.cpp">
       <Filter>Source Files\models</Filter>
     </ClCompile>
   </ItemGroup>

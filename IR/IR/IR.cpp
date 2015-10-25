@@ -29,7 +29,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	
 	
 	IDictionary *dictionary = new HashTableDictionary();
-	IIndexBuilder* indexBuilder= new sortBasedIndexBuilder("C:\\myFiles\\tests");
+	IIndexBuilder* indexBuilder= new InMemoryIndexBuilder("C:\\myFiles\\tests");
 	indexBuilder->setIDictionary(dictionary);
 	IIndex *index1= indexBuilder->createIndex();
 	int size = dictionary->getMemorySize();
