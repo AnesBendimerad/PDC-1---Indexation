@@ -10,12 +10,12 @@ class HashTableDictionary : public IDictionary {
 private:
 	IHasher * hasher;
 	list<Term>  ** hashTable;
-	int size;
+	unsigned int size;
 	unsigned long long termsNumber;
 	static bool compare(const void * firstTerm, const void * secondTerm);
 	vector<Term *> sortTermsByOccurances();
 public:
-	HashTableDictionary(int size,IHasher *hasher);
+	HashTableDictionary(unsigned int size,IHasher *hasher);
 	HashTableDictionary();
 	Term* addTerm(string token) ;
 	void addTerm(Term* term);

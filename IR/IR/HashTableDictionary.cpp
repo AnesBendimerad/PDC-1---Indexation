@@ -4,12 +4,12 @@
 #include "Hasher.h"
 #include <algorithm>
 
-HashTableDictionary::HashTableDictionary(int size, IHasher *hasher)
+HashTableDictionary::HashTableDictionary(unsigned int size, IHasher *hasher)
 {
 	HashTableDictionary::termsNumber = 0;
 	HashTableDictionary::size = size;
 	hashTable = (list<Term>**) malloc(sizeof(list<Term>*)*size);
-	for (int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		hashTable[i] = nullptr;
 	}
@@ -21,7 +21,7 @@ HashTableDictionary::HashTableDictionary()
 	HashTableDictionary::termsNumber = 0;
 	HashTableDictionary::size = DEFAULT_SIZE;
 	hashTable = (list<Term>**) malloc(sizeof(list<Term>*)*size);
-	for (int i = 0; i < size; i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		hashTable[i] = nullptr;
 	}

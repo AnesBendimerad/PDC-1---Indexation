@@ -366,7 +366,7 @@ void sortBasedIndexBuilder::finalize(DocumentTable * documentTable,string sorted
 	outputFile.write((const char *)&iCompressor->getCompressorId(), sizeof(int));
 
 	// write the DocumentMetaDatas number in DocumentTable
-	outputFile.write((const char *)&documentTable->getDocumentNumber(), sizeof(unsigned long long));
+	outputFile.write((const char *)&documentTable->getDocumentNumber(), sizeof(unsigned int));
 
 	// write the DocumentMetaDatas
 	outputFile.write((const char *)documentTable->getFinalizedDocumentTable(), documentTable->getDocumentNumber()*sizeof(DocumentMetaData));

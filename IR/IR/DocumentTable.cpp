@@ -14,14 +14,14 @@ DocumentTable::DocumentTable()
 	finalized = false;
 	docTable = new list<DocumentMetaData>();
 }
-DocumentTable::DocumentTable(int documentNumber, DocumentMetaData * docTable)
+DocumentTable::DocumentTable(unsigned int documentNumber, DocumentMetaData * docTable)
  {
 	DocumentTable::documentNumber = documentNumber;
 	DocumentTable::docTable = docTable;
 	DocumentTable::finalized = true;
 }
 
-unsigned long long DocumentTable::addDocument(DocumentMetaData documentMetaData)
+unsigned int DocumentTable::addDocument(DocumentMetaData documentMetaData)
 {
 	if (finalized) {
 		throw runtime_error("Document table already finalized");
@@ -32,7 +32,7 @@ unsigned long long DocumentTable::addDocument(DocumentMetaData documentMetaData)
 	return documentNumber-1;
 }
 
-unsigned long long& DocumentTable::getDocumentNumber()
+unsigned int& DocumentTable::getDocumentNumber()
 {
 	return documentNumber;
 }
@@ -58,7 +58,7 @@ void DocumentTable::finalize()
 	}
 }
 
-DocumentMetaData* DocumentTable::getDocument(int documentIndex)
+DocumentMetaData* DocumentTable::getDocument(unsigned int documentIndex)
 {
 
 	if (finalized) {
@@ -81,7 +81,7 @@ DocumentMetaData* DocumentTable::getDocument(int documentIndex)
 
 unsigned long long DocumentTable::getMemorySize()
 {
-	return documentNumber*sizeof(DocumentMetaData)+sizeof(unsigned long long)+sizeof(bool) + sizeof(void*);
+	return documentNumber*sizeof(DocumentMetaData)+sizeof(unsigned int)+sizeof(bool) + sizeof(void*);
 }
 
 DocumentMetaData * DocumentTable::getFinalizedDocumentTable()

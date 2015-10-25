@@ -14,6 +14,7 @@
 #include "IndexLoader.h"
 #include <fstream>
 #include "GammaCompressor.h"
+#include "VByteCompressor.h"
 #include "InMemoryIndexBuilder.h"
 #include "MemoryManager.h"
 using namespace std;

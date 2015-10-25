@@ -5,7 +5,7 @@
 #include "Document.h"
 #include "Triplet.h"
 
-#define TEMPORARY_FILES_DIRECTORY_PATH "E:\\PDC_TMP"
+#define TEMPORARY_FILES_DIRECTORY_PATH "C:\\Users\\anes\\Documents\\projets"
 #define TEMPORARY_FILE_PREFIX_NAME "~tmp"
 
 using namespace std;

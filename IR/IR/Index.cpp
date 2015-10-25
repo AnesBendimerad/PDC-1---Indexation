@@ -119,7 +119,7 @@ vector<vector<pair<int, double>>> Index::calculateTF_IDF(string query)
 	fstream inputStream(invertedFilePath);
 	istringstream iss(query);
 	string token;
-	int documentsNumber = documentTable->getDocumentNumber();
+	unsigned int documentsNumber = documentTable->getDocumentNumber();
 
 	//Calculate tf-idf in the loop
 	while (iss >> token)

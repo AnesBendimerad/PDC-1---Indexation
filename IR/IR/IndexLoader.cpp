@@ -8,6 +8,7 @@
 #include "NoCompressor.h"
 #include "VByteCompressor.h"
 #include "GammaCompressor.h"
+#include "IndexBM25.h"
 IndexLoader::IndexLoader(string invertedFilePath)
 {
 	IndexLoader::invertedFilePath = invertedFilePath;
@@ -41,12 +42,12 @@ IIndex  * IndexLoader::load()
 	unsigned int  dictionaryOffset;
 	unsigned long long  termNumbers;
 	int compressorId;
-	unsigned long long  documentMetaDataNumber;
+	unsigned int documentMetaDataNumber;
 
 	inputStream.read((char *)&dictionaryOffset, sizeof(unsigned int));
 	inputStream.read((char *)&termNumbers, sizeof(unsigned long long));
 	inputStream.read((char *)&compressorId, sizeof(int));
-	inputStream.read((char *)&documentMetaDataNumber, sizeof(unsigned long long));
+	inputStream.read((char *)&documentMetaDataNumber, sizeof(unsigned int));
 	
 	ICompressor *iCompressor;
 	switch (compressorId)
@@ -84,6 +85,10 @@ IIndex  * IndexLoader::load()
 	case FAGIN_INDEX_TYPE:
 			myIndex = new Index(dictionary, documentTable, iCompressor, invertedFilePath);
 			break;
+	case BM25_INDEX_TYPE:
+		myIndex = new IndexBM25(dictionary, documentTable, iCompressor, invertedFilePath);
+		
+		break;
 	}
 	return myIndex;
 }
