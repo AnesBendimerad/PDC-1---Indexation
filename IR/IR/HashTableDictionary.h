@@ -12,8 +12,11 @@ private:
 	list<Term>  ** hashTable;
 	unsigned int size;
 	unsigned long long termsNumber;
+
+
 	static bool compare(const void * firstTerm, const void * secondTerm);
 	vector<Term *> sortTermsByOccurances();
+	unsigned int termsListMemorySize(list<Term>* termsList);
 public:
 	HashTableDictionary(unsigned int size,IHasher *hasher);
 	HashTableDictionary();

@@ -123,9 +123,32 @@ unsigned long long& HashTableDictionary::getTermsNumber()
 	return termsNumber;
 }
 
+unsigned int HashTableDictionary::termsListMemorySize(list<Term>* termsList)
+{
+	if (termsList == nullptr) {
+		return 0;
+	}
+	else {
+		unsigned int memorySize = 24;
+		list<Term>::iterator it;
+		for (it = termsList->begin(); it != termsList->end(); ++it)
+		{
+			memorySize += 16 + sizeof(Term) + (it->token.capacity()+1);
+		}
+		return memorySize;
+	}
+}
+
+
 unsigned long long HashTableDictionary::getMemorySize()
 {
-	return sizeof(IHasher*)+size*sizeof(list<Term>*)+sizeof(list<Term>  **)+sizeof(int)+sizeof(unsigned long long)+termsNumber*(sizeof(Term)+sizeof(void*));
+	unsigned long long memorySize = sizeof(IHasher*) + size*sizeof(list<Term>*) + sizeof(list<Term>  **) + sizeof(unsigned int) + sizeof(unsigned long long);
+	
+	for (unsigned int i = 0; i < size; i++) {
+		memorySize += termsListMemorySize(hashTable[i]);
+	}
+	
+	return memorySize;
 }
 
 unsigned long long HashTableDictionary::getTokenId(string token)
@@ -201,6 +224,7 @@ vector<Term*> HashTableDictionary::sortTermsByOccurances(){
 
 	return allTerms;
 }
+
 
 void HashTableDictionary::writeCSVFile(){
 
