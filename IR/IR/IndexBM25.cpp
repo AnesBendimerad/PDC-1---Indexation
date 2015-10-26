@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iostream>
 #include <map>
+#include "FileManager.h"
 using namespace std;
 
 IndexBM25::IndexBM25(IDictionary * dictionary, DocumentTable * documentTable, ICompressor * compressor, string invertedFilePath)
@@ -21,16 +22,16 @@ IndexBM25::~IndexBM25()
 
 DocumentTerm * IndexBM25::getTermPostingList(string token)
 {
-	ifstream inputStream(invertedFilePath, ios::in | ios::binary);
+	ifstream *inputStream = FileManager::openIfstream(invertedFilePath);
 	Term * term = dictionary->getTerm(token);
 	if (term != nullptr) {
 		DocumentTerm* documentTermTable;
-		inputStream.seekg((unsigned int)term->postingList);
-		compressor->readAndDecompress(&inputStream, &documentTermTable, term->documentNumber);
-		inputStream.close();
+		inputStream->seekg((unsigned int)term->postingList);
+		compressor->readAndDecompress(inputStream, &documentTermTable, term->documentNumber);
+		inputStream->close();
 		return documentTermTable;
 	}
-	inputStream.close();
+	inputStream->close();
 	return nullptr;
 }
 

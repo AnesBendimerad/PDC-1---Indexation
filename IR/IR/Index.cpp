@@ -9,6 +9,7 @@
 #include "DocumentTable.h"
 #include "DocumentTerm.h"
 #include "Term.h"
+#include "FileManager.h"
 using namespace std;
 
 
@@ -22,16 +23,16 @@ Index::Index(IDictionary * dictionary, DocumentTable * documentTable, ICompresso
 
 DocumentTerm * Index::getTermPostingList(string token)
 {
-	ifstream inputStream(invertedFilePath, ios::in | ios::binary);
+	ifstream *inputStream = FileManager::openIfstream(invertedFilePath);
 	Term * term = dictionary->getTerm(token);
 	if (term != nullptr) {
 		DocumentTerm* documentTermTable;
-		inputStream.seekg((unsigned int) term->postingList);
-		compressor->readAndDecompress(&inputStream, &documentTermTable, term->documentNumber);
-		inputStream.close();
+		inputStream->seekg((unsigned int) term->postingList);
+		compressor->readAndDecompress(inputStream, &documentTermTable, term->documentNumber);
+		inputStream->close();
 		return documentTermTable;
 	}
-	inputStream.close();
+	inputStream->close();
 	return nullptr;
 }
 

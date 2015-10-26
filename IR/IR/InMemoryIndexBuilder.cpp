@@ -8,6 +8,7 @@
 #include "StrTkTokenizer.h"
 #include "NoCompressor.h"
 #include "IndexBM25.h"
+#include "FileManager.h"
 InMemoryIndexBuilder::InMemoryIndexBuilder(string repositoryPath)
 {
 	InMemoryIndexBuilder::repositoryPath = repositoryPath;
@@ -147,23 +148,24 @@ void InMemoryIndexBuilder::finalize(DocumentTable * documentTable)
 		//		DocumentMetaDatas
 		//		posting lists
 		//		Dictionary
-		ofstream outputFile(outputFilePath, ios::out | ios::binary);
+		ofstream *outputFile = FileManager::openOfstream(outputFilePath);
+			
 
 		// prepare a place for the dictionary offset
 		unsigned int offsetPlacer = 0;
-		outputFile.write((const char *)&offsetPlacer, sizeof(unsigned int));
+		outputFile->write((const char *)&offsetPlacer, sizeof(unsigned int));
 
 		// write the terms number in HashTableDictionary
-		outputFile.write((const char *)&iDictionary->getTermsNumber(), sizeof(unsigned long long));
+		outputFile->write((const char *)&iDictionary->getTermsNumber(), sizeof(unsigned long long));
 
 		// write the Compressor ID
-		outputFile.write((const char *)&iCompressor->getCompressorId(), sizeof(int));
+		outputFile->write((const char *)&iCompressor->getCompressorId(), sizeof(int));
 
 		// write the DocumentMetaDatas number in DocumentTable
-		outputFile.write((const char *)&documentTable->getDocumentNumber(), sizeof(unsigned int));
+		outputFile->write((const char *)&documentTable->getDocumentNumber(), sizeof(unsigned int));
 
 		// write the DocumentMetaDatas
-		outputFile.write((const char *)documentTable->getFinalizedDocumentTable(), documentTable->getDocumentNumber()*sizeof(DocumentMetaData));
+		outputFile->write((const char *)documentTable->getFinalizedDocumentTable(), documentTable->getDocumentNumber()*sizeof(DocumentMetaData));
 
 		// write the posting lists contiguously
 		IIterator* termIterator = iDictionary->getIterator();
@@ -171,8 +173,8 @@ void InMemoryIndexBuilder::finalize(DocumentTable * documentTable)
 		int i = 0;
 		while ((term = static_cast<Term*>(termIterator->getNext())) != nullptr) {
 			list<DocumentTerm>* postingListAsList = static_cast<list<DocumentTerm>*>(term->postingList);
-			unsigned int  postingListOffset = (unsigned int)outputFile.tellp();
-			iCompressor->compressAndWrite(&outputFile, postingListAsList);
+			unsigned int  postingListOffset = (unsigned int)outputFile->tellp();
+			iCompressor->compressAndWrite(outputFile, postingListAsList);
 			postingListAsList->erase(postingListAsList->begin(), postingListAsList->end());
 			delete term->postingList;
 			term->postingList = (void *)postingListOffset;
@@ -181,16 +183,16 @@ void InMemoryIndexBuilder::finalize(DocumentTable * documentTable)
 		delete termIterator;
 
 		// save the dictionary offset
-		unsigned int  dictionaryOffset = (unsigned int)outputFile.tellp();
+		unsigned int  dictionaryOffset = (unsigned int)outputFile->tellp();
 
 		// write the terms of the dictionary
 		termIterator = iDictionary->getIterator();
 		while ((term = static_cast<Term*>(termIterator->getNext())) != nullptr) {
-			outputFile << term;
+			*outputFile << term;
 		}
-		outputFile.seekp(0);
-		outputFile.write((const char *)&dictionaryOffset, sizeof(unsigned int));
-		outputFile.close();
+		outputFile->seekp(0);
+		outputFile->write((const char *)&dictionaryOffset, sizeof(unsigned int));
+		outputFile->close();
 		delete termIterator;
 		
 }

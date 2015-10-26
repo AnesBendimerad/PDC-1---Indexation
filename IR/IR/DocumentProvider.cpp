@@ -6,6 +6,7 @@
 #include <sstream>
 #include <sys/types.h>
 #include <iostream>
+#include "FileManager.h"
 using namespace std;
 
 DocumentProvider::DocumentProvider(string repositoryPath)
@@ -13,14 +14,16 @@ DocumentProvider::DocumentProvider(string repositoryPath)
 	DIR *directory = NULL;
 	struct dirent *fileEntity;
 
-	directory = opendir(repositoryPath.c_str());
-
+	directory = FileManager::openDirectory(repositoryPath);
 	if (directory != NULL) {
 		while ((fileEntity = readdir(directory)) != NULL) {
 			if (strcmp(fileEntity->d_name, ".") != 0 && strcmp(fileEntity->d_name, "..") != 0)
 				pathList.push_back(repositoryPath + "\\" + string(fileEntity->d_name));
 		}
 		closedir(directory);
+	}
+	if (pathList.empty()) {
+		throw runtime_error("The directory is empty");
 	}
 }
 
