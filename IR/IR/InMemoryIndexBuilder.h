@@ -9,7 +9,6 @@ private:
 	string outputFilePath;
 	IDictionary * iDictionary;
 	ICompressor * iCompressor;
-	int indexType;
 	int iTokenizerType;
 
 	void addTerm(string token, DocumentTable *documentTable);
@@ -20,7 +19,6 @@ public:
 	IIndexBuilder* setICompressor(ICompressor *iCompressor);
 	IIndexBuilder* setITokenizer(int iTokenizerType);
 	IIndexBuilder* setOutputFilePath(string outputFilePath);
-	IIndexBuilder* setIndexType(int indexType);
-	IIndex* createIndex();
+	Index* createIndex();
 	~InMemoryIndexBuilder();
 };

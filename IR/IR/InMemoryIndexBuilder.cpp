@@ -7,15 +7,14 @@
 #include "Tokenizer.h"
 #include "StrTkTokenizer.h"
 #include "NoCompressor.h"
-#include "IndexBM25.h"
 #include "FileManager.h"
+
 InMemoryIndexBuilder::InMemoryIndexBuilder(string repositoryPath)
 {
 	InMemoryIndexBuilder::repositoryPath = repositoryPath;
 	iDictionary = nullptr;
 	iCompressor = nullptr;
 	outputFilePath = "";
-	indexType = FAGIN_INDEX_TYPE;
 	iTokenizerType = SIMPLE_TOKENIZER;
 }
 
@@ -43,18 +42,8 @@ IIndexBuilder * InMemoryIndexBuilder::setOutputFilePath(string outputFilePath)
 	return this;
 }
 
-IIndexBuilder * InMemoryIndexBuilder::setIndexType(int indexType)
-{
-	if (indexType != FAGIN_INDEX_TYPE && indexType != BM25_INDEX_TYPE) {
-		throw runtime_error("No Index with such ID");
-	}
-	InMemoryIndexBuilder::indexType = indexType;
-	return this;
-}
 
-
-
-IIndex* InMemoryIndexBuilder::createIndex()
+Index* InMemoryIndexBuilder::createIndex()
 {
 	if (iDictionary == nullptr) {
 		iDictionary = new HashTableDictionary();
@@ -97,15 +86,7 @@ IIndex* InMemoryIndexBuilder::createIndex()
 	}
 	delete documentProvider;
 	finalize(documentTable);
-	IIndex *index = nullptr;
-	switch (indexType) {
-	case FAGIN_INDEX_TYPE:
-		index = new Index(iDictionary, documentTable, iCompressor, outputFilePath);
-		break;
-	case BM25_INDEX_TYPE:
-		index = new IndexBM25(iDictionary, documentTable, iCompressor, outputFilePath);
-		break;
-	}
+	Index *index = new Index(iDictionary, documentTable, iCompressor, outputFilePath);
 	return index;
 }
 void InMemoryIndexBuilder::addTerm(string token, DocumentTable *documentTable) {
@@ -194,6 +175,7 @@ void InMemoryIndexBuilder::finalize(DocumentTable * documentTable)
 		outputFile->write((const char *)&dictionaryOffset, sizeof(unsigned int));
 		outputFile->close();
 		delete termIterator;
+		delete outputFile;
 		
 }
 
@@ -201,5 +183,5 @@ void InMemoryIndexBuilder::finalize(DocumentTable * documentTable)
 
 InMemoryIndexBuilder::~InMemoryIndexBuilder()
 {
-	//[Aymen] i don't know what we should do in this destructor
+
 }

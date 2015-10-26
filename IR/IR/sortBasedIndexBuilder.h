@@ -4,20 +4,20 @@
 #include "DocumentTable.h"
 #include "Document.h"
 #include "Triplet.h"
+#include "FileManager.h"
 
 using namespace std;
 
 #define MEMORY_RATIO_USED_FOR_BUFFER 0.5
 #define DEFAULT_MEMORY_LIMIT_IN_BYTE 65536
 
-class sortBasedIndexBuilder : public IIndexBuilder {
+class SortBasedIndexBuilder : public IIndexBuilder {
 private:
 	string temporaryFilePrefixPath;
 	string repositoryPath;
 	string outputFilePath;
 	IDictionary * iDictionary;
 	ICompressor * iCompressor;
-	int indexType;
 	int iTokenizerType;
 	
 	unsigned int numberOfBlock; //number of block in the Triplet Buffer
@@ -32,14 +32,13 @@ private:
 	static int sort_by_termId_docId(const void *left, const void *right);
 
 public:
-	sortBasedIndexBuilder(string repositoryPath,unsigned int numberOfBlock, unsigned int numberOfTripletInBlock);
-	sortBasedIndexBuilder(string repositoryPath, unsigned int memoryLimitInByte = DEFAULT_MEMORY_LIMIT_IN_BYTE);
+	SortBasedIndexBuilder(string repositoryPath,unsigned int numberOfBlock, unsigned int numberOfTripletInBlock);
+	SortBasedIndexBuilder(string repositoryPath, unsigned int memoryLimitInByte = DEFAULT_MEMORY_LIMIT_IN_BYTE);
 
 	IIndexBuilder* setIDictionary(IDictionary *iDictionary);
 	IIndexBuilder* setICompressor(ICompressor *iCompressor);
 	IIndexBuilder* setITokenizer(int iTokenizerType);
 	IIndexBuilder* setOutputFilePath(string outputFilePath);
-	IIndexBuilder* setIndexType(int indexType);
-	IIndex* createIndex();
-	~sortBasedIndexBuilder();
+	Index* createIndex();
+	~SortBasedIndexBuilder();
 };
