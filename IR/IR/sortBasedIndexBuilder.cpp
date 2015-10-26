@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "sortBasedIndexBuilder.h"
 #include "Index.h"
+#include "IndexBM25.h"
 #include "HashTableDictionary.h"
 #include "Hasher.h"
 #include "DocumentProvider.h"
@@ -15,7 +16,7 @@
 
 void sortBasedIndexBuilder::init(string repositoryPath, unsigned int numberOfBlock, unsigned int numberOfTripletInBlock)
 {
-	string temporaryFileDirectory = "E:\\tmp\\"; // should end with '\\' if not empty 
+	string temporaryFileDirectory = ""; // should end with '\\' if not empty , ex : "E:\\tmp\\"
 	string temporaryFilePrefixName = ".~tmp_";
 	sortBasedIndexBuilder::temporaryFilePrefixPath = temporaryFileDirectory + temporaryFilePrefixName;
 	sortBasedIndexBuilder::repositoryPath = repositoryPath;
@@ -103,8 +104,13 @@ IIndex * sortBasedIndexBuilder::createIndex()
 	
 	// Phase 5 : In Memory Index creation
 	IIndex *index = nullptr;
-	if (indexType == FAGIN_INDEX_TYPE) {
+	switch (indexType) {
+	case FAGIN_INDEX_TYPE:
 		index = new Index(iDictionary, documentTable, iCompressor, outputFilePath);
+		break;
+	case BM25_INDEX_TYPE:
+		index = new IndexBM25(iDictionary, documentTable, iCompressor, outputFilePath);
+		break;
 	}
 	return index;
 }

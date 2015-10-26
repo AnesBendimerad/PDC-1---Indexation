@@ -27,70 +27,108 @@ using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	IIndex *index;
-	vector<pair<DocumentMetaData, double>> searchResult;
+	IIndex *index = NULL;
+	bool end = false;
 
-	//Index Builder case :
 	string repositoryPath;
 	string indexPath;
 	unsigned int indiceTokenizer = 0;
 	unsigned int indiceBuilder = 1;
-	IIndexBuilder *indexBuilder;
 	unsigned int indiceCompressor = 0;
-	ICompressor *compressor;
 	unsigned int indiceSearch = 1;
+	IIndexBuilder *indexBuilder;
+	ICompressor *compressor;
+	IDictionary *dictionary;
+	IndexLoader *indexLoader;
+	string invertedFilePath;
+	string query;
+	vector<pair<DocumentMetaData, double>> searchResult;
 
+	while (!end)
+	{
+		unsigned int choice;
+		std::cout << "----------------------------------------" << endl;
+		std::cout << "What would you like to do ? " << endl;
+		std::cout << "\t 0 : Build an index " << endl;
+		std::cout << "\t 1 : load an index " << endl;
+		std::cout << "\t 2 : search in a created index " << endl;
+		std::cout << "\t 3 : quit " << endl;
+		std::cout << "choice : ";
+		std::cin >> choice;
+		std::cout << endl;
+		std::cout << "----------------------------------------" << endl;
+		std::cin.clear();
 
-	cout << "write the path of the corpus to index : ";
-	cin >> repositoryPath;
-	cout << endl;
+		switch (choice)
+		{
+		case 0 : 
+			//Index Builder case :
 
-	cout << "write the path of the serialized index (inverted file) : ";
-	cin >> indexPath;
-	cout << endl;
+			std::cout << "Index Build :" << endl;
+			std::cout << "----------------------------------------" << endl;
 
-	cout << "select the tokenizer : " << endl;
-	cout << "\t 0 : for simple tokenizer" << endl;
-	cout << "\t 1 : for strtk based tokenizer" << endl;
-	cout << "choice : ";
-	cin >> indiceTokenizer;
-	cout << endl;
+			std::cout << "write the path of the corpus to index : ";
+			while (std::getline(std::cin, repositoryPath)) {
+				if (repositoryPath == "") continue;
+				else break;
+			}
+			std::cout << endl;
+			std::cin.clear();
 
-	cout << "select the indexation method : " << endl;
-	cout << "\t 0 : for In memory inversion" << endl;
-	cout << "\t 1 : for sort based inversion" << endl;
-	cout << "choice : ";
-	cin >> indiceBuilder;
-	cout << endl;
+			std::cout << "write the path of the serialized index (inverted file) : ";
+			while (std::getline(std::cin, indexPath)) {
+				if (indexPath == "") continue;
+				else break;
+			}
+			std::cout << endl;
+			std::cin.clear();
 
-	cout << "select the compression method : " << endl;
-	cout << "\t 0 : No compression" << endl;
-	cout << "\t 1 : VByte compression" << endl;
-	cout << "\t 2 : Gamma compression" << endl;
-	cout << "choice : ";
-	cin >> indiceCompressor;
-	cout << endl;
-	
-	cout << "select the search method : " << endl;
-	cout << "\t 0 : Fagin method" << endl;
-	cout << "\t 1 : BM25 method" << endl;
-	cout << "choice : ";
-	cin >> indiceSearch;
-	cout << endl;
+			std::cout << "select the indexation method : " << endl;
+			std::cout << "\t 0 : for In memory inversion" << endl;
+			std::cout << "\t 1 : for sort based inversion" << endl;
+			std::cout << "choice : ";
+			std::cin >> indiceBuilder;
+			std::cout << endl;
+			std::cin.clear();
+
+			std::cout << "select the tokenizer : " << endl;
+			std::cout << "\t 0 : for simple tokenizer" << endl;
+			std::cout << "\t 1 : for strtk based tokenizer" << endl;
+			std::cout << "choice : ";
+			std::cin >> indiceTokenizer;
+			std::cout << endl;
+			std::cin.clear();
+
+			std::cout << "select the compression method : " << endl;
+			std::cout << "\t 0 : No compression" << endl;
+			std::cout << "\t 1 : VByte compression" << endl;
+			std::cout << "\t 2 : Gamma compression" << endl;
+			std::cout << "choice : ";
+			std::cin >> indiceCompressor;
+			std::cout << endl;
+			std::cin.clear();
+
+			std::cout << "select the search method : " << endl;
+			std::cout << "\t 0 : Fagin method" << endl;
+			std::cout << "\t 1 : BM25 method" << endl;
+			std::cout << "choice : ";
+			std::cin >> indiceSearch;
+			std::cout << endl;
+			std::cin.clear();
 	
 	switch (indiceBuilder) {
-	case 1:
+			case 0:
 		indexBuilder = new InMemoryIndexBuilder(repositoryPath);
 		break;
-	case 2:
+			case 1:
 		indexBuilder = new sortBasedIndexBuilder(repositoryPath);
 		break;
-	default :
+			default:
 		indexBuilder = new InMemoryIndexBuilder(repositoryPath);
 		break;
 	}
 	
-	IDictionary *dictionary = new HashTableDictionary();
+			dictionary = new HashTableDictionary();
 	
 	switch (indiceCompressor) {
 	case NO_COMPRESSOR:
@@ -112,22 +150,89 @@ int _tmain(int argc, _TCHAR* argv[])
 		indiceTokenizer = SIMPLE_TOKENIZER;
 	}
 
+			if (indiceSearch != FAGIN_INDEX_TYPE && indiceSearch != BM25_INDEX_TYPE)
+			{
+				indiceSearch = FAGIN_INDEX_TYPE;
+			}
+
+			std::cout << "Constructing the index ..." << endl;
+			indexBuilder->setIDictionary(dictionary)->setOutputFilePath(indexPath)->setICompressor(compressor)->setITokenizer(indiceTokenizer)->setIndexType(indiceSearch);
+			index = indexBuilder->createIndex();
+			std::cout << "Index successfully created !" << endl;
+			std::cout << "----------------------------------------" << endl;
+			break;
+		case 1:
+			//Index load case :
+			std::cout << "Index Load :" << endl;
+			std::cout << "----------------------------------------" << endl;
+
+			std::cout << "write the path of the serialized index (inverted file) : ";
+			while (std::getline(std::cin, invertedFilePath)) {
+				if (invertedFilePath == "") continue;
+				else break;
+			}
+			std::cout << endl;
+			std::cin.clear();
+
+			std::cout << "select the search method : " << endl;
+			std::cout << "\t 0 : Fagin method" << endl;
+			std::cout << "\t 1 : BM25 method" << endl;
+			std::cout << "choice : ";
+			std::cin >> indiceSearch;
+			std::cout << endl;
+			std::cin.clear();
+
 	if (indiceSearch != FAGIN_INDEX_TYPE && indiceSearch != BM25_INDEX_TYPE)
 	{
 		indiceSearch = FAGIN_INDEX_TYPE;
 	}
 
-	cout << "Compressor ID : ";
-	cout << compressor->getCompressorId() << endl;
-	
-	indexBuilder->setIDictionary(dictionary)->setOutputFilePath(indexPath)->setICompressor(compressor)->setITokenizer(indiceTokenizer)->setIndexType(indiceSearch);
+			std::cout << "Loading the index from " << invertedFilePath << " ..." << endl;
+			indexLoader = new IndexLoader(invertedFilePath);
+			indexLoader->setIndexType(indiceSearch);
+			index = indexLoader->load();
+			std::cout << "Index successfully loaded !" << endl;
+			std::cout << "----------------------------------------" << endl;
+			break;
+		case 2:
+			// Index search
+			std::cout << "search :" << endl;
+			std::cout << "----------------------------------------" << endl;
 
-	index = indexBuilder->createIndex();
+			std::cout << "write the query (Bag of word) : " << endl;
+			while (std::getline(std::cin, query)) {
+				if (query == "") continue;
+				else break;
+			}
+			std::cout << endl;
+			std::cin.clear();
 	
-	searchResult=index->search(3, "the");
+
+			if (index == NULL)
+			{
+				std::cout << "No index loaded, please build or load an index before" << endl;
+			}
+			else
+			{
+				std::cout << "Processing the query : '" << query << "' ..." << endl;
+				searchResult = index->search(3, query);
 	for (int i = 0;i < searchResult.size();i++)
 	{
-		cout << searchResult[i].first.id << endl;
+					std::cout << searchResult[i].first.id << endl;
+				}
+			}
+			std::cout << "----------------------------------------" << endl;
+			break;
+		case 3:
+			end = true;
+			break;
+		default :
+			end = true;
+			break;
+		}
+		
+
+		
 	}
 	return 0;
 }
