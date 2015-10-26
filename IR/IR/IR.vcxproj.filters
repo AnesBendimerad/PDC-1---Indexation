@@ -75,9 +75,6 @@
     <ClInclude Include="IHasher.h">
       <Filter>Header Files\interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="IIndex.h">
-      <Filter>Header Files\interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="DocumentProvider.h">
       <Filter>Header Files\controllers</Filter>
     </ClInclude>
@@ -123,9 +120,6 @@
     <ClInclude Include="NoCompressor.h">
       <Filter>Header Files\models</Filter>
     </ClInclude>
-    <ClInclude Include="sortBasedIndexBuilder.h">
-      <Filter>Header Files\controllers</Filter>
-    </ClInclude>
     <ClInclude Include="Triplet.h">
       <Filter>Header Files\structures</Filter>
     </ClInclude>
@@ -138,13 +132,13 @@
     <ClInclude Include="MemoryManager.h">
       <Filter>Header Files\controllers</Filter>
     </ClInclude>
-    <ClInclude Include="IndexBM25.h">
-      <Filter>Header Files\models</Filter>
-    </ClInclude>
     <ClInclude Include="Tokenizer.h">
       <Filter>Header Files\models</Filter>
     </ClInclude>
     <ClInclude Include="FileManager.h">
+      <Filter>Header Files\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="SortBasedIndexBuilder.h">
       <Filter>Header Files\controllers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -191,9 +185,6 @@
     <ClCompile Include="NoCompressor.cpp">
       <Filter>Source Files\models</Filter>
     </ClCompile>
-    <ClCompile Include="sortBasedIndexBuilder.cpp">
-      <Filter>Source Files\controllers</Filter>
-    </ClCompile>
     <ClCompile Include="VByteCompressor.cpp">
       <Filter>Source Files\models</Filter>
     </ClCompile>
@@ -206,13 +197,13 @@
     <ClCompile Include="MemoryManager.cpp">
       <Filter>Source Files\controllers</Filter>
     </ClCompile>
-    <ClCompile Include="IndexBM25.cpp">
-      <Filter>Source Files\models</Filter>
-    </ClCompile>
     <ClCompile Include="Tokenizer.cpp">
       <Filter>Source Files\models</Filter>
     </ClCompile>
     <ClCompile Include="FileManager.cpp">
+      <Filter>Source Files\controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="SortBasedIndexBuilder.cpp">
       <Filter>Source Files\controllers</Filter>
     </ClCompile>
   </ItemGroup>

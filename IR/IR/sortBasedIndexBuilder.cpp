@@ -1,7 +1,6 @@
 #include "stdafx.h"
-#include "sortBasedIndexBuilder.h"
+#include "SortBasedIndexBuilder.h"
 #include "Index.h"
-#include "IndexBM25.h"
 #include "HashTableDictionary.h"
 #include "Hasher.h"
 #include "DocumentProvider.h"
@@ -14,69 +13,59 @@
 #include <stdio.h>
 
 
-void sortBasedIndexBuilder::init(string repositoryPath, unsigned int numberOfBlock, unsigned int numberOfTripletInBlock)
+void SortBasedIndexBuilder::init(string repositoryPath, unsigned int numberOfBlock, unsigned int numberOfTripletInBlock)
 {
 	string temporaryFileDirectory = ""; // should end with '\\' if not empty , ex : "E:\\tmp\\"
 	string temporaryFilePrefixName = ".~tmp_";
-	sortBasedIndexBuilder::temporaryFilePrefixPath = temporaryFileDirectory + temporaryFilePrefixName;
-	sortBasedIndexBuilder::repositoryPath = repositoryPath;
-	sortBasedIndexBuilder::numberOfBlock = numberOfBlock;
-	sortBasedIndexBuilder::numberOfTripletInBlock = numberOfTripletInBlock;
-	sortBasedIndexBuilder::iDictionary = nullptr;
-	sortBasedIndexBuilder::iCompressor = nullptr;
-	sortBasedIndexBuilder::outputFilePath = "";
-	sortBasedIndexBuilder::indexType = FAGIN_INDEX_TYPE;
-	sortBasedIndexBuilder::iTokenizerType = SIMPLE_TOKENIZER;
+	SortBasedIndexBuilder::temporaryFilePrefixPath = temporaryFileDirectory + temporaryFilePrefixName;
+	SortBasedIndexBuilder::repositoryPath = repositoryPath;
+	SortBasedIndexBuilder::numberOfBlock = numberOfBlock;
+	SortBasedIndexBuilder::numberOfTripletInBlock = numberOfTripletInBlock;
+	SortBasedIndexBuilder::iDictionary = nullptr;
+	SortBasedIndexBuilder::iCompressor = nullptr;
+	SortBasedIndexBuilder::outputFilePath = "";
+	SortBasedIndexBuilder::iTokenizerType = SIMPLE_TOKENIZER;
 }
 
-sortBasedIndexBuilder::sortBasedIndexBuilder(string repositoryPath, unsigned int numberOfBlock, unsigned int numberOfTripletInBlock)
+SortBasedIndexBuilder::SortBasedIndexBuilder(string repositoryPath, unsigned int numberOfBlock, unsigned int numberOfTripletInBlock)
 {
-	sortBasedIndexBuilder::init(repositoryPath, numberOfBlock, numberOfTripletInBlock);
+	SortBasedIndexBuilder::init(repositoryPath, numberOfBlock, numberOfTripletInBlock);
 }
 
-sortBasedIndexBuilder::sortBasedIndexBuilder(string repositoryPath, unsigned int memoryLimitInByte)
+SortBasedIndexBuilder::SortBasedIndexBuilder(string repositoryPath, unsigned int memoryLimitInByte)
 {
 	unsigned int memoryLimitForBufferInByte = (unsigned int)(MEMORY_RATIO_USED_FOR_BUFFER*memoryLimitInByte);
 	unsigned int sizeOfDiskBlock = MemoryManager::getDiskSectorSize();
 	unsigned int TripletInBlockNumber = sizeOfDiskBlock / sizeof(Triplet);
 	unsigned int BlockNumber = memoryLimitForBufferInByte / sizeOfDiskBlock;
-	sortBasedIndexBuilder::init(repositoryPath, BlockNumber, TripletInBlockNumber);
+	SortBasedIndexBuilder::init(repositoryPath, BlockNumber, TripletInBlockNumber);
 }
 
-IIndexBuilder * sortBasedIndexBuilder::setIDictionary(IDictionary * iDictionary)
+IIndexBuilder * SortBasedIndexBuilder::setIDictionary(IDictionary * iDictionary)
 {
-	sortBasedIndexBuilder::iDictionary = iDictionary;
+	SortBasedIndexBuilder::iDictionary = iDictionary;
 	return this;
 }
 
-IIndexBuilder * sortBasedIndexBuilder::setICompressor(ICompressor * iCompressor)
+IIndexBuilder * SortBasedIndexBuilder::setICompressor(ICompressor * iCompressor)
 {
-	sortBasedIndexBuilder::iCompressor = iCompressor;
+	SortBasedIndexBuilder::iCompressor = iCompressor;
 	return this;
 }
 
-IIndexBuilder * sortBasedIndexBuilder::setITokenizer(int iTokenizerType)
+IIndexBuilder * SortBasedIndexBuilder::setITokenizer(int iTokenizerType)
 {
-	sortBasedIndexBuilder::iTokenizerType = iTokenizerType;
+	SortBasedIndexBuilder::iTokenizerType = iTokenizerType;
 	return this;
 }
 
-IIndexBuilder * sortBasedIndexBuilder::setOutputFilePath(string outputFilePath)
+IIndexBuilder * SortBasedIndexBuilder::setOutputFilePath(string outputFilePath)
 {
-	sortBasedIndexBuilder::outputFilePath = outputFilePath;
+	SortBasedIndexBuilder::outputFilePath = outputFilePath;
 	return this;
 }
 
-IIndexBuilder * sortBasedIndexBuilder::setIndexType(int indexType)
-{
-	if (indexType != FAGIN_INDEX_TYPE && indexType != BM25_INDEX_TYPE) {
-		throw runtime_error("No Index with such ID");
-	}
-	sortBasedIndexBuilder::indexType = indexType;
-	return this;
-}
-
-IIndex * sortBasedIndexBuilder::createIndex()
+Index * SortBasedIndexBuilder::createIndex()
 {
 	// Phase 1 : Initialisation
 	if (iDictionary == nullptr) {
@@ -106,15 +95,7 @@ IIndex * sortBasedIndexBuilder::createIndex()
 	finalize(documentTable, sortedTripletFilePath);
 	
 	// Phase 5 : In Memory Index creation
-	IIndex *index = nullptr;
-	switch (indexType) {
-	case FAGIN_INDEX_TYPE:
-		index = new Index(iDictionary, documentTable, iCompressor, outputFilePath);
-		break;
-	case BM25_INDEX_TYPE:
-		index = new IndexBM25(iDictionary, documentTable, iCompressor, outputFilePath);
-		break;
-	}
+	Index *index = new Index(iDictionary, documentTable, iCompressor, outputFilePath);
 	return index;
 }
 
@@ -124,7 +105,7 @@ IIndex * sortBasedIndexBuilder::createIndex()
 
 
 
-list<Triplet>* sortBasedIndexBuilder::parseDocumentToTriplet(Document* document, DocumentTable *documentTable)
+list<Triplet>* SortBasedIndexBuilder::parseDocumentToTriplet(Document* document, DocumentTable *documentTable)
 {
 	ITokenizer* tokenizer;
 	switch (iTokenizerType) {
@@ -182,7 +163,7 @@ list<Triplet>* sortBasedIndexBuilder::parseDocumentToTriplet(Document* document,
 	return tripletList;
 }
 
-unsigned int sortBasedIndexBuilder::createFirstLevelSortedTripletsFiles(Triplet * tripletBuffer, DocumentTable* documentTable)
+unsigned int SortBasedIndexBuilder::createFirstLevelSortedTripletsFiles(Triplet * tripletBuffer, DocumentTable* documentTable)
 {
 	unsigned int bufferSize = numberOfBlock*numberOfTripletInBlock;
 	unsigned int bufferFirstFreeIndex = 0;
@@ -234,7 +215,7 @@ unsigned int sortBasedIndexBuilder::createFirstLevelSortedTripletsFiles(Triplet 
 	return runNumber-1;
 }
 
-string sortBasedIndexBuilder::getFinalSortedTripletsFilesByFusion(Triplet * tripletBuffer, DocumentTable * documentTable, unsigned int lastRunNumber)
+string SortBasedIndexBuilder::getFinalSortedTripletsFilesByFusion(Triplet * tripletBuffer, DocumentTable * documentTable, unsigned int lastRunNumber)
 {
 	unsigned int* mergedInRunIndex = (unsigned int *)malloc(sizeof(unsigned int)*(numberOfBlock - 1));
 	unsigned int* mergedInRunActualFileIndex = (unsigned int *)malloc(sizeof(unsigned int)*(numberOfBlock - 1));
@@ -388,7 +369,7 @@ string sortBasedIndexBuilder::getFinalSortedTripletsFilesByFusion(Triplet * trip
 	return sortedTripletFilePath;
 }
 
-void sortBasedIndexBuilder::finalize(DocumentTable * documentTable,string sortedTripletFilePath)
+void SortBasedIndexBuilder::finalize(DocumentTable * documentTable,string sortedTripletFilePath)
 {
 	ifstream* inputStreamI = FileManager::openIfstream(sortedTripletFilePath);
 	ofstream* outputFile = FileManager::openOfstream(outputFilePath);
@@ -465,7 +446,7 @@ void sortBasedIndexBuilder::finalize(DocumentTable * documentTable,string sorted
 	remove(sortedTripletFilePath.c_str());
 }
 
-int sortBasedIndexBuilder:: sort_by_termId_docId(const void *left, const void *right)
+int SortBasedIndexBuilder:: sort_by_termId_docId(const void *left, const void *right)
 {
 	Triplet triplet1 = *(Triplet*)left;
 	Triplet triplet2 = *(Triplet*)right;
@@ -480,7 +461,7 @@ int sortBasedIndexBuilder:: sort_by_termId_docId(const void *left, const void *r
 	return 1;
 }
 
-sortBasedIndexBuilder::~sortBasedIndexBuilder()
+SortBasedIndexBuilder::~SortBasedIndexBuilder()
 {
 	//[Aymen] i don't know what we should do in this destructor
 }

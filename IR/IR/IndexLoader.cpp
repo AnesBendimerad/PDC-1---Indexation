@@ -8,13 +8,11 @@
 #include "NoCompressor.h"
 #include "VByteCompressor.h"
 #include "GammaCompressor.h"
-#include "IndexBM25.h"
 #include "FileManager.h"
 IndexLoader::IndexLoader(string invertedFilePath)
 {
 	IndexLoader::invertedFilePath = invertedFilePath;
 	dictionary = nullptr;
-	indexType = FAGIN_INDEX_TYPE;
 }
 
 IndexLoader * IndexLoader::setDictionary(IDictionary * dictionary)
@@ -23,16 +21,7 @@ IndexLoader * IndexLoader::setDictionary(IDictionary * dictionary)
 	return this;
 }
 
-IndexLoader * IndexLoader::setIndexType(int indexType)
-{
-	if (indexType != FAGIN_INDEX_TYPE && indexType != BM25_INDEX_TYPE) {
-		throw runtime_error("No Index with such ID");
-	}
-	IndexLoader::indexType = indexType;
-	return this;
-}
-
-IIndex  * IndexLoader::load()
+Index  * IndexLoader::load()
 {
 	if (dictionary == nullptr) {
 		dictionary= new HashTableDictionary();
@@ -83,15 +72,7 @@ IIndex  * IndexLoader::load()
 	inputStream->close();
 	delete inputStream;
 
-	IIndex *myIndex=nullptr;
-	switch (indexType) {
-		case FAGIN_INDEX_TYPE:
-			myIndex = new Index(dictionary, documentTable, iCompressor, invertedFilePath);
-			break;
-		case BM25_INDEX_TYPE:
-			myIndex = new IndexBM25(dictionary, documentTable, iCompressor, invertedFilePath);
-			break;
-	}
+	Index *myIndex=new Index(dictionary, documentTable, iCompressor, invertedFilePath);
 	return myIndex;
 }
 

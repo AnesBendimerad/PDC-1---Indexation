@@ -92,15 +92,13 @@
     <ClInclude Include="DocumentTerm.h" />
     <ClInclude Include="Hasher.h" />
     <ClInclude Include="MemoryManager.h" />
-    <ClInclude Include="IndexBM25.h" />
     <ClInclude Include="Triplet.h" />
-    <ClInclude Include="sortBasedIndexBuilder.h" />
+    <ClInclude Include="SortBasedIndexBuilder.h" />
     <ClInclude Include="ICompressor.h" />
     <ClInclude Include="IIterator.h" />
     <ClInclude Include="IDictionary.h" />
     <ClInclude Include="IDocumentProvider.h" />
     <ClInclude Include="IHasher.h" />
-    <ClInclude Include="IIndex.h" />
     <ClInclude Include="IIndexBuilder.h" />
     <ClInclude Include="Index.h" />
     <ClInclude Include="InMemoryIndexBuilder.h" />
@@ -122,7 +120,6 @@
     <ClCompile Include="HashTableDictionaryTermIterator.cpp" />
     <ClCompile Include="Document.cpp" />
     <ClCompile Include="DocumentProvider.cpp" />
-    <ClCompile Include="IndexBM25.cpp" />
     <ClCompile Include="IndexLoader.cpp" />
     <ClCompile Include="IR.cpp" />
     <ClCompile Include="Hasher.cpp" />
@@ -132,7 +129,7 @@
     <ClCompile Include="InMemoryIndexBuilder.cpp" />
     <ClCompile Include="MemoryManager.cpp" />
     <ClCompile Include="NoCompressor.cpp" />
-    <ClCompile Include="sortBasedIndexBuilder.cpp" />
+    <ClCompile Include="SortBasedIndexBuilder.cpp" />
     <ClCompile Include="Triplet.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

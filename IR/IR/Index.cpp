@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cmath> 
 #include <algorithm>
+#include <map>
 #include "Index.h"
 #include "IDictionary.h"
 #include "DocumentTable.h"
@@ -38,11 +39,13 @@ DocumentTerm * Index::getTermPostingList(string token)
 }
 
 
-
+// FAGIN
 
 // This function implements fagin's algorithm and return the topK documents which matchs the query
-vector<pair<DocumentMetaData, double>> Index::search(int topK, string query)
+vector<pair<DocumentMetaData, double>> Index::searchFagin(int topK, string query)
 {
+	std::transform(query.begin(), query.end(), query.begin(), ::tolower);
+	
 	vector<vector<pair<int, double>>> list_sorted_by_tf_idf = calculateTF_IDF(query);
 	vector<pair<int, double>> topKDocuments;
 	vector<pair<DocumentMetaData, double>>  topDocuments;
@@ -162,6 +165,112 @@ bool Index:: sort_by_tf_idf(const pair<int, double>& left, const pair<int, doubl
 {
 	return left.second > right.second;
 }
+
+
+// BM25
+
+vector<pair<DocumentMetaData, double>> Index::searchBM25(int topK, string query)
+{
+	std::transform(query.begin(), query.end(), query.begin(), ::tolower);
+	
+	vector<pair<DocumentMetaData, double>> topKDocuments;
+	map<int, double> result;
+	map<int, double>::iterator it;
+
+	istringstream stream(query);
+	string token;
+	DocumentTerm *documentTermTable;
+	Term *term;
+
+	double avgdl = calculateAVGDL();
+	double score;
+
+	int tf, fd, nbwords, currentDocumentIndex;
+
+	while (stream >> token)
+	{
+		documentTermTable = getTermPostingList(token);
+
+		if (documentTermTable != nullptr)
+		{
+			term = dictionary->getTerm(token);
+
+			for (unsigned int i = 0; i < term->documentNumber; i++)
+			{
+				tf = documentTermTable[i].ftd;
+				currentDocumentIndex = documentTermTable[i].documentIndex;
+				fd = term->documentNumber;
+				nbwords = documentTable->getDocument(currentDocumentIndex)->wordsNumber;
+				score = calculateScore(tf, fd, nbwords, avgdl);
+
+				it = result.find(currentDocumentIndex);
+				if (it != result.end())
+				{
+					it->second = it->second + score;
+				}
+				else
+				{
+					result.insert(pair<int, double>(currentDocumentIndex, score));
+
+				}
+			}
+		}
+	}
+
+	for (auto element : result)
+	{
+		topKDocuments.push_back(pair<DocumentMetaData, double>(*documentTable->getDocument(element.first), element.second));
+	}
+
+	sort(topKDocuments.begin(), topKDocuments.end(), sort_by_score);
+
+	if (topKDocuments.size() > topK)
+		topKDocuments.resize(topK);
+
+	return  topKDocuments;
+}
+
+
+//this function calculates the average document length over all documents of the collection
+double Index::calculateAVGDL()
+{
+	int totalDocumentsLength = 0;
+	DocumentMetaData *allDocuments = documentTable->getFinalizedDocumentTable();
+
+	for (unsigned int i = 0; i < documentTable->getDocumentNumber(); i++)
+	{
+		totalDocumentsLength += allDocuments[i].wordsNumber;
+	}
+
+	return (double)totalDocumentsLength / (double)documentTable->getDocumentNumber();
+}
+
+//this function calculates the score using BM25 function
+double Index::calculateScore(int tf, int df, int nbwords, int avgdl)
+{
+	//free paramaters used by BM25 
+	double k1 = 2.0;
+	double b = 0.75;
+
+	double score = 0;
+	double idf = 0;
+	double w = 0;
+	int N = documentTable->getDocumentNumber();
+
+	idf = log10((N - df + 0.5) / (df + 0.5));
+
+	w = ((tf*(k1 + 1)) / (tf + (k1*(1 - b + (b*nbwords / avgdl)))));
+
+	score = idf * w;
+
+	return score;
+}
+
+bool Index::sort_by_score(const pair<DocumentMetaData, double>& left, const pair<DocumentMetaData, double>& right)
+{
+	return left.second > right.second;
+}
+
 
 
 Index::~Index()

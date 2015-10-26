@@ -6,10 +6,10 @@
 #include <typeinfo>
 #include "DocumentTable.h"
 #include "HashTableDictionary.h"
-#include "IIndex.h"
+#include "Index.h"
 #include "StrTkTokenizer.h"
 #include "Index.h"
-#include "sortBasedIndexBuilder.h"
+#include "SortBasedIndexBuilder.h"
 #include "InMemoryIndexBuilder.h"
 #include "DocumentTerm.h"
 #include "IndexLoader.h"
@@ -27,7 +27,7 @@ using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	IIndex *index = NULL;
+	Index *index = NULL;
 	bool end = false;
 
 	string repositoryPath;
@@ -36,6 +36,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	unsigned int indiceBuilder = 1;
 	unsigned int indiceCompressor = 0;
 	unsigned int indiceSearch = 1;
+	unsigned int topk;
 	IIndexBuilder *indexBuilder;
 	ICompressor *compressor;
 	IDictionary *dictionary;
@@ -109,20 +110,12 @@ int _tmain(int argc, _TCHAR* argv[])
 				std::cout << endl;
 				std::cin.clear();
 
-				std::cout << "select the search method : " << endl;
-				std::cout << "\t 0 : Fagin method" << endl;
-				std::cout << "\t 1 : BM25 method" << endl;
-				std::cout << "choice : ";
-				std::cin >> indiceSearch;
-				std::cout << endl;
-				std::cin.clear();
-
 				switch (indiceBuilder) {
 				case 0:
 					indexBuilder = new InMemoryIndexBuilder(repositoryPath);
 					break;
 				case 1:
-					indexBuilder = new sortBasedIndexBuilder(repositoryPath);
+					indexBuilder = new SortBasedIndexBuilder(repositoryPath);
 					break;
 				default:
 					indexBuilder = new InMemoryIndexBuilder(repositoryPath);
@@ -151,13 +144,8 @@ int _tmain(int argc, _TCHAR* argv[])
 					indiceTokenizer = SIMPLE_TOKENIZER;
 				}
 
-				if (indiceSearch != FAGIN_INDEX_TYPE && indiceSearch != BM25_INDEX_TYPE)
-				{
-					indiceSearch = FAGIN_INDEX_TYPE;
-				}
-
 				std::cout << "Constructing the index ..." << endl;
-				indexBuilder->setIDictionary(dictionary)->setOutputFilePath(indexPath)->setICompressor(compressor)->setITokenizer(indiceTokenizer)->setIndexType(indiceSearch);
+				indexBuilder->setIDictionary(dictionary)->setOutputFilePath(indexPath)->setICompressor(compressor)->setITokenizer(indiceTokenizer);
 				index = indexBuilder->createIndex();
 				std::cout << "Index successfully created !" << endl;
 				std::cout << "----------------------------------------" << endl;
@@ -175,22 +163,8 @@ int _tmain(int argc, _TCHAR* argv[])
 				std::cout << endl;
 				std::cin.clear();
 
-				std::cout << "select the search method : " << endl;
-				std::cout << "\t 0 : Fagin method" << endl;
-				std::cout << "\t 1 : BM25 method" << endl;
-				std::cout << "choice : ";
-				std::cin >> indiceSearch;
-				std::cout << endl;
-				std::cin.clear();
-
-				if (indiceSearch != FAGIN_INDEX_TYPE && indiceSearch != BM25_INDEX_TYPE)
-				{
-					indiceSearch = FAGIN_INDEX_TYPE;
-				}
-
 				std::cout << "Loading the index from " << invertedFilePath << " ..." << endl;
 				indexLoader = new IndexLoader(invertedFilePath);
-				indexLoader->setIndexType(indiceSearch);
 				index = indexLoader->load();
 				std::cout << "Index successfully loaded !" << endl;
 				std::cout << "----------------------------------------" << endl;
@@ -199,6 +173,27 @@ int _tmain(int argc, _TCHAR* argv[])
 				// Index search
 				std::cout << "search :" << endl;
 				std::cout << "----------------------------------------" << endl;
+
+				std::cout << "select the search method : " << endl;
+				std::cout << "\t 0 : Fagin method" << endl;
+				std::cout << "\t 1 : BM25 method" << endl;
+				std::cout << "choice : ";
+				std::cin >> indiceSearch;
+				std::cout << endl;
+				std::cin.clear();
+
+				std::cout << "select the number of result (between 1 and 1000) : ";
+				std::cin >> topk;
+				std::cout << endl;
+				std::cin.clear();
+				if (topk < 1)
+				{
+					topk = 1;
+				}
+				else if (topk > 1000)
+				{
+					topk = 1000;
+				}
 
 				std::cout << "write the query (Bag of word) : " << endl;
 				while (std::getline(std::cin, query)) {
@@ -215,11 +210,29 @@ int _tmain(int argc, _TCHAR* argv[])
 				}
 				else
 				{
-					std::cout << "Processing the query : '" << query << "' ..." << endl;
-					searchResult = index->search(3, query);
+					switch (indiceSearch) 
+					{
+					case 0 : 
+						std::cout << "Processing the query (Fagin) : '" << query << "' ..." << endl;
+						searchResult = index->searchFagin(topk, query);
+						break;
+					case 1 :
+						std::cout << "Processing the query (BM25) : '" << query << "' ..." << endl;
+						searchResult = index->searchBM25(topk, query);
+						break;
+					default :
+						std::cout << "Processing the query (BM25) : '" << query << "' ..." << endl;
+						searchResult = index->searchBM25(topk, query);
+						break;
+					}
 					for (unsigned int i = 0;i < searchResult.size();i++)
 					{
-						std::cout << searchResult[i].first.id << endl;
+						unsigned int j = i + 1;
+						unsigned long documentNumber = searchResult[i].first.address%10000;
+						unsigned long documentDate = searchResult[i].first.address/10000;
+						std::cout << j << ": document " << searchResult[i].first.id << " (document " << documentNumber;
+						std::printf(" in file la%06d", documentDate);
+					    std:cout << ") : Score = " << searchResult[i].second << endl;
 					}
 				}
 				std::cout << "----------------------------------------" << endl;
