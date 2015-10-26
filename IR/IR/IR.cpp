@@ -147,6 +147,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				std::cout << "Constructing the index ..." << endl;
 				indexBuilder->setIDictionary(dictionary)->setOutputFilePath(indexPath)->setICompressor(compressor)->setITokenizer(indiceTokenizer);
 				index = indexBuilder->createIndex();
+				//dictionary->writeCSVFile();
 				std::cout << "Index successfully created !" << endl;
 				std::cout << "----------------------------------------" << endl;
 				break;
