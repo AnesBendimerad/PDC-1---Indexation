@@ -4,6 +4,7 @@
 #include "DocumentTable.h"
 #include "Document.h"
 #include "Triplet.h"
+#include "FileManager.h"
 
 using namespace std;
 

@@ -32,6 +32,7 @@ DocumentTerm * IndexBM25::getTermPostingList(string token)
 		return documentTermTable;
 	}
 	inputStream->close();
+	delete inputStream;
 	return nullptr;
 }
 

@@ -194,6 +194,7 @@ void InMemoryIndexBuilder::finalize(DocumentTable * documentTable)
 		outputFile->write((const char *)&dictionaryOffset, sizeof(unsigned int));
 		outputFile->close();
 		delete termIterator;
+		delete outputFile;
 		
 }
 

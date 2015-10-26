@@ -33,6 +33,7 @@ DocumentTerm * Index::getTermPostingList(string token)
 		return documentTermTable;
 	}
 	inputStream->close();
+	delete inputStream;
 	return nullptr;
 }
 

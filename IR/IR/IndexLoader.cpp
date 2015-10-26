@@ -80,16 +80,17 @@ IIndex  * IndexLoader::load()
 		dictionary->addTerm(&currentTerm);
 	}
 	
-	
+	inputStream->close();
+	delete inputStream;
+
 	IIndex *myIndex=nullptr;
 	switch (indexType) {
-	case FAGIN_INDEX_TYPE:
+		case FAGIN_INDEX_TYPE:
 			myIndex = new Index(dictionary, documentTable, iCompressor, invertedFilePath);
 			break;
-	case BM25_INDEX_TYPE:
-		myIndex = new IndexBM25(dictionary, documentTable, iCompressor, invertedFilePath);
-		
-		break;
+		case BM25_INDEX_TYPE:
+			myIndex = new IndexBM25(dictionary, documentTable, iCompressor, invertedFilePath);
+			break;
 	}
 	return myIndex;
 }

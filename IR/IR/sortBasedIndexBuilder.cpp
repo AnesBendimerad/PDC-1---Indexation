@@ -205,9 +205,10 @@ unsigned int sortBasedIndexBuilder::createFirstLevelSortedTripletsFiles(Triplet 
 			{
 				qsort(tripletBuffer, bufferFirstFreeIndex, sizeof(Triplet), sort_by_termId_docId);
 				path = temporaryFilePrefixPath + to_string(runNumber);
-				ofstream outputFile(path, ios::out | ios::binary);
-				outputFile.write((char *)tripletBuffer, sizeof(Triplet)*bufferFirstFreeIndex);
-				outputFile.close();
+				ofstream* outputFile = FileManager::openOfstream(path);
+				outputFile->write((char *)tripletBuffer, sizeof(Triplet)*bufferFirstFreeIndex);
+				outputFile->close();
+				delete outputFile;
 				bufferFirstFreeIndex = 0;
 				runNumber++;
 			}
@@ -221,9 +222,10 @@ unsigned int sortBasedIndexBuilder::createFirstLevelSortedTripletsFiles(Triplet 
 	{
 		qsort(tripletBuffer, bufferFirstFreeIndex, sizeof(Triplet), sort_by_termId_docId);
 		path = temporaryFilePrefixPath + to_string(runNumber);
-		ofstream outputFile(path, ios::out | ios::binary);
-		outputFile.write((const char *)tripletBuffer, sizeof(Triplet)*bufferFirstFreeIndex);
-		outputFile.close();
+		ofstream* outputFile = FileManager::openOfstream(path);
+		outputFile->write((const char *)tripletBuffer, sizeof(Triplet)*bufferFirstFreeIndex);
+		outputFile->close();
+		delete outputFile;
 		bufferFirstFreeIndex = 0;
 		runNumber++;
 	}
@@ -260,11 +262,11 @@ string sortBasedIndexBuilder::getFinalSortedTripletsFilesByFusion(Triplet * trip
 		if (lastSortedRunNumber - firstSortedRunNumber > 0)
 		{
 			string outputPath = temporaryFilePrefixPath + string("Merged_") + to_string(outputNumber);
-			ofstream outputFile(outputPath, ios::out | ios::binary);
+			ofstream *outputFile = FileManager::openOfstream(outputPath);
 			for (unsigned int i = 0;i <= lastSortedRunNumber - firstSortedRunNumber;i++)
 			{
 				string sourcePath = temporaryFilePrefixPath + to_string(unsigned int(i + firstSortedRunNumber));
-				ifstream* inputStreamI = new ifstream(sourcePath, ios::in | ios::binary);
+				ifstream* inputStreamI = FileManager::openIfstream(sourcePath);
 				mergedTableStream[i] = inputStreamI;
 				mergedInRunIndex[i] = 0;
 				mergedInRunActualFileIndex[i] = 0;
@@ -331,29 +333,30 @@ string sortBasedIndexBuilder::getFinalSortedTripletsFilesByFusion(Triplet * trip
 					outputInTableIndex++;
 					if (outputInTableIndex == numberOfTripletInBlock)
 					{
-						outputFile.write((char *)(tripletBuffer + (numberOfBlock - 1)*numberOfTripletInBlock), sizeof(Triplet)*outputInTableIndex);
+						outputFile->write((char *)(tripletBuffer + (numberOfBlock - 1)*numberOfTripletInBlock), sizeof(Triplet)*outputInTableIndex);
 						outputInTableIndex = 0;
 					}
 				}
 				else if (outputInTableIndex>0)
 				{
-					outputFile.write((char *)(tripletBuffer + (numberOfBlock - 1)*numberOfTripletInBlock), sizeof(Triplet)*outputInTableIndex);
+					outputFile->write((char *)(tripletBuffer + (numberOfBlock - 1)*numberOfTripletInBlock), sizeof(Triplet)*outputInTableIndex);
 					outputInTableIndex = 0;
 				}
 			} while (!localMergingEnd);
 
 
 			// Finalize runs
-			outputFile.close();
+			outputFile->close();
+			delete outputFile;
 			//rename the file 
 			string lastOutputPath = temporaryFilePrefixPath + to_string(outputNumber);
-			rename(outputPath.c_str(), lastOutputPath.c_str());
+			std::rename(outputPath.c_str(), lastOutputPath.c_str());
 		}
 		else
 		{
 			string ancientName = temporaryFilePrefixPath + to_string(firstSortedRunNumber);
 			string lastOutputPath = temporaryFilePrefixPath + to_string(outputNumber);
-			rename(ancientName.c_str(), lastOutputPath.c_str());
+			std::rename(ancientName.c_str(), lastOutputPath.c_str());
 		}
 		if (lastSortedRunNumber < lastRunNumber)
 		{
@@ -373,22 +376,22 @@ string sortBasedIndexBuilder::getFinalSortedTripletsFilesByFusion(Triplet * trip
 
 	string lastOutputPath = temporaryFilePrefixPath + to_string(outputNumber);
 	string sortedTripletFilePath = temporaryFilePrefixPath + string("merged");
-	rename(lastOutputPath.c_str(), sortedTripletFilePath.c_str());
+	std::rename(lastOutputPath.c_str(), sortedTripletFilePath.c_str());
 
-	free(mergedInRunIndex);
-	free(mergedInRunLastIndex);
-	free(mergedInRunActualFileIndex);
-	free(mergedInRunIsFileClosed);
-	free(mergedTableStream);
-	free(tripletBuffer);
+	std::free(mergedInRunIndex);
+	std::free(mergedInRunLastIndex);
+	std::free(mergedInRunActualFileIndex);
+	std::free(mergedInRunIsFileClosed);
+	std::free(mergedTableStream);
+	std::free(tripletBuffer);
 
 	return sortedTripletFilePath;
 }
 
 void sortBasedIndexBuilder::finalize(DocumentTable * documentTable,string sortedTripletFilePath)
 {
-	ifstream* inputStreamI = new ifstream(sortedTripletFilePath, ios::in | ios::binary);
-	ofstream outputFile(outputFilePath, ios::out | ios::binary);
+	ifstream* inputStreamI = FileManager::openIfstream(sortedTripletFilePath);
+	ofstream* outputFile = FileManager::openOfstream(outputFilePath);
 
 	Triplet currentTriplet;
 	DocumentTerm currentDocumentTerm;
@@ -409,19 +412,19 @@ void sortBasedIndexBuilder::finalize(DocumentTable * documentTable,string sorted
 
 	// prepare a place for the dictionary offset
 	unsigned int offsetPlacer = 0;
-	outputFile.write((const char *)&offsetPlacer, sizeof(unsigned int));
+	outputFile->write((const char *)&offsetPlacer, sizeof(unsigned int));
 
 	// write the terms number in HashTableDictionary
-	outputFile.write((const char *)&iDictionary->getTermsNumber(), sizeof(unsigned long long));
+	outputFile->write((const char *)&iDictionary->getTermsNumber(), sizeof(unsigned long long));
 
 	// write the Compressor ID
-	outputFile.write((const char *)&iCompressor->getCompressorId(), sizeof(int));
+	outputFile->write((const char *)&iCompressor->getCompressorId(), sizeof(int));
 
 	// write the DocumentMetaDatas number in DocumentTable
-	outputFile.write((const char *)&documentTable->getDocumentNumber(), sizeof(unsigned int));
+	outputFile->write((const char *)&documentTable->getDocumentNumber(), sizeof(unsigned int));
 
 	// write the DocumentMetaDatas
-	outputFile.write((const char *)documentTable->getFinalizedDocumentTable(), documentTable->getDocumentNumber()*sizeof(DocumentMetaData));
+	outputFile->write((const char *)documentTable->getFinalizedDocumentTable(), documentTable->getDocumentNumber()*sizeof(DocumentMetaData));
 
 	// write the posting lists contiguously
 	do
@@ -431,8 +434,8 @@ void sortBasedIndexBuilder::finalize(DocumentTable * documentTable,string sorted
 		currentTerm = iDictionary->getTermById(currentTriplet.termId);
 		if (ancientTerm != nullptr && ancientTerm != currentTerm) {
 			ancientTerm->documentNumber = currentPostingList.size();
-			ancientTerm->postingList = (void *)(unsigned int)outputFile.tellp();
-			iCompressor->compressAndWrite(&outputFile, &currentPostingList);
+			ancientTerm->postingList = (void *)(unsigned int)outputFile->tellp();
+			iCompressor->compressAndWrite(outputFile, &currentPostingList);
 			currentPostingList.erase(currentPostingList.begin(), currentPostingList.end());
 		}
 		currentDocumentTerm.documentIndex = currentTriplet.documentId;
@@ -443,19 +446,20 @@ void sortBasedIndexBuilder::finalize(DocumentTable * documentTable,string sorted
 
 
 	// save the dictionary offset
-	unsigned int  dictionaryOffset = (unsigned int)outputFile.tellp();
+	unsigned int  dictionaryOffset = (unsigned int)outputFile->tellp();
 
 	// write the terms of the dictionary
 	IIterator* termIteratorDictionary = iDictionary->getIterator();
 	Term * termDictionary;
 	while ((termDictionary = static_cast<Term*>(termIteratorDictionary->getNext())) != nullptr) {
-		outputFile << termDictionary;
+		(*outputFile) << termDictionary;
 	}
-	outputFile.seekp(0);
-	outputFile.write((const char *)&dictionaryOffset, sizeof(unsigned int));
-	outputFile.close();
+	outputFile->seekp(0);
+	outputFile->write((const char *)&dictionaryOffset, sizeof(unsigned int));
+	outputFile->close();
 	inputStreamI->close();
 	
+	delete outputFile;
 	delete inputStreamI;
 	delete termIteratorDictionary;
 	remove(sortedTripletFilePath.c_str());
