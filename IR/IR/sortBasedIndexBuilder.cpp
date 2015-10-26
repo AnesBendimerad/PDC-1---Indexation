@@ -69,6 +69,9 @@ IIndexBuilder * sortBasedIndexBuilder::setOutputFilePath(string outputFilePath)
 
 IIndexBuilder * sortBasedIndexBuilder::setIndexType(int indexType)
 {
+	if (indexType != FAGIN_INDEX_TYPE && indexType != BM25_INDEX_TYPE) {
+		throw runtime_error("No Index with such ID");
+	}
 	sortBasedIndexBuilder::indexType = indexType;
 	return this;
 }

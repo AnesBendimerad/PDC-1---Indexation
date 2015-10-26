@@ -44,6 +44,9 @@ IIndexBuilder * InMemoryIndexBuilder::setOutputFilePath(string outputFilePath)
 
 IIndexBuilder * InMemoryIndexBuilder::setIndexType(int indexType)
 {
+	if (indexType != FAGIN_INDEX_TYPE && indexType != BM25_INDEX_TYPE) {
+		throw runtime_error("No Index with such ID");
+	}
 	InMemoryIndexBuilder::indexType = indexType;
 	return this;
 }
