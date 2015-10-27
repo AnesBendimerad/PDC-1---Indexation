@@ -54,10 +54,11 @@ vector<pair<DocumentMetaData, double>> Index::searchFagin(int topK, string query
 	double weight=0, globalWeight =0;
 	int documentIndex;
 	int result;
-
+	int numberOfEmptyLists;
 	do
 	{
 		thresHold = 0;
+		numberOfEmptyLists = 0;
 		for (unsigned int i = 0; i < list_sorted_by_tf_idf.size(); i++)
 		{
 			if (list_sorted_by_tf_idf.at(i).size() != 0)
@@ -66,6 +67,7 @@ vector<pair<DocumentMetaData, double>> Index::searchFagin(int topK, string query
 				documentIndex = list_sorted_by_tf_idf.at(i).begin()->first;
 				weight = list_sorted_by_tf_idf.at(i).begin()->second;
 				list_sorted_by_tf_idf.at(i).erase(list_sorted_by_tf_idf.at(i).begin());
+
 				//Compute its global score by retrieving all s(tj, d(i)) with j!=i
 				for (unsigned int j = 0; j < list_sorted_by_tf_idf.size(); j++)
 				{
@@ -97,15 +99,18 @@ vector<pair<DocumentMetaData, double>> Index::searchFagin(int topK, string query
 						topKDocuments.push_back(pair<int, double>(documentIndex, globalWeight));
 					}
 				}
-
+			}
+			else
+			{
+				numberOfEmptyLists++;
 			}
 			globalWeight = 0;
 			documentIndex = -1;
-
 			//We always sort the result by global weight 
-			sort(topKDocuments.begin(), topKDocuments.end(),sort_by_tf_idf);
+			std::sort(topKDocuments.begin(), topKDocuments.end(),sort_by_tf_idf);
 		}
-	} while (topKDocuments.size() < topK  && topKDocuments.at(topKDocuments.size()-1).second< thresHold && list_sorted_by_tf_idf.size() !=0);
+
+	} while (topKDocuments.size() < topK  && topKDocuments.at(topKDocuments.size()-1).second<= thresHold && numberOfEmptyLists != list_sorted_by_tf_idf.size());
 
 	for (unsigned int i = 0; i < topKDocuments.size(); i++)
 	{
@@ -141,7 +146,7 @@ vector<vector<pair<int, double>>> Index::calculateTF_IDF(string query)
 				vector.push_back(pair<int, double>(documentTermTable[i].documentIndex, tf*log10(idf)));
 			}
 
-			sort(vector.begin(), vector.end(), sort_by_tf_idf);
+			std::sort(vector.begin(), vector.end(), sort_by_tf_idf);
 			tf_idfLists.push_back(vector);
 			vector.clear();
 		}
@@ -222,7 +227,7 @@ vector<pair<DocumentMetaData, double>> Index::searchBM25(int topK, string query)
 		topKDocuments.push_back(pair<DocumentMetaData, double>(*documentTable->getDocument(element.first), element.second));
 	}
 
-	sort(topKDocuments.begin(), topKDocuments.end(), sort_by_score);
+	std::sort(topKDocuments.begin(), topKDocuments.end(), sort_by_score);
 
 	if (topKDocuments.size() > topK)
 		topKDocuments.resize(topK);
