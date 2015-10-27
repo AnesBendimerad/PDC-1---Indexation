@@ -17,7 +17,7 @@ StrTkTokenizer::StrTkTokenizer(Document *document)
 string StrTkTokenizer::getNextToken()
 {
 
-	while (StrTkTokenizer::currentPosition < tokens->size() && tokens->at(StrTkTokenizer::currentPosition).length() == 1)
+	while (StrTkTokenizer::currentPosition < tokens->size() && tokens->at(StrTkTokenizer::currentPosition).empty())
 			StrTkTokenizer::currentPosition = ++StrTkTokenizer::currentPosition;
 
 		if (StrTkTokenizer::currentPosition < tokens->size())
@@ -26,7 +26,7 @@ string StrTkTokenizer::getNextToken()
 			return tokens->at(StrTkTokenizer::currentPosition = StrTkTokenizer::currentPosition++);
 		}
 
-		return "eof";
+		return "";
 }
 
 deque<std::string>* StrTkTokenizer::fillDequeWithTokens(){
@@ -39,7 +39,7 @@ deque<std::string>* StrTkTokenizer::fillDequeWithTokens(){
 	strtk::convert_to_lowercase(text);
 	// setting delimiters
 	if (delimiters.empty())
-		delimiters = "0123456789""-""\t\r\n ,,.;':\"£$€</> \\""()[]{}<>";
+		delimiters = "0123456789""-""\t\r\n ,,.;':\"£$€</> \\""()[]{}<> ";
 
 	//filter stop words
 	if (this->stopWords == nullptr){
