@@ -17,9 +17,6 @@ StrTkTokenizer::StrTkTokenizer(Document *document)
 string StrTkTokenizer::getNextToken()
 {
 
-	while (StrTkTokenizer::currentPosition < tokens->size() && tokens->at(StrTkTokenizer::currentPosition).empty())
-			StrTkTokenizer::currentPosition = ++StrTkTokenizer::currentPosition;
-
 		if (StrTkTokenizer::currentPosition < tokens->size())
 		{
 			document->incrementWordsNumber();
@@ -62,11 +59,22 @@ deque<std::string>* StrTkTokenizer::fillDequeWithTokens(){
 		})
 	);
 	strtk::remove_consecutives_inplace(' ', text);
-
 	//parse into deque
 	tokensList = new deque<std::string>();
 	strtk::parse(text, delimiters, *tokensList);
 
+	// Second filter on StopWords
+	//The first filter is over-all mandatory to perform split of the string !
+	unsigned int i=0;
+	while (i < tokensList->size()){
+		auto itr = customStopWords->find(tokensList->at(i));
+		if (customStopWords->end() != itr)
+		{
+			tokensList->erase(tokensList->begin() + i);
+			i--;
+		}
+		i++; 
+	}
 	return tokensList;
 }
 

@@ -3,7 +3,8 @@
 std::unordered_set<std::string> * getStopWords(){
 
 	std::unordered_set<std::string> * stopWords = new std::unordered_set<std::string>();
-
+	 
+	stopWords->insert("");
 	stopWords->insert("<p>");
 	stopWords->insert("</p>");
 	stopWords->insert("and");
