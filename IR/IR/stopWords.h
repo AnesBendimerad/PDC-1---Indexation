@@ -9,6 +9,7 @@ std::unordered_set<std::string> * getStopWords(){
 	stopWords->insert("</p>");
 	stopWords->insert("and");
 	stopWords->insert("about");
+	stopWords->insert("a");
 	stopWords->insert("an");
 	stopWords->insert("are");
 	stopWords->insert("as");
