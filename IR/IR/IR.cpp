@@ -147,7 +147,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				std::cout << "Constructing the index ..." << endl;
 				indexBuilder->setIDictionary(dictionary)->setOutputFilePath(indexPath)->setICompressor(compressor)->setITokenizer(indiceTokenizer);
 				index = indexBuilder->createIndex();
-				//dictionary->writeCSVFile();
+				dictionary->writeCSVFile();
 				std::cout << "Index successfully created !" << endl;
 				std::cout << "----------------------------------------" << endl;
 				break;
@@ -226,14 +226,21 @@ int _tmain(int argc, _TCHAR* argv[])
 						searchResult = index->searchBM25(topk, query);
 						break;
 					}
-					for (unsigned int i = 0;i < searchResult.size();i++)
+					if (searchResult.empty())
 					{
-						unsigned int j = i + 1;
-						unsigned long documentNumber = searchResult[i].first.address%10000;
-						unsigned long documentDate = searchResult[i].first.address/10000;
-						std::cout << j << ": document " << searchResult[i].first.id << " (document " << documentNumber;
-						std::printf(" in file la%06d", documentDate);
-					    std:cout << ") : Score = " << searchResult[i].second << endl;
+						std::cout << "No result found !" << endl;
+					}
+					else
+					{
+						for (unsigned int i = 0;i < searchResult.size();i++)
+						{
+							unsigned int j = i + 1;
+							unsigned long documentNumber = searchResult[i].first.address % 10000;
+							unsigned long documentDate = searchResult[i].first.address / 10000;
+							std::cout << j << ": document " << searchResult[i].first.id << " (document " << documentNumber;
+							std::printf(" in file la%06d", documentDate);
+						std:cout << ") : Score = " << searchResult[i].second << endl;
+						}
 					}
 				}
 				std::cout << "----------------------------------------" << endl;

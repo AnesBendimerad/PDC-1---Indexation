@@ -55,6 +55,11 @@ vector<pair<DocumentMetaData, double>> Index::searchFagin(int topK, string query
 	int documentIndex;
 	int result;
 	int numberOfEmptyLists;
+
+	if (list_sorted_by_tf_idf.empty())
+	{
+		return topDocuments;
+	}
 	do
 	{
 		thresHold = 0;
