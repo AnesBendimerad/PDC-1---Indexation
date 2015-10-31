@@ -21,12 +21,17 @@
 #include "NoCompressor.h"
 #include "VByteCompressor.h"
 #include "GammaCompressor.h"
+#include <ctime>
+
 using namespace std;
 
 
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	time_t tbegin, tend;
+	double texec = 0.;
+
 	Index *index = NULL;
 	bool end = false;
 
@@ -37,6 +42,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	unsigned int indiceCompressor = 0;
 	unsigned int indiceSearch = 1;
 	unsigned int topk;
+	unsigned long long memoryLimit;
+	unsigned long long memoryLimitO;
 	IIndexBuilder *indexBuilder;
 	ICompressor *compressor;
 	IDictionary *dictionary;
@@ -93,6 +100,25 @@ int _tmain(int argc, _TCHAR* argv[])
 				std::cout << endl;
 				std::cin.clear();
 
+				if (indiceBuilder == 1)
+				{
+					std::cout << "Please give the memory limitation in KO (miniumum is 64 KO) : " ;
+					std::cin >> memoryLimit;
+					std::cout << endl;
+					std::cin.clear();
+					if (memoryLimit < 64)
+					{
+						memoryLimit = 64;
+					}
+					memoryLimitO = 1024 * memoryLimit;
+					unsigned long long memoryLimitForBufferKO= memoryLimit*MEMORY_RATIO_USED_FOR_BUFFER;
+					unsigned long long memoryLimitForBufferO = memoryLimitO*MEMORY_RATIO_USED_FOR_BUFFER;
+					unsigned int sizeOfDiskBlock = MemoryManager::getDiskSectorSize();
+					unsigned int TripletInBlockNumber = sizeOfDiskBlock / sizeof(Triplet);
+					unsigned int BlockNumber = memoryLimitForBufferO / sizeOfDiskBlock;
+					std:cout << "The size of the used buffer will be " << memoryLimitForBufferKO << " KO devided in " << BlockNumber << " blocks" << endl << endl;
+				}
+
 				std::cout << "select the tokenizer : " << endl;
 				std::cout << "\t 0 : for simple tokenizer" << endl;
 				std::cout << "\t 1 : for strtk based tokenizer" << endl;
@@ -115,7 +141,7 @@ int _tmain(int argc, _TCHAR* argv[])
 					indexBuilder = new InMemoryIndexBuilder(repositoryPath);
 					break;
 				case 1:
-					indexBuilder = new SortBasedIndexBuilder(repositoryPath);
+					indexBuilder = new SortBasedIndexBuilder(repositoryPath, memoryLimitO);
 					break;
 				default:
 					indexBuilder = new InMemoryIndexBuilder(repositoryPath);
@@ -143,12 +169,20 @@ int _tmain(int argc, _TCHAR* argv[])
 				{
 					indiceTokenizer = SIMPLE_TOKENIZER;
 				}
-
+				tbegin = time(NULL);
 				std::cout << "Constructing the index ..." << endl;
 				indexBuilder->setIDictionary(dictionary)->setOutputFilePath(indexPath)->setICompressor(compressor)->setITokenizer(indiceTokenizer);
 				index = indexBuilder->createIndex();
 				dictionary->writeCSVFile();
-				std::cout << "Index successfully created !" << endl;
+				std::cout << "Index successfully created ! " << endl;
+				tend = time(NULL);
+				texec = difftime(tend, tbegin);
+				std::cout << endl;
+				printf("Execution time : %.2f s", texec);
+				std::cout << endl;
+				printf("Memory usage : %d KO", MemoryManager::getPeakWorkingSetSize() / 1024);
+				std::cout << endl;
+				std::cout << endl;
 				std::cout << "----------------------------------------" << endl;
 				break;
 			case 1:
@@ -163,11 +197,19 @@ int _tmain(int argc, _TCHAR* argv[])
 				}
 				std::cout << endl;
 				std::cin.clear();
-
+				tbegin = time(NULL);
 				std::cout << "Loading the index from " << invertedFilePath << " ..." << endl;
 				indexLoader = new IndexLoader(invertedFilePath);
 				index = indexLoader->load();
 				std::cout << "Index successfully loaded !" << endl;
+				tend = time(NULL);
+				texec = difftime(tend, tbegin);
+				std::cout << endl;
+				printf("Execution time : %.2f s", texec);
+				std::cout << endl;
+				printf("Memory usage : %d KO", MemoryManager::getPeakWorkingSetSize() / 1024);
+				std::cout << endl;
+				std::cout << endl;
 				std::cout << "----------------------------------------" << endl;
 				break;
 			case 2:
@@ -204,7 +246,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				std::cout << endl;
 				std::cin.clear();
 
-
+				tbegin = time(NULL);
 				if (index == NULL)
 				{
 					std::cout << "No index loaded, please build or load an index before" << endl;
@@ -232,16 +274,25 @@ int _tmain(int argc, _TCHAR* argv[])
 					}
 					else
 					{
+						std::cout << "Results : " << endl;
 						for (unsigned int i = 0;i < searchResult.size();i++)
 						{
 							unsigned int j = i + 1;
 							unsigned long documentNumber = searchResult[i].first.address % 10000;
 							unsigned long documentDate = searchResult[i].first.address / 10000;
-							std::cout << j << ": document " << searchResult[i].first.id << " (document " << documentNumber;
+							std::cout <<"\t"<< j << ": document " << searchResult[i].first.id << " (document " << documentNumber;
 							std::printf(" in file la%06d", documentDate);
-						std:cout << ") : Score = " << searchResult[i].second << endl;
+							std::cout << ") : Score = " << searchResult[i].second << endl;
 						}
 					}
+					tend = time(NULL);
+					texec = difftime(tend, tbegin);
+					std::cout << endl;
+					printf("Execution time : %.2f s", texec);
+					std::cout << endl;
+					printf("Memory usage : %d KO", MemoryManager::getPeakWorkingSetSize() / 1024);
+					std::cout << endl;
+					std::cout << endl;
 				}
 				std::cout << "----------------------------------------" << endl;
 				break;

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MemoryManager.h"
 
-unsigned long long MemoryManager::getWorkingSetSize()
+unsigned long long MemoryManager::getCurrentWorkingSetSize()
 {
 	PROCESS_MEMORY_COUNTERS pmc;
 	if (GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc)))
@@ -21,6 +21,18 @@ unsigned long long MemoryManager::getWorkingSetSize()
 	CloseHandle(GetCurrentProcess());
 	return 0;
 }
+
+unsigned long long MemoryManager::getPeakWorkingSetSize()
+{
+	PROCESS_MEMORY_COUNTERS pmc;
+	if (GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc)))
+	{
+		return pmc.PeakWorkingSetSize;
+	}
+	CloseHandle(GetCurrentProcess());
+	return 0;
+}
+
 
 unsigned int MemoryManager::getDiskSectorSize()
 {
