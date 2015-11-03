@@ -90,7 +90,7 @@ vector<pair<DocumentMetaData, double>> Index::searchFagin(int topK, string query
 				thresHold += weight;
 
 				//If R contains less than k documents, add d(i) to the result
-				if (topKDocuments.size() < topK && documentIndex != -1)
+				if (((int)(topKDocuments.size())) < topK && documentIndex != -1)
 				{
 					topKDocuments.push_back(pair<int, double>(documentIndex, globalWeight));
 				}
@@ -115,7 +115,7 @@ vector<pair<DocumentMetaData, double>> Index::searchFagin(int topK, string query
 			std::sort(topKDocuments.begin(), topKDocuments.end(),sort_by_tf_idf);
 		}
 
-	} while (topKDocuments.size() < topK  && topKDocuments.at(topKDocuments.size()-1).second<= thresHold && numberOfEmptyLists != list_sorted_by_tf_idf.size());
+	} while ( ((int)(topKDocuments.size())) < topK  && topKDocuments.at(topKDocuments.size()-1).second<= thresHold && numberOfEmptyLists != list_sorted_by_tf_idf.size());
 
 	for (unsigned int i = 0; i < topKDocuments.size(); i++)
 	{
@@ -234,7 +234,7 @@ vector<pair<DocumentMetaData, double>> Index::searchBM25(int topK, string query)
 
 	std::sort(topKDocuments.begin(), topKDocuments.end(), sort_by_score);
 
-	if (topKDocuments.size() > topK)
+	if (((int)(topKDocuments.size())) > topK)
 		topKDocuments.resize(topK);
 
 	return  topKDocuments;

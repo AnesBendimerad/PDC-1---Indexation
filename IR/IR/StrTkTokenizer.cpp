@@ -17,7 +17,7 @@ StrTkTokenizer::StrTkTokenizer(Document *document)
 string StrTkTokenizer::getNextToken()
 {
 
-		if (StrTkTokenizer::currentPosition < tokens->size())
+		if (StrTkTokenizer::currentPosition < ((int)(tokens->size())))
 		{
 			document->incrementWordsNumber();
 			return tokens->at(StrTkTokenizer::currentPosition = StrTkTokenizer::currentPosition++);
