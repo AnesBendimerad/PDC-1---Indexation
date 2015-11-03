@@ -87,6 +87,7 @@ Document* DocumentProvider::getNextDocument()
 					// IF All DOCUMENTS in the current FILE have been processed then close the file and move to the next one
 					if (currentFile.eof())
 					{
+						cout << "numero:" << currentFileIndex << endl;
 						currentFileIndex++;
 						currentFile.close();
 					}

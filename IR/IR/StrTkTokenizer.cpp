@@ -22,7 +22,10 @@ string StrTkTokenizer::getNextToken()
 			document->incrementWordsNumber();
 			return tokens->at(StrTkTokenizer::currentPosition = StrTkTokenizer::currentPosition++);
 		}
-
+		delete tokens;
+		tokens = 0;
+		delete stopWords;
+		stopWords = 0;
 		return "";
 }
 
@@ -75,6 +78,7 @@ deque<std::string>* StrTkTokenizer::fillDequeWithTokens(){
 		}
 		i++; 
 	}
+	delete customStopWords;
 	return tokensList;
 }
 
@@ -88,6 +92,7 @@ void StrTkTokenizer::setStopWords(std::unordered_set<std::string> * stopWords){
 
 StrTkTokenizer::~StrTkTokenizer()
 {
+	cout << "destructeur" << endl;
 	delete tokens;
 	tokens = 0;
 	delete stopWords;

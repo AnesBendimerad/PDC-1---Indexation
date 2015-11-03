@@ -256,7 +256,7 @@ double Index::calculateAVGDL()
 }
 
 //this function calculates the score using BM25 function
-double Index::calculateScore(int tf, int df, int nbwords, int avgdl)
+double Index::calculateScore(int tf, int df, int nbwords, double avgdl)
 {
 	//free paramaters used by BM25 
 	double k1 = 2.0;
