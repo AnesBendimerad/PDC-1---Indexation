@@ -78,7 +78,7 @@ void HashTableDictionary::addTerm(Term * term)
 	else
 	{
 		list<Term>::iterator it = cell->begin();
-		while (it != cell->end() && term->token.compare(it->token)!=0)
+		while (it != cell->end() && term->token.compare(it->token) != 0)
 		{
 			it++;
 		}
