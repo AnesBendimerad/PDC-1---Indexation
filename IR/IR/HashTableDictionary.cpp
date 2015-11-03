@@ -78,7 +78,7 @@ void HashTableDictionary::addTerm(Term * term)
 	else
 	{
 		list<Term>::iterator it = cell->begin();
-		while (it != cell->end() && term->token.compare(it->token)!=0)
+		while (it != cell->end() && term->token.compare(it->token) != 0)
 		{
 			it++;
 		}
@@ -180,7 +180,7 @@ unsigned long long HashTableDictionary::getTokenId(string token)
 Term * HashTableDictionary::getTermById(unsigned long long id)
 {
 	unsigned int index = id % size;
-	unsigned int i = id / size;
+	unsigned int i = (unsigned int) (id / size);
 	list<Term>* cell = hashTable[index];
 	if (cell != nullptr)
 	{

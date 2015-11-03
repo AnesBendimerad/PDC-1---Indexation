@@ -22,7 +22,7 @@ private:
 	static bool sort_by_tf_idf(const pair<int, double>& left, const pair<int, double>& right);
 	
 	//---- BM25 Search ------------------------------------------
-	double calculateScore(int tf, int df, int nbwords, int avgdl);
+	double calculateScore(int tf, int df, int nbwords, double avgdl);
 	double calculateAVGDL();
 	static 	bool sort_by_score(const pair<DocumentMetaData, double>& left, const pair<DocumentMetaData, double>& right);
 

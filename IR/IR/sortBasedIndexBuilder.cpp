@@ -256,7 +256,7 @@ string SortBasedIndexBuilder::getFinalSortedTripletsFilesByFusion(Triplet * trip
 				inputStreamI->seekg(0, ios::end);
 				streampos end = inputStreamI->tellg();
 				inputStreamI->seekg(0, ios::beg);
-				mergedInRunLastIndex[i] = (end - begin) / sizeof(Triplet);
+				mergedInRunLastIndex[i] = (unsigned int ) ((end - begin) / sizeof(Triplet));
 			}
 
 			bool localMergingEnd = true;

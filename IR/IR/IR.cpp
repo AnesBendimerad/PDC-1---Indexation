@@ -42,8 +42,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	unsigned int indiceCompressor = 0;
 	unsigned int indiceSearch = 1;
 	unsigned int topk;
-	unsigned long long memoryLimit;
-	unsigned long long memoryLimitO;
+	unsigned int memoryLimit;
+	unsigned int memoryLimitO;
 	IIndexBuilder *indexBuilder;
 	ICompressor *compressor;
 	IDictionary *dictionary;
@@ -111,12 +111,12 @@ int _tmain(int argc, _TCHAR* argv[])
 						memoryLimit = 64;
 					}
 					memoryLimitO = 1024 * memoryLimit;
-					unsigned long long memoryLimitForBufferKO= memoryLimit*MEMORY_RATIO_USED_FOR_BUFFER;
-					unsigned long long memoryLimitForBufferO = memoryLimitO*MEMORY_RATIO_USED_FOR_BUFFER;
+					unsigned long long memoryLimitForBufferKO=(unsigned long long) (memoryLimit*MEMORY_RATIO_USED_FOR_BUFFER);
+					unsigned long long memoryLimitForBufferO = (unsigned long long) (memoryLimitO*MEMORY_RATIO_USED_FOR_BUFFER);
 					unsigned int sizeOfDiskBlock = MemoryManager::getDiskSectorSize();
 					unsigned int TripletInBlockNumber = sizeOfDiskBlock / sizeof(Triplet);
-					unsigned int BlockNumber = memoryLimitForBufferO / sizeOfDiskBlock;
-					std:cout << "The size of the used buffer will be " << memoryLimitForBufferKO << " KO devided in " << BlockNumber << " blocks" << endl << endl;
+					unsigned int BlockNumber = (unsigned int) (memoryLimitForBufferO / sizeOfDiskBlock);
+					cout << "The size of the used buffer will be " << memoryLimitForBufferKO << " KO devided in " << BlockNumber << " blocks" << endl << endl;
 				}
 
 				std::cout << "select the tokenizer : " << endl;
@@ -180,7 +180,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				std::cout << endl;
 				printf("Execution time : %.2f s", texec);
 				std::cout << endl;
-				printf("Memory usage : %d KO", MemoryManager::getPeakWorkingSetSize() / 1024);
+				printf("Memory usage : %llu KO", MemoryManager::getPeakWorkingSetSize() / 1024);
 				std::cout << endl;
 				std::cout << endl;
 				std::cout << "----------------------------------------" << endl;
@@ -207,7 +207,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				std::cout << endl;
 				printf("Execution time : %.2f s", texec);
 				std::cout << endl;
-				printf("Memory usage : %d KO", MemoryManager::getPeakWorkingSetSize() / 1024);
+				printf("Memory usage : %llu KO", MemoryManager::getPeakWorkingSetSize() / 1024);
 				std::cout << endl;
 				std::cout << endl;
 				std::cout << "----------------------------------------" << endl;
@@ -290,7 +290,7 @@ int _tmain(int argc, _TCHAR* argv[])
 					std::cout << endl;
 					printf("Execution time : %.2f s", texec);
 					std::cout << endl;
-					printf("Memory usage : %d KO", MemoryManager::getPeakWorkingSetSize() / 1024);
+					printf("Memory usage : %llu KO", MemoryManager::getPeakWorkingSetSize() / 1024);
 					std::cout << endl;
 					std::cout << endl;
 				}
